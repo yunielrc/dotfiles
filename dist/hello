@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# Run a program multiple times with different environment variables on each run
+
+#  BASH SETTINGS
+# Exit on error. Append "|| true" if you expect an error.
+set -o errexit
+# Exit on error inside any functions or subshells.
+set -o errtrace
+# Do not allow use of undefined vars. Use ${VAR:-} to use an undefined VAR
+set -o nounset
+# Catch the error in case mysqldump fails (but gzip succeeds) in `mysqldump |gzip`
+set -o pipefail
+# Turn on traces, useful while debugging but commented out by default
+# set -o xtrace
+# :BASH SETTINGS
+
+# ALIASES
+# :ALIASES
+
+# ENVIRONMENT PARAMETERS
+## :ENVIRONMENT PARAMETERS
+
+# CONSTANTS
+readonly MEM_DIR="/dev/shm/runqenv_$(uuidgen)"
+# :CONSTANTS
+
+# FUNCTIONS
+
+err() {
+  echo "ERROR> $*" >&2
+}
+
+inf() {
+  [[ "$ENV" == 'production' ]] && return 0;
+  echo "INFO> $*"
+}
+
+setup() {
+  mkdir "$MEM_DIR"
+}
+
+on_exit() {
+  rm --recursive "$MEM_DIR"
+}
+
+hello() {
+  echo 'hello'
+}
+
+main(){
+  setup
+  hello
+}
+
+# :FUNCTIONS
+
+if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
+  trap on_exit EXIT
+  main "$@"
+  exit $?
+fi

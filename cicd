@@ -1,0 +1,49 @@
+#!/bin/bash
+
+#  BASH SETTINGS
+# Exit on error. Append "|| true" if you expect an error.
+set -o errexit
+# Exit on error inside any functions or subshells.
+set -o errtrace
+# Do not allow use of undefined vars. Use ${VAR:-} to use an undefined VAR
+set -o nounset
+# Catch the error in case mysqldump fails (but gzip succeeds) in `mysqldump |gzip`
+set -o pipefail
+# Turn on traces, useful while debugging but commented out by default
+# set -o xtrace
+# :BASH SETTINGS
+
+cicd::build() {
+  :
+}
+
+cicd::test() {
+  echo '>>' 💚/💔 'Testing'
+  docker-compose up test
+}
+
+cicd::package() {
+  :
+}
+
+cicd::deliver() {
+  :
+}
+
+
+main() {
+  cicd::build
+  cicd::test
+  cicd::package
+  cicd::deliver
+}
+
+on_exit() {
+  docker-compose down --volumes
+}
+
+if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
+  trap on_exit EXIT
+  main "$@"
+  exit $?
+fi

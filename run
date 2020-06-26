@@ -1,0 +1,18 @@
+#!/bin/bash
+
+case "$1" in
+  build-test)
+    shift
+    docker-compose build
+    docker-compose run --rm test "$@"
+  ;;
+  test)
+    shift
+    docker-compose run --rm test "$@"
+  ;;
+  *)
+    echo "./run test"
+    echo "./run bulld-test"
+    exit 1
+  ;;
+esac

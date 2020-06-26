@@ -1,0 +1,33 @@
+version: '3.4'
+
+x-base: &base
+  env_file: .env
+  build:
+    context: .
+    dockerfile: ./Dockerfile
+    args:
+      VERSION: 20.04
+    target: dev
+  container_name: "${NAME}"
+  volumes:
+    - "./:${MOUNT}"
+  working_dir: "${WORKDIR}"
+  environment: &env
+    LIBS: /usr/local/lib/
+  stdin_open: true # docker run -i
+  tty: true        # docker run -t
+
+services:
+  test:
+    <<: *base
+    environment:
+      <<: *env
+      ENV: testing
+    command: >
+      bash -c '
+      ./scripts/lint-shellcheck &&
+      ./scripts/test-bats
+      '
+  stagin:
+    <<: *base
+    command: bash
