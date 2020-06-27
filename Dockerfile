@@ -1,8 +1,8 @@
-ARG VERSION=20.04
+ARG VERSION
 
-FROM ubuntu:$VERSION as base
-RUN echo 'Acquire::http::Proxy "http://apt-cacher.casa.dylgran.com:3142/";' \
-    > '/etc/apt/apt.conf.d/00proxy'
+FROM ubuntu:${VERSION:-20.04} as base
+ARG APT_PROXY
+RUN [ -n "$APT_PROXY" ] && echo "$APT_PROXY" | sed "s/'//g" > '/etc/apt/apt.conf.d/00proxy' || :
 RUN apt-get update -y && \
     apt-get install -y wget file sudo xz-utils uuid-runtime && \
     rm -rf /var/lib/apt/lists/* && \

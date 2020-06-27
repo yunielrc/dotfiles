@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# execute ./run command in remote server
+
+set -eEu
+
+if [[ -f .env ]]; then
+	set -o allexport
+	# shellcheck disable=SC1091
+	. .env
+	set +o allexport
+fi
+
+if git branch | grep --silent "^\*\?\s\+${PUBLIC_REPO_TEST_BRANCH}$"; then
+  git checkout "$PUBLIC_REPO_TEST_BRANCH"
+else
+  git checkout -b "$PUBLIC_REPO_TEST_BRANCH"
+fi
+
+git add .
+git commit -m "test: remote" || :
+git push "$PUBLIC_REPO_ORIGIN" "$PUBLIC_REPO_TEST_BRANCH"
+
+
+# >>>>>>> REMOTE CODE EXECUTION BELOW
+# shellcheck disable=2215,2087
+ssh -T "${TEST_SERVER_USER}@${TEST_SERVER}" <<- SSHEOF
+  set -xeEu
+
+  if [ ! -d "$TEST_SERVER_DIR" ]; then
+    mkdir -p "$TEST_SERVER_DIR"
+  fi
+
+  cd "$TEST_SERVER_DIR"
+
+  if [ ! -d "$NAME" ]; then
+    git clone --origin "$PUBLIC_REPO_ORIGIN" "$PUBLIC_REPO" "$NAME"
+  fi
+
+  cd "$NAME"
+  git fetch "$PUBLIC_REPO_ORIGIN"
+
+  if git branch | grep --silent "^\*\?\s\+${PUBLIC_REPO_TEST_BRANCH}$"; then
+    git checkout "$PUBLIC_REPO_TEST_BRANCH"
+  else
+    git checkout -b "$PUBLIC_REPO_TEST_BRANCH"
+  fi
+
+  git pull "$PUBLIC_REPO_ORIGIN" "$PUBLIC_REPO_TEST_BRANCH"
+
+  bash ./run "$@"
+SSHEOF

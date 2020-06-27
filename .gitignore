@@ -1,1 +1,5 @@
 **/.env
+**/local/*
+!**/.gitkeep
+!**/local/README.md
+**/*.local

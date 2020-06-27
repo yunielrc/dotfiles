@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.8'
 
 x-base: &base
   env_file: .env
@@ -6,11 +6,12 @@ x-base: &base
     context: .
     dockerfile: ./Dockerfile
     args:
-      VERSION: 20.04
+      VERSION: '20.04'
+      APT_PROXY: "${APT_PROXY}"
     target: dev
   container_name: "${NAME}"
   volumes:
-    - "./:${MOUNT}"
+    - "./:${MOUNT}:ro"
   working_dir: "${WORKDIR}"
   environment: &env
     LIBS: /usr/local/lib/
@@ -20,9 +21,6 @@ x-base: &base
 services:
   test:
     <<: *base
-    environment:
-      <<: *env
-      ENV: testing
     command: >
       bash -c '
       ./scripts/lint-shellcheck &&

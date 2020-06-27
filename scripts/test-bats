@@ -1,5 +1,15 @@
 #!/bin/bash
-
 set -e
 
-bats -r './test'
+cd './dist/packages'
+for pkg in *; do
+  echo -e "\n> package: ${pkg}\n"
+
+  while read -r suite; do
+    echo -e 💚/💔 ">> ${suite##*/} in ${suite%/*}\n"
+    bats --pretty "./$suite"
+  done < <(find "${pkg}/test" -name '*.bats' -type f)
+
+done
+
+exit $?
