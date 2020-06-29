@@ -18,7 +18,21 @@ else
 fi
 
 git add .
-git commit -m "test: remote" || :
+
+commit=false
+
+on_exit() {
+  if [[ "$commit" == true ]]; then
+    git reset --mixed HEAD~1
+  fi
+
+}
+
+trap on_exit EXIT
+
+if git commit -m "test: remote"; then
+  commit=true
+fi
 git push "$PUBLIC_REPO_ORIGIN" "$PUBLIC_REPO_TEST_BRANCH"
 
 

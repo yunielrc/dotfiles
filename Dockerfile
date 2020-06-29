@@ -2,11 +2,14 @@ ARG VERSION
 
 FROM ubuntu:${VERSION:-20.04} as base
 ARG APT_PROXY
+ARG USER=${USER:-user}
 RUN [ -n "$APT_PROXY" ] && echo "$APT_PROXY" | sed "s/'//g" > '/etc/apt/apt.conf.d/00proxy' || :
 RUN apt-get update -y && \
     apt-get install -y wget file sudo xz-utils uuid-runtime && \
     rm -rf /var/lib/apt/lists/* && \
-    groupadd -r user && useradd -r -g user -s `which bash` user
+    useradd --create-home --shell /bin/bash "$USER" && \
+    usermod -aG sudo "$USER" && \
+    echo "$USER ALL=NOPASSWD:ALL" > /etc/sudoers.d/nopasswd
 
 FROM base as dev
 RUN apt-get update -y && \

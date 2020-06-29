@@ -1,22 +1,23 @@
 #!/usr/bin/env bash
 
-# dependencies
-sudo apt-get install build-essential curl git
-# install
+set -e
+
+# Dependencies
+
+sudo apt-get update -y
+sudo apt-get install -y curl git build-essential
+
+# Install
+
 curl -fsSL 'https://raw.githubusercontent.com/Homebrew/install/master/install.sh' | bash
-# configure
-echo "eval \$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" >> ~/.profile
-# test
-brew install hello
+# shellcheck disable=SC2226
+ln --symbolic --verbose "${PKG_PATH}/content/brew.plugin.bash" "${BASHC_PLUGINS_DIR}/brew.plugin.bash"
 
 
-# if type brew &>/dev/null; then
-#   HOMEBREW_PREFIX="$(brew --prefix)"
-#   if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
-#     source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
-#   else
-#     for COMPLETION in "${HOMEBREW_PREFIX}/etc/bash_completion.d/"*; do
-#       [[ -r "$COMPLETION" ]] && source "$COMPLETION"
-#     done
-#   fi
-# fi
+# Configure
+
+# shellcheck disable=SC2016
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+brew install patchelf
+brew install gcc

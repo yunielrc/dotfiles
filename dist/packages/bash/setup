@@ -1,26 +1,12 @@
 #!/usr/bin/env bash
 
-# TODO replace dirname by builtin
-BASE_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+set -e
 
-## functions
-err() {
-  echo "ERROR> $*" >&2
-}
+# Install
 
-inf() {
-  echo "INFO> $*"
-}
-
-infn() {
-  echo -n "INFO> $*"
-}
-## :functions
-
-# install
 if [[ ! -f ~/.bashc ]]; then
-  infn 'Symbolic link created:  '
-  ln --symbolic --verbose "${BASE_PATH}/content/.bashc" ~/.bashc
+  infn 'Symbolic link created: '
+  ln --symbolic --verbose "${PKG_PATH}/content/.bashc" ~/.bashc
 fi
 # shellcheck disable=SC2088
 if ! grep --silent '~/.bashc/init' ~/.bashrc ; then
@@ -33,5 +19,3 @@ EOF
 
   inf "Added: '~/.bashc/init' to '$(realpath ~/.bashrc)'"
 fi
-
-# configure
