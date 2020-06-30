@@ -77,7 +77,7 @@ start_test_server() {
 # create & publish test branch
 publish_test_branch() {
   inf 'Publishing Test branch'
-  git stash push --quiet
+  git stash push --include-untracked --quiet
   git checkout -b "$TEST_BRANCH"
   git stash apply --quiet
   git commit -a -m 'test: remote' || :
@@ -89,7 +89,7 @@ publish_test_branch() {
 restore_local_workspace() {
   inf 'Restoring Local Workspace'
   git checkout "$WORK_BRANCH"
-  git stash pop --quiet --index
+  git stash pop --quiet --index || :
   git branch -D "$TEST_BRANCH" || :
   git branch --remotes -d "${PUBLIC_REPO_ORIGIN}/${TEST_BRANCH}" || :
   inf 'Local Workspace restored' "$GREEN"
@@ -123,7 +123,7 @@ run_tests_in_server () {
 
     cd "$TEST_SERVER_DIR"
     inf "Cloning git repository: ${PUBLIC_REPO}"
-    git clone --quiet --origin "$PUBLIC_REPO_ORIGIN" "$PUBLIC_REPO" "$clone_folder"
+    git clone --origin "$PUBLIC_REPO_ORIGIN" "$PUBLIC_REPO" "$clone_folder"
     cd "./${clone_folder}"
     inf "Cloning git repository done" "$GREEN"
 

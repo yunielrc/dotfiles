@@ -11,7 +11,7 @@ for pkg in *; do
   while read -r suite; do
     echo -e 💚/💔 ">> ${suite##*/} in ${suite%/*}\n"
     bats "./$suite"
-  done < <(find "${pkg}/test" -name '*.bats' -type f 2> /dev/null )
+  done < <(find "${pkg}/test" -ignore_readdir_race -name '*.bats' -type f 2> /dev/null )
 
 done
 
