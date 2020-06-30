@@ -1,17 +1,38 @@
 #!/bin/bash
-set -e
+set -eu
+
+# shellcheck disable=SC1091
+. './lib/colors.bash'
+
+if [[ -f ./.env ]]; then
+	set -o allexport
+	# shellcheck disable=SC1091
+	. ./.env
+	set +o allexport
+fi
 
 # shellcheck disable=SC2155
 export DIST_PATH="$(realpath ./dist)"
 
 cd './dist/packages'
 for pkg in *; do
-  echo -e "\n> package: ${pkg}\n"
+  echo -e "\n> package: ${YELLOW}${pkg}${NOCOLOR}\n"
 
+  if [[ -n "${BATS_IGNORED_TESTS_PKG:-}" ]] && echo "$BATS_IGNORED_TESTS_PKG" | grep --quiet --word-regexp "$pkg"; then
+    echo -e "${LIGHTRED}>>TESTS IGNORED${NOCOLOR}"
+    continue
+  fi
+
+  has_tests=false
   while read -r suite; do
-    echo -e 💚/💔 ">> ${suite##*/} in ${suite%/*}\n"
+    has_tests=true
+    echo -e "\n💚/💔 >> ${LIGHTBLUE}${suite##*/}${NOCOLOR} in ${suite%/*}\n"
     bats "./$suite"
   done < <(find "${pkg}/test" -ignore_readdir_race -name '*.bats' -type f 2> /dev/null )
+
+  if [[ $has_tests == false ]]; then
+    echo -e "${LIGHTRED}>> NO TESTS${NOCOLOR}"
+  fi
 
 done
 

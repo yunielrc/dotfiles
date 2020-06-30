@@ -2,37 +2,27 @@
 
 set -eEu
 
+# shellcheck disable=SC1091
+. './lib/colors.bash'
+
 # Allows testing in a remote environment without affecting the current working branch
 
 ON_EXIT_FN_STACK=()
+EXIT_ERROR_MSG=''
 
 on_exit() {
+  # shellcheck disable=SC2181
+  if [[ $? != 0 && -n "$EXIT_ERROR_MSG" ]]; then
+    err "$EXIT_ERROR_MSG" "$RED"
+  fi
+
   for fn in "${ON_EXIT_FN_STACK[@]}"; do
     "$fn" || :
   done
 }
-trap on_exit EXIT
-# trap on_exit SIGINT
 
-# ----------------------------------
-# Colors
-# ----------------------------------
-readonly NOCOLOR='\033[0m'
-readonly RED='\033[0;31m'
-readonly GREEN='\033[0;32m'
-readonly ORANGE='\033[0;33m'
-readonly BLUE='\033[0;34m'
-readonly PURPLE='\033[0;35m'
-readonly CYAN='\033[0;36m'
-readonly LIGHTGRAY='\033[0;37m'
-readonly DARKGRAY='\033[1;30m'
-readonly LIGHTRED='\033[1;31m'
-readonly LIGHTGREEN='\033[1;32m'
-readonly YELLOW='\033[1;33m'
-readonly LIGHTBLUE='\033[1;34m'
-readonly LIGHTPURPLE='\033[1;35m'
-readonly LIGHTCYAN='\033[1;36m'
-readonly WHITE='\033[1;37m'
+trap on_exit INT TERM EXIT
+# trap on_exit SIGINT
 
 err() {
   local -r color="${2-$RED}"
@@ -70,24 +60,29 @@ readonly TEST_BRANCH="$(gen_test_branch_name)"
 start_test_server() {
   # start test server
   inf 'Starting Test server'
+  EXIT_ERROR_MSG='Starting Test server. FAILED'
   ./scripts/aws-ec2 start "$AWS_EC2_INSTANCE_ID" --wait
-  inf 'Test server started' "$GREEN"
+  inf 'Test server started. DONE' "$GREEN"
 }
 
 # create & publish test branch
 publish_test_branch() {
-  inf 'Publishing Test branch'
+  info 'Publishing Test branch'
+  EXIT_ERROR_MSG='Publishing Test branch. FAILED'
   git stash push --include-untracked --quiet
-  git checkout -b "$TEST_BRANCH"
+  git stash branch "$TEST_BRANCH" 'stash@{1}'
+  # git checkout -b "$TEST_BRANCH"
   git stash apply --quiet
   git commit -a -m 'test: remote' || :
   git push --quiet "$PUBLIC_REPO_ORIGIN" "$TEST_BRANCH"
-  inf 'Test branch published' "$GREEN"
+  info 'Publishing Test branch. DONE' "$GREEN"
 }
 
 # restore git local workspace
 restore_local_workspace() {
+  # only restore if necesary
   inf 'Restoring Local Workspace'
+  EXIT_ERROR_MSG='Restoring Local Workspace. FAILED'
   git checkout "$WORK_BRANCH"
   git stash pop --quiet --index || :
   git branch -D "$TEST_BRANCH" || :
@@ -157,7 +152,17 @@ delete_public_test_branch_onexit() {
 suggest_stop_instance_onexit() {
   # suggest stop the instance
   inf "IMPORTANT: Stop ec2 instance with the command below:" "$LIGHTRED"
-  echo -e "${NOCOLOR}\$ ./scripts/aws-ec2 stop $AWS_EC2_INSTANCE_ID"
+  echo -e "${NOCOLOR}\$ ./scripts/aws-ec2 stop ${AWS_EC2_INSTANCE_ID}"
+}
+
+stop_instance_onexit() {
+  # suggest stop the instance
+  inf "Stopping ec2 instance ${AWS_EC2_INSTANCE_ID}"
+  if ./scripts/aws-ec2 stop "$AWS_EC2_INSTANCE_ID" ; then
+    inf "Stopping ec2 instance ${AWS_EC2_INSTANCE_ID}. DONE" "$GREEN"
+  else
+    inf "Stopping ec2 instance ${AWS_EC2_INSTANCE_ID}. FAIL" "$RED"
+  fi
 }
 
 done_msg_onexit() {
@@ -166,7 +171,11 @@ done_msg_onexit() {
 
 main() {
   start_test_server
-  ON_EXIT_FN_STACK+=(suggest_stop_instance_onexit)
+  if [[ -n "${TEST_SERVER_STOP}" && "${TEST_SERVER_STOP}" == true ]]; then
+    ON_EXIT_FN_STACK+=(stop_instance_onexit)
+  else
+    ON_EXIT_FN_STACK+=(suggest_stop_instance_onexit)
+  fi
   publish_test_branch || {
     restore_local_workspace
     return 1
