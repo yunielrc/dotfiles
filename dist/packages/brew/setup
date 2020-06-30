@@ -2,6 +2,13 @@
 
 set -e
 
+# Idempotent
+
+if command -v brew &> /dev/null; then
+  inf 'brew currently installed'
+  exit 0
+fi
+
 # Dependencies
 
 sudo apt-get update -y
@@ -12,7 +19,6 @@ sudo apt-get install -y curl git build-essential
 curl -fsSL 'https://raw.githubusercontent.com/Homebrew/install/master/install.sh' | bash
 # shellcheck disable=SC2226
 ln --symbolic --verbose "${PKG_PATH}/content/brew.plugin.bash" "${BASHC_PLUGINS_DIR}/brew.plugin.bash"
-
 
 # Configure
 

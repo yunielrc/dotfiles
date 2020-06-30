@@ -12,4 +12,7 @@ load test_helper
 
   run which hello
   assert_output '/home/linuxbrew/.linuxbrew/bin/hello'
+
+  run bash ../setup
+  assert_output --regexp 'brew currently installed'
 }

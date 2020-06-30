@@ -1,66 +1,181 @@
 #!/bin/bash
 
-# execute ./run command in remote server
-
 set -eEu
 
-if [[ -f .env ]]; then
+# Allows testing in a remote environment without affecting the current working branch
+
+ON_EXIT_FN_STACK=()
+
+on_exit() {
+  for fn in "${ON_EXIT_FN_STACK[@]}"; do
+    "$fn" || :
+  done
+}
+trap on_exit EXIT
+# trap on_exit SIGINT
+
+# ----------------------------------
+# Colors
+# ----------------------------------
+readonly NOCOLOR='\033[0m'
+readonly RED='\033[0;31m'
+readonly GREEN='\033[0;32m'
+readonly ORANGE='\033[0;33m'
+readonly BLUE='\033[0;34m'
+readonly PURPLE='\033[0;35m'
+readonly CYAN='\033[0;36m'
+readonly LIGHTGRAY='\033[0;37m'
+readonly DARKGRAY='\033[1;30m'
+readonly LIGHTRED='\033[1;31m'
+readonly LIGHTGREEN='\033[1;32m'
+readonly YELLOW='\033[1;33m'
+readonly LIGHTBLUE='\033[1;34m'
+readonly LIGHTPURPLE='\033[1;35m'
+readonly LIGHTCYAN='\033[1;36m'
+readonly WHITE='\033[1;37m'
+
+err() {
+  local -r color="${2-$RED}"
+  echo -e "${color}ERROR>${NOCOLOR} $*" >&2
+}
+
+inf() {
+  local -r color="${2-$LIGHTBLUE}"
+  echo -e "${color}INFO>${NOCOLOR} $*"
+}
+
+infn() {
+  local -r color="${2-$LIGHTBLUE}"
+  echo -e -n "${color}INFO>${NOCOLOR} $*"
+}
+
+git_cur_branch() {
+  git branch | grep '^\*\s' | sed 's/^.*\s\+//'
+}
+
+gen_test_branch_name() {
+  echo "test_$(uuidgen | sed 's/-.*//')"
+}
+
+if [[ -f ./.env ]]; then
 	set -o allexport
 	# shellcheck disable=SC1091
-	. .env
+	. ./.env
 	set +o allexport
 fi
 
-if git branch | grep --silent "^\*\?\s\+${PUBLIC_REPO_TEST_BRANCH}$"; then
-  git checkout "$PUBLIC_REPO_TEST_BRANCH"
-else
-  git checkout -b "$PUBLIC_REPO_TEST_BRANCH"
-fi
+readonly WORK_BRANCH="$(git_cur_branch)"
+readonly TEST_BRANCH="$(gen_test_branch_name)"
 
-git add .
-
-commit=false
-
-on_exit() {
-  if [[ "$commit" == true ]]; then
-    git reset --mixed HEAD~1
-  fi
-
+start_test_server() {
+  # start test server
+  inf 'Starting Test server'
+  ./scripts/aws-ec2 start "$AWS_EC2_INSTANCE_ID" --wait
+  inf 'Test server started' "$GREEN"
 }
 
-trap on_exit EXIT
+# create & publish test branch
+publish_test_branch() {
+  inf 'Publishing Test branch'
+  git stash push --quiet
+  git checkout -b "$TEST_BRANCH"
+  git stash apply --quiet
+  git commit -a -m 'test: remote' || :
+  git push --quiet "$PUBLIC_REPO_ORIGIN" "$TEST_BRANCH"
+  inf 'Test branch published' "$GREEN"
+}
 
-if git commit -m "test: remote"; then
-  commit=true
-fi
-git push "$PUBLIC_REPO_ORIGIN" "$PUBLIC_REPO_TEST_BRANCH"
+# restore git local workspace
+restore_local_workspace() {
+  inf 'Restoring Local Workspace'
+  git checkout "$WORK_BRANCH"
+  git stash pop --quiet --index
+  git branch -D "$TEST_BRANCH" || :
+  git branch --remotes -d "${PUBLIC_REPO_ORIGIN}/${TEST_BRANCH}" || :
+  inf 'Local Workspace restored' "$GREEN"
+}
 
+# setup test server
+run_tests_in_server () {
+  inf 'Running test in remote server'
+  local -r clone_folder="${NAME}-$(uuidgen)"
+  local -r env_name=".env-$(uuidgen)"
+  local test_server_ip=''
+  test_server_ip="$(./scripts/aws-ec2 public-ip "$AWS_EC2_INSTANCE_ID")"
+  readonly test_server_ip
+  local -r env_file="$(mktemp)"
+  sed '/APT_PROXY/d' ./.env > "$env_file"
+  # shellcheck disable=SC2140
+  scp -q "$env_file" "${TEST_SERVER_USER}@${test_server_ip}":~/"$env_name" # without APT_PROXY
+  rm "$env_file"
+  # shellcheck disable=2215,2087,SC2153
+  ssh -T "${TEST_SERVER_USER}@${test_server_ip}" <<- SSHEOF
+    set -eEu
 
-# >>>>>>> REMOTE CODE EXECUTION BELOW
-# shellcheck disable=2215,2087
-ssh -T "${TEST_SERVER_USER}@${TEST_SERVER}" <<- SSHEOF
-  set -xeEu
+    inf() {
+      local -r color="\${2-$LIGHTBLUE}"
+      echo -e "${PURPLE}[TEST SERVER]${NOCOLOR} \${color}INFO>${NOCOLOR} \$*"
+    }
 
-  if [ ! -d "$TEST_SERVER_DIR" ]; then
-    mkdir -p "$TEST_SERVER_DIR"
-  fi
+    if [ ! -d "$TEST_SERVER_DIR" ]; then
+      mkdir -p "$TEST_SERVER_DIR"
+    fi
 
-  cd "$TEST_SERVER_DIR"
+    cd "$TEST_SERVER_DIR"
+    inf "Cloning git repository: ${PUBLIC_REPO}"
+    git clone --quiet --origin "$PUBLIC_REPO_ORIGIN" "$PUBLIC_REPO" "$clone_folder"
+    cd "./${clone_folder}"
+    inf "Cloning git repository done" "$GREEN"
 
-  if [ ! -d "$NAME" ]; then
-    git clone --origin "$PUBLIC_REPO_ORIGIN" "$PUBLIC_REPO" "$NAME"
-  fi
+    on_exit() {
+      sudo rm -r "${TEST_SERVER_DIR}/${clone_folder}"
+      inf "Directory ${TEST_SERVER_DIR}/${clone_folder} removed" "$GREEN"
+    }
+    trap on_exit EXIT
 
-  cd "$NAME"
-  git fetch "$PUBLIC_REPO_ORIGIN"
+    inf "Pulling test branch"
+    git fetch "$PUBLIC_REPO_ORIGIN"
+    git checkout -b "$TEST_BRANCH"
+    git pull github "$TEST_BRANCH"
+    inf "Pulling test branch done" "$GREEN"
 
-  if git branch | grep --silent "^\*\?\s\+${PUBLIC_REPO_TEST_BRANCH}$"; then
-    git checkout "$PUBLIC_REPO_TEST_BRANCH"
-  else
-    git checkout -b "$PUBLIC_REPO_TEST_BRANCH"
-  fi
+    mv ~/"$env_name" ./.env
 
-  git pull "$PUBLIC_REPO_ORIGIN" "$PUBLIC_REPO_TEST_BRANCH"
-
-  bash ./run "$@"
+    inf "Tests started"
+    time bash ./run "$@"
+    inf "Tests done" "$GREEN"
 SSHEOF
+  inf 'Tests done in remote server' "$GREEN"
+}
+
+delete_public_test_branch_onexit() {
+  inf "Deleting remote public repo branch: ${PUBLIC_REPO_ORIGIN}/${TEST_BRANCH}"
+  git push "$PUBLIC_REPO_ORIGIN" --delete "$TEST_BRANCH"
+  inf "Remote branch ${PUBLIC_REPO_ORIGIN}/${TEST_BRANCH} deleted" "$GREEN"
+}
+
+suggest_stop_instance_onexit() {
+  # suggest stop the instance
+  inf "IMPORTANT: Stop ec2 instance with the command below:" "$LIGHTRED"
+  echo -e "${NOCOLOR}\$ ./scripts/aws-ec2 stop $AWS_EC2_INSTANCE_ID"
+}
+
+done_msg_onexit() {
+  inf 'Work done, :)' "$GREEN"
+}
+
+main() {
+  start_test_server
+  ON_EXIT_FN_STACK+=(suggest_stop_instance_onexit)
+  publish_test_branch || {
+    restore_local_workspace
+    return 1
+  }
+  ON_EXIT_FN_STACK=(delete_public_test_branch_onexit "${ON_EXIT_FN_STACK[@]}")
+  restore_local_workspace
+  run_tests_in_server "$@"
+
+  ON_EXIT_FN_STACK+=(done_msg_onexit)
+}
+
+main "$@"

@@ -2,7 +2,7 @@
 
 set -e
 
-# Install
+# Install, Idempotent
 
 if [[ ! -f ~/.bashc ]]; then
   infn 'Symbolic link created: '
@@ -16,6 +16,5 @@ if ! grep --silent '~/.bashc/init' ~/.bashrc ; then
 . ~/.bashc/init
 # :BASHC
 EOF
-
   inf "Added: '~/.bashc/init' to '$(realpath ~/.bashrc)'"
 fi
