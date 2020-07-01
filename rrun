@@ -8,12 +8,11 @@ set -eEu
 # Allows testing in a remote environment without affecting the current working branch
 
 ON_EXIT_FN_STACK=()
-EXIT_ERROR_MSG=''
 
 on_exit() {
   # shellcheck disable=SC2181
-  if [[ $? != 0 && -n "$EXIT_ERROR_MSG" ]]; then
-    err "$EXIT_ERROR_MSG" "$RED"
+  if [[ $? != 0 && -n "${EXIT_ERROR_MSG:-}" ]]; then
+    err "$EXIT_ERROR_MSG"
   fi
 
   for fn in "${ON_EXIT_FN_STACK[@]}"; do
@@ -26,17 +25,17 @@ trap on_exit INT TERM EXIT
 
 err() {
   local -r color="${2-$RED}"
-  echo -e "${color}ERROR>${NOCOLOR} $*" >&2
+  echo -e "\n${color}ERROR> $*${NOCOLOR}\n" >&2
 }
 
 inf() {
   local -r color="${2-$LIGHTBLUE}"
-  echo -e "${color}INFO>${NOCOLOR} $*"
+  echo -e "\n${color}INFO> $*${NOCOLOR}\n"
 }
 
 infn() {
   local -r color="${2-$LIGHTBLUE}"
-  echo -e -n "${color}INFO>${NOCOLOR} $*"
+  echo -e -n "${color}INFO> $*${NOCOLOR}"
 }
 
 git_cur_branch() {
@@ -62,37 +61,48 @@ start_test_server() {
   inf 'Starting Test server'
   EXIT_ERROR_MSG='Starting Test server. FAILED'
   ./scripts/aws-ec2 start "$AWS_EC2_INSTANCE_ID" --wait
-  inf 'Test server started. DONE' "$GREEN"
+  inf 'Starting Test server. DONE' "$GREEN" && unset EXIT_ERROR_MSG
 }
 
 # create & publish test branch
 publish_test_branch() {
-  info 'Publishing Test branch'
-  EXIT_ERROR_MSG='Publishing Test branch. FAILED'
-  git stash push --include-untracked --quiet
-  git stash branch "$TEST_BRANCH" 'stash@{1}'
-  # git checkout -b "$TEST_BRANCH"
-  git stash apply --quiet
+  local msg='Publishing Test branch'
+  inf "$msg"
+  EXIT_ERROR_MSG="${msg}. FAILED"
+
+  git stash push --message "$TEST_BRANCH"
+  # git stash branch "$TEST_BRANCH" 'stash@{1}'
+  git checkout -b "$TEST_BRANCH"
+  git stash apply
   git commit -a -m 'test: remote' || :
-  git push --quiet "$PUBLIC_REPO_ORIGIN" "$TEST_BRANCH"
-  info 'Publishing Test branch. DONE' "$GREEN"
+  git push "$PUBLIC_REPO_ORIGIN" "$TEST_BRANCH"
+  inf "${msg}. DONE" "$GREEN" && unset EXIT_ERROR_MSG
 }
 
 # restore git local workspace
 restore_local_workspace() {
   # only restore if necesary
-  inf 'Restoring Local Workspace'
-  EXIT_ERROR_MSG='Restoring Local Workspace. FAILED'
+  local msg='Restoring Local Workspace'
+  inf "$msg"
+  EXIT_ERROR_MSG="${msg}. FAILED"
+
   git checkout "$WORK_BRANCH"
-  git stash pop --quiet --index || :
+  # only stash pop if stash exist
+  local -r stash="$(git stash list | grep ": ${TEST_BRANCH}" | head -n 1 | sed 's/:.*//')"
+  if [[ -n "$stash" ]]; then
+    git stash pop --index "$stash"
+  fi
   git branch -D "$TEST_BRANCH" || :
   git branch --remotes -d "${PUBLIC_REPO_ORIGIN}/${TEST_BRANCH}" || :
-  inf 'Local Workspace restored' "$GREEN"
+  inf "${msg}. DONE" "$GREEN" && unset EXIT_ERROR_MSG
 }
 
 # setup test server
 run_tests_in_server () {
-  inf 'Running test in remote server'
+  local msg='Running test in remote server'
+  inf "$msg"
+  EXIT_ERROR_MSG="${msg}. FAILED"
+
   local -r clone_folder="${NAME}-$(uuidgen)"
   local -r env_name=".env-$(uuidgen)"
   local test_server_ip=''
@@ -108,8 +118,8 @@ run_tests_in_server () {
     set -eEu
 
     inf() {
-      local -r color="\${2-$LIGHTBLUE}"
-      echo -e "${PURPLE}[TEST SERVER]${NOCOLOR} \${color}INFO>${NOCOLOR} \$*"
+      local -r color="\${2:-$LIGHTBLUE}"
+      echo -e "\n${PURPLE}[TEST SERVER]${NOCOLOR} \${color}INFO> \$*${NOCOLOR}\n"
     }
 
     if [ ! -d "$TEST_SERVER_DIR" ]; then
@@ -120,7 +130,7 @@ run_tests_in_server () {
     inf "Cloning git repository: ${PUBLIC_REPO}"
     git clone --origin "$PUBLIC_REPO_ORIGIN" "$PUBLIC_REPO" "$clone_folder"
     cd "./${clone_folder}"
-    inf "Cloning git repository done" "$GREEN"
+    inf "Cloning git repository. DONE" "$GREEN"
 
     on_exit() {
       sudo rm -r "${TEST_SERVER_DIR}/${clone_folder}"
@@ -132,21 +142,24 @@ run_tests_in_server () {
     git fetch "$PUBLIC_REPO_ORIGIN"
     git checkout -b "$TEST_BRANCH"
     git pull github "$TEST_BRANCH"
-    inf "Pulling test branch done" "$GREEN"
+    inf "Pulling test branch. DONE" "$GREEN"
 
     mv ~/"$env_name" ./.env
-
-    inf "Tests started"
     time bash ./run "$@"
-    inf "Tests done" "$GREEN"
 SSHEOF
-  inf 'Tests done in remote server' "$GREEN"
+  inf "${msg}. DONE" "$GREEN" && unset EXIT_ERROR_MSG
 }
 
 delete_public_test_branch_onexit() {
-  inf "Deleting remote public repo branch: ${PUBLIC_REPO_ORIGIN}/${TEST_BRANCH}"
-  git push "$PUBLIC_REPO_ORIGIN" --delete "$TEST_BRANCH"
-  inf "Remote branch ${PUBLIC_REPO_ORIGIN}/${TEST_BRANCH} deleted" "$GREEN"
+  local msg="Deleting public test branch on ${PUBLIC_REPO_ORIGIN}"
+  inf "$msg"
+
+  if git push "$PUBLIC_REPO_ORIGIN" --delete "$TEST_BRANCH"; then
+    inf "${msg}. DONE" "$GREEN"
+  else
+    err "${msg}. FAILED"
+  fi
+
 }
 
 suggest_stop_instance_onexit() {
@@ -161,7 +174,7 @@ stop_instance_onexit() {
   if ./scripts/aws-ec2 stop "$AWS_EC2_INSTANCE_ID" ; then
     inf "Stopping ec2 instance ${AWS_EC2_INSTANCE_ID}. DONE" "$GREEN"
   else
-    inf "Stopping ec2 instance ${AWS_EC2_INSTANCE_ID}. FAIL" "$RED"
+    err "Stopping ec2 instance ${AWS_EC2_INSTANCE_ID}. FAIL"
   fi
 }
 
@@ -171,19 +184,18 @@ done_msg_onexit() {
 
 main() {
   start_test_server
+
   if [[ -n "${TEST_SERVER_STOP}" && "${TEST_SERVER_STOP}" == true ]]; then
     ON_EXIT_FN_STACK+=(stop_instance_onexit)
   else
     ON_EXIT_FN_STACK+=(suggest_stop_instance_onexit)
   fi
-  publish_test_branch || {
-    restore_local_workspace
-    return 1
-  }
-  ON_EXIT_FN_STACK=(delete_public_test_branch_onexit "${ON_EXIT_FN_STACK[@]}")
-  restore_local_workspace
-  run_tests_in_server "$@"
 
+  ON_EXIT_FN_STACK=(restore_local_workspace "${ON_EXIT_FN_STACK[@]}")
+  publish_test_branch
+  ON_EXIT_FN_STACK=(delete_public_test_branch_onexit "${ON_EXIT_FN_STACK[@]}")
+
+  run_tests_in_server "$@"
   ON_EXIT_FN_STACK+=(done_msg_onexit)
 }
 
