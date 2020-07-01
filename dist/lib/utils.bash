@@ -48,59 +48,66 @@ debug() {
 
 install_plugin() {
   local -r plugin="$1"
-  local -r plugin_file_path="${DIST_PATH}/packages/${plugin}/content/${plugin}.plugin.bash"
+
+  local -r pkg="$plugin"
+  local -r plugin_file_path="${PKG_PATH}/${pkg}/content/${plugin}.plugin.bash"
   local -r plugin_file_dest_path="${BASH_PLUGINS_DIR}/${plugin}.plugin.bash"
 
-  inf "Setting bash plugin: ${plugin}"
+  local -r msg="Installing bash plugin"
+
+  inf "${msg}: ${plugin}"
 
   if [[ ! -f "$plugin_file_path" ]]; then
-    err "Setting bash plugin: ${plugin}, plugin doesn't exist: $plugin_file_path"
+    err "${msg}: ${plugin}, plugin doesn't exist in: $plugin_file_path"
     return 10
   fi
 
   if [[ ! -d "$BASH_PLUGINS_DIR" ]]; then
-    err "Setting bash plugin: ${plugin}, plugins dir doesn't exist: $BASH_PLUGINS_DIR"
+    err "${msg}: ${plugin}, plugins dir doesn't exist: $BASH_PLUGINS_DIR"
     return 11
   fi
 
-  ln --symbolic --verbose "$plugin_file_path" "$plugin_file_dest_path"
-  echo "BASHC_PLUGINS=+($plugin)" >> "$BASH_GEN_SETTINGS_FILE"
-  inf "DONE. Setting bash plugin: ${plugin}" "$GREEN"
+  ln --symbolic --verbose "$plugin_file_path" "$plugin_file_dest_path" || {
+    err "${msg}: ${plugin}, creating link"
+    return 12
+  }
+  echo "BASHC_PLUGINS=+($plugin)" >> "$BASH_GEN_SETTINGS_FILE" || {
+    err "${msg}: ${plugin}, adding plugin to settings"
+    return 13
+  }
 
+  inf "DONE. ${msg}: ${plugin}" "$GREEN"
   return 0
 }
-
 
 install_package() {
   local -r pkg="$1"
 
-  local -r pkg_dir="${DIST_PATH}/packages/${pkg}"
+  local -r pkg_dir="${PKG_PATH}/${pkg}"
   local -r setup_file_path="${pkg_dir}/setup"
   local -r plugin_file_path="${pkg_dir}/content/${pkg}.plugin.bash"
+  local -r msg='Installing package'
 
-  inf "Setting package: ${pkg}"
+  inf "${msg}: ${pkg}"
 
   if [[ ! -f "$setup_file_path" ]]; then
-    err "Setting package: ${pkg}, package doesn't exist: $plugin_file_path"
+    err "${msg}: ${pkg}, package doesn't exist: $plugin_file_path"
     return 10
   fi
 
-  local out=''
-  out="$(bash "$setup_file_path" 2>&1)"
-  local -r ecode=$?
-
-  if [[ $ecode != 0 ]] ; then
-    echoc "$out" "$RED"
-    err "Setting package: ${pkg}"
-    return $ecode
-  else
-    echoc "$out" "$GREEN"
-  fi
+  bash "$setup_file_path" || {
+    err "${msg}: ${pkg}, executing package setup"
+    return 11
+  }
 
   if [[ -f "$plugin_file_path" ]]; then
-    install_plugin "$pkg"
+    install_plugin "$pkg" || {
+      err "${msg}: ${pkg}, installing bash plugin"
+      return 12
+    }
   fi
-  inf "DONE. Setting package: ${pkg}" "$GREEN"
+
+  inf "DONE. ${msg}: ${pkg}" "$GREEN"
   return 0
 }
 
