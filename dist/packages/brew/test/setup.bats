@@ -1,7 +1,7 @@
 load test_helper
 
 @test 'should install brew config' {
-  export BASHC_PLUGINS_DIR=/tmp
+  export BASH_PLUGINS_DIR=/tmp
   run bash ../setup
 
   [[ -L /tmp/brew.plugin.bash && -f /tmp/brew.plugin.bash ]]
