@@ -4,17 +4,38 @@ set -eu
 # shellcheck disable=SC1091
 . './lib/colors.bash'
 
-if [[ -f ./.env ]]; then
-	set -o allexport
-	# shellcheck disable=SC1091
-	. ./.env
-	set +o allexport
-fi
+set -o allexport
+# shellcheck disable=SC1091
+. ./.env
+set +o allexport
 
 # shellcheck disable=SC2155
 export DIST_PATH="$(realpath ./dist)"
 
+__test_dir() {
+  local -r test_dir="$1"
+  local has_tests=false
+
+  while read -r suite; do
+    has_tests=true
+    echo -e "\n💚/💔 >> ${LIGHTBLUE}${suite##*/}${NOCOLOR} in ${suite%/*}\n"
+    if [[ "${BATS_PRETTY:-}" == true ]]; then
+      bats --pretty "./$suite"
+    else
+      bats "./$suite"
+    fi
+
+  done < <(find "$test_dir" -ignore_readdir_race -name '*.bats' -type f 2> /dev/null )
+
+  if [[ $has_tests == false ]]; then
+    echo -e "${LIGHTRED}>> NO TESTS${NOCOLOR}"
+  fi
+}
+
 cd './dist/packages'
+
+echo -e "\n${LIGHTPURPLE}Testing Packages${NOCOLOR}\n"
+
 for pkg in *; do
   echo -e "\n> package: ${YELLOW}${pkg}${NOCOLOR}\n"
 
@@ -22,18 +43,12 @@ for pkg in *; do
     echo -e "${LIGHTRED}>>TESTS IGNORED${NOCOLOR}"
     continue
   fi
-
-  has_tests=false
-  while read -r suite; do
-    has_tests=true
-    echo -e "\n💚/💔 >> ${LIGHTBLUE}${suite##*/}${NOCOLOR} in ${suite%/*}\n"
-    bats "./$suite"
-  done < <(find "${pkg}/test" -ignore_readdir_race -name '*.bats' -type f 2> /dev/null )
-
-  if [[ $has_tests == false ]]; then
-    echo -e "${LIGHTRED}>> NO TESTS${NOCOLOR}"
-  fi
-
+  __test_dir "${pkg}/test"
 done
+cd - > /dev/null
+
+echo -e "\n${LIGHTPURPLE}Testing Dist${NOCOLOR}\n"
+
+ __test_dir "./dist/test"
 
 exit $?

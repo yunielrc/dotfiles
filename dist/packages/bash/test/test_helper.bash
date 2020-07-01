@@ -6,4 +6,4 @@
 # shellcheck disable=SC2155
 export BASHC_PATH="$(realpath ./fixtures/.bashc)"
 # shellcheck disable=SC2155
-export PKG_PATH="$(realpath ..)"
+export PKG_PATH="$(realpath ../..)"

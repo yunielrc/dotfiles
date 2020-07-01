@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+#  BASH SETTINGS
+set -o errexit
+set -o errtrace
+set -o nounset
+set -o pipefail
+# :BASH SETTINGS
+
+readonly SCRIPT_NAME="$(basename "${0}")"
+readonly BASE_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# shellcheck disable=SC2155
+export DIST_PATH="$(realpath ./dist)"
+readonly DIST_PATH
+# shellcheck disable=SC2155
+export PKG_PATH="$(realpath ./dist/packages)"
+readonly PKG_PATH
+
+cd "$BASE_PATH"
+
+# shellcheck disable=SC1091
+. './lib/colors.bash'
+# shellcheck disable=SC1091
+. './lib/utils.bash'
+
+set -o allexport
+# shellcheck disable=SC1091
+. ./.env
+set +o allexport
+
+
+usage(){
+
+  cat <<HELPMSG
+  Usage:
+  ${SCRIPT_NAME} <cm>
+
+  Bootstrap a configuration management inside cm
+
+  Options:
+    -h, --help          Show this help
+
+  Examples:
+  ${SCRIPT_NAME} desktop
+
+  Exit status:
+  0: Ok
+  >= 1: Error
+HELPMSG
+}
+
+on_exit() {
+  :
+}
+
+validate() {
+  local cm="$1"
+
+  if [[ ! -f "./cm/${cm}" ]]; then
+     err "Configuration management '${cm}' doesn't exists inside $(realpath ./cm)"
+     usage
+     return 1
+  fi
+}
+
+# TODO: test this now
+main() {
+
+  if [[ "$#" == 0 ]]; then
+    set -- '-h'
+  fi
+
+  validate "$1"
+  bash "./cm/base.bash"
+  bash "./cm/${1}"
+}
+
+trap on_exit EXIT
+
+if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
+  main "$@"
+  exit $?
+fi

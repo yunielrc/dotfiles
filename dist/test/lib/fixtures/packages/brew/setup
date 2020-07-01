@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-# setup pc
+echo 'brew setup'
