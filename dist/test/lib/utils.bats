@@ -2,7 +2,7 @@ load test_helper
 
 setup() {
   TMP_DIR="$(mktemp -d)"
-  DIST_PATH="$(realpath ./fixtures)"
+  DIST_PATH="$(realpath ../fixtures)"
   PKG_PATH="${DIST_PATH}/packages"
 
   BASH_PLUGINS_DIR="${TMP_DIR}/plugins"
@@ -15,7 +15,7 @@ setup() {
     run install_plugin 'plugin1'
 
     assert_failure 10
-    assert_line --index 1 --regexp "ERROR> Installing bash plugin: plugin1, plugin doesn't exist in: .*/dist/test/lib/fixtures/packages/plugin1/content/plugin1.plugin.bash"
+    assert_line --index 1 --regexp "ERROR> Installing bash plugin: plugin1, plugin doesn't exist in: .*/dist/test/fixtures/packages/plugin1/content/plugin1.plugin.bash"
 }
 
 @test "plugin dir doesn't exists" {
@@ -51,7 +51,7 @@ ERROR> Installing bash plugin: brew, plugins dir doesn't exist: 123456654321"
   run install_plugin "$plugin"
 
   assert_success
-  assert_line --index 2 "INFO> DONE. Installing bash plugin: brew "
+  assert_line --index 2 --regexp "INFO> DONE. Installing bash plugin: brew"
 
   [[ -L "${BASH_PLUGINS_DIR}/${plugin}.plugin.bash" && -f "${BASH_PLUGINS_DIR}/${plugin}.plugin.bash" ]]
 
@@ -65,7 +65,7 @@ ERROR> Installing bash plugin: brew, plugins dir doesn't exist: 123456654321"
   run install_package "$pkg"
 
   assert_failure 10
-  assert_line --index 1 --regexp "ERROR> Installing package: pkg1, package doesn't exist: .*/dist/test/lib/fixtures/packages/pkg1/content/pkg1.plugin.bash"
+  assert_line --index 1 --regexp "ERROR> Installing package: pkg1, package doesn't exist: .*/dist/test/fixtures/packages/pkg1/setup"
 
   pkg='pkgfail'
   run install_package "$pkg"

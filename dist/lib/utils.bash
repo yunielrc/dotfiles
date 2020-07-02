@@ -1,9 +1,15 @@
 #!/usr/bin/env bash
 
+[[ -z "${NOCOLOR:-}" ]] && {
+  set -o allexport
+  . "${LIBS_PATH}/colors.bash"
+  set +o allexport
+}
+
 echoc() {
   local -r color="${2-$BLUE}"
 
-  if [[ "${ENV,,}" != 'production' ]]; then
+  if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
     echo -e "$*"
   else
     echo -e "${color}$*${NOCOLOR}" >&2
@@ -13,7 +19,7 @@ echoc() {
 err() {
   local -r color="${2-$RED}"
 
-  if [[ "${ENV,,}" != 'production' ]]; then
+  if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
     echo -e "ERROR> $*" >&2
   else
     echo -e "${color}ERROR> $*${NOCOLOR}" >&2
@@ -23,7 +29,7 @@ err() {
 inf() {
   local -r color="${2-$LIGHTBLUE}"
 
-  if [[ "${ENV,,}" != 'production' ]]; then
+  if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
     echo -e "INFO> $*"
   else
     echo -e "${color}INFO> $*${NOCOLOR}"
@@ -33,7 +39,7 @@ inf() {
 infn() {
   local -r color="${2-$LIGHTBLUE}"
 
-  if [[ "${ENV,,}" != 'production' ]]; then
+  if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
     echo -e -n "INFO> $*"
   else
     echo -e -n "${color}INFO> $*${NOCOLOR}"
@@ -41,7 +47,7 @@ infn() {
 }
 
 debug() {
-  if [[ "${ENV,,}" != 'production' ]]; then
+  if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
     echo "DEBUG> $*"
   fi
 }
@@ -91,7 +97,7 @@ install_package() {
   inf "${msg}: ${pkg}"
 
   if [[ ! -f "$setup_file_path" ]]; then
-    err "${msg}: ${pkg}, package doesn't exist: $plugin_file_path"
+    err "${msg}: ${pkg}, package doesn't exist: $setup_file_path"
     return 10
   fi
 
@@ -111,6 +117,10 @@ install_package() {
   return 0
 }
 
-alias addp='install_package'
-export -f err inf infn debug
-export addp
+addp() {
+  echo
+  install_package "$@"
+  echo
+}
+
+export -f echoc err inf infn debug install_plugin install_package addp
