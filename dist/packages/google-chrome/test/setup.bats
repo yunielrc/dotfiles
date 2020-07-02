@@ -7,12 +7,9 @@ load test_helper
 
   assert_success
   assert_output --regexp '.*/google-chrome$'
-}
 
-@test 'should not install google chrome if already installed' {
-  run bash ../setup
   run bash ../setup
 
-  assert_failure
+  assert_success
   assert_output --regexp 'google-chrome currently installed'
 }

@@ -6,7 +6,7 @@ set -e
 
 type -P brew &> /dev/null && {
   inf 'brew currently installed'
-  exit 1
+  exit 0
 }
 
 # Dependencies

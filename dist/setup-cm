@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Bootstrap a configuration management inside cm folder
+
 #  BASH SETTINGS
 set -o errexit
 set -o errtrace
@@ -7,14 +9,19 @@ set -o nounset
 set -o pipefail
 # :BASH SETTINGS
 
-readonly INCLUDE_BASE_CM="${INCLUDE_BASE_CM:-true}"
 
 readonly SCRIPT_NAME="$(basename "${0}")"
 readonly BASE_PATH="${BASE_PATH:-"$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"}"
 
+readonly INCLUDE_BASE_CM="${INCLUDE_BASE_CM:-true}"
+
 readonly CM_PATH="${BASE_PATH}/cm"
 readonly LIBS_PATH="${LIBS_PATH:-"${BASE_PATH}/lib"}"
 
+export DIST_PATH="${BASE_PATH}"
+readonly DIST_PATH
+export PKG_PATH="${DIST_PATH}/packages"
+readonly PKG_PATH
 
 cd "$BASE_PATH"
 
@@ -23,11 +30,6 @@ set -o allexport
 set +o allexport
 
 . "${LIBS_PATH}/utils.bash"
-
-export DIST_PATH="${BASE_PATH}"
-readonly DIST_PATH
-export PKG_PATH="${DIST_PATH}/packages"
-readonly PKG_PATH
 
 usage(){
 
@@ -76,6 +78,8 @@ load_base_cm(){
 main() {
   if [[ "$#" == 0 ]]; then
     set -- '-h'
+    usage
+    return 1
   fi
   if [[ "${INCLUDE_BASE_CM:-}" == true ]]; then
     load_base_cm

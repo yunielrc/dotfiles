@@ -19,6 +19,6 @@ load test_helper
 
   run bash ../setup
 
-  assert_failure
+  assert_success
   assert_output --regexp 'brew currently installed'
 }
