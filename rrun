@@ -70,7 +70,7 @@ publish_test_branch() {
   inf "$msg"
   EXIT_ERROR_MSG="${msg}. FAILED"
 
-  git stash push --message "$TEST_BRANCH"
+  git stash push --include-untracked --message "$TEST_BRANCH"
   # git stash branch "$TEST_BRANCH" 'stash@{1}'
   git checkout -b "$TEST_BRANCH"
   git stash apply
@@ -104,15 +104,22 @@ run_tests_in_server () {
   EXIT_ERROR_MSG="${msg}. FAILED"
 
   local -r clone_folder="${NAME}-$(uuidgen)"
-  local -r env_name=".env-$(uuidgen)"
   local test_server_ip=''
   test_server_ip="$(./scripts/aws-ec2 public-ip "$AWS_EC2_INSTANCE_ID")"
   readonly test_server_ip
-  local -r env_file="$(mktemp)"
-  sed '/APT_PROXY/d' ./.env > "$env_file"
+
+  local -r env_name=".env-$(uuidgen)"
+  local -r env_tmp_file="$(mktemp)"
+
+  cat ./.env > "$env_tmp_file"
+
+  if [[ -f ./.env.override.server ]]; then
+    cat ./.env.override.server >> "$env_tmp_file"
+  fi
+
   # shellcheck disable=SC2140
-  scp -q "$env_file" "${TEST_SERVER_USER}@${test_server_ip}":~/"$env_name" # without APT_PROXY
-  rm "$env_file"
+  scp -q "$env_tmp_file" "${TEST_SERVER_USER}@${test_server_ip}":~/"$env_name" # without APT_PROXY
+  rm "$env_tmp_file"
   # shellcheck disable=2215,2087,SC2153
   ssh -T "${TEST_SERVER_USER}@${test_server_ip}" <<- SSHEOF
     set -eEu
