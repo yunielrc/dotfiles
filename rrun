@@ -2,7 +2,6 @@
 
 set -eEu
 
-# shellcheck disable=SC1091
 . './lib/colors.bash'
 
 # Allows testing in a remote environment without affecting the current working branch
@@ -74,7 +73,8 @@ publish_test_branch() {
   # git stash branch "$TEST_BRANCH" 'stash@{1}'
   git checkout -b "$TEST_BRANCH"
   git stash apply
-  git commit -a -m 'test: remote' || :
+  git add .
+  git commit -m 'test: remote' || :
   git push "$PUBLIC_REPO_ORIGIN" "$TEST_BRANCH"
   inf "${msg}. DONE" "$GREEN" && unset EXIT_ERROR_MSG
 }
@@ -121,7 +121,7 @@ run_tests_in_server () {
   scp -q "$env_tmp_file" "${TEST_SERVER_USER}@${test_server_ip}":~/"$env_name" # without APT_PROXY
   rm "$env_tmp_file"
   # shellcheck disable=2215,2087,SC2153
-  ssh -o 'UserKnownHostsFile=/dev/null' -o 'UserKnownHostsFile=/dev/null' -T "${TEST_SERVER_USER}@${test_server_ip}" <<- SSHEOF
+  ssh -o 'StrictHostKeyChecking=no' -o 'UserKnownHostsFile=/dev/null' -T "${TEST_SERVER_USER}@${test_server_ip}" <<- SSHEOF
     set -eEu
 
     inf() {

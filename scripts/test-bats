@@ -19,12 +19,11 @@ __test_dir() {
   while read -r suite; do
     has_tests=true
     echo -e "\n💚/💔 >> ${LIGHTBLUE}${suite##*/}${NOCOLOR} in ${suite%/*}\n"
-    if [[ "${BATS_PRETTY:-}" == true ]]; then
+    if [[ "${BATS_PRETTY:-}" != false ]]; then
       bats --pretty "./$suite"
     else
       bats "./$suite"
     fi
-
   done < <(find "$test_dir" -ignore_readdir_race -name '*.bats' -type f 2> /dev/null )
 
   if [[ $has_tests == false ]]; then

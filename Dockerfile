@@ -5,11 +5,15 @@ ARG APT_PROXY
 ARG USER=${USER:-user}
 RUN [ -n "$APT_PROXY" ] && echo "$APT_PROXY" | sed "s/'//g" > '/etc/apt/apt.conf.d/00proxy' || :
 RUN apt-get update -y && \
-    apt-get install -y wget file sudo xz-utils uuid-runtime && \
+    apt-get install -y wget file sudo xz-utils uuid-runtime gnupg tzdata && \
     rm -rf /var/lib/apt/lists/* && \
     useradd --create-home --shell /bin/bash "$USER" && \
     usermod -aG sudo "$USER" && \
-    echo "$USER ALL=NOPASSWD:ALL" > /etc/sudoers.d/nopasswd
+    echo "$USER ALL=NOPASSWD:ALL" > /etc/sudoers.d/nopasswd && \
+    rm '/etc/localtime' && \
+    ln -s '/usr/share/zoneinfo/America/Havana' '/etc/localtime' && \
+    echo 'America/Havana' > '/etc/timezone'
+
 
 FROM base as dev
 RUN apt-get update -y && \

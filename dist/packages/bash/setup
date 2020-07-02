@@ -2,7 +2,7 @@
 
 set -e
 
-# Install, Idempotent
+# Install
 
 if [[ ! -f ~/.bashc ]]; then
   infn 'Symbolic link created: '

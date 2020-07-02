@@ -9,22 +9,12 @@ set -o pipefail
 
 readonly SCRIPT_NAME="$(basename "${0}")"
 readonly BASE_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-# shellcheck disable=SC2155
-export DIST_PATH="$(realpath ./dist)"
-readonly DIST_PATH
-# shellcheck disable=SC2155
-export PKG_PATH="$(realpath ./dist/packages)"
-readonly PKG_PATH
-
 cd "$BASE_PATH"
 
-# shellcheck disable=SC1091
 . './lib/colors.bash'
-# shellcheck disable=SC1091
 . './lib/utils.bash'
 
 set -o allexport
-# shellcheck disable=SC1091
 . ./.env
 set +o allexport
 
@@ -71,6 +61,14 @@ main() {
   fi
 
   validate "$1"
+
+  # shellcheck disable=SC2155
+  export DIST_PATH="${BASE_PATH}/dist)"
+  readonly DIST_PATH
+  # shellcheck disable=SC2155
+  export PKG_PATH="${DIST_PATH}/packages)"
+  readonly PKG_PATH
+
   bash "./cm/base.bash"
   bash "./cm/${1}"
 }
