@@ -6,13 +6,18 @@ case "$1" in
     docker-compose build
     docker-compose run --rm test "$@"
   ;;
+  build-prod|build-setup-cm)
+    shift
+    docker-compose build
+    docker-compose run --rm prod "$@"
+  ;;
   test)
     shift
     docker-compose run --rm test "$@"
   ;;
-  e2e)
+  prod|setup-cm)
     shift
-    docker-compose run --rm e2e "$@"
+    docker-compose run --rm prod "$@"
   ;;
   *)
     echo "./run test"

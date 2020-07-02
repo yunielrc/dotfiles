@@ -1,13 +1,23 @@
 version: '3.8'
 
-
+x-build: &build
+  context: .
+  dockerfile: ./Dockerfile
+  args:
+    VERSION: '20.04'
+    APT_PROXY: "${APT_PROXY}"
+    USER: "${DUSER}"
+    WORKDIR: "${WORKDIR}"
+  target: dev
 
 x-base: &base
   env_file: .env
   container_name: "${NAME}"
   working_dir: "${WORKDIR}"
-  environment: &env
+  environment:
     LIBS: /usr/local/lib/
+  volumes:
+    - "./:${MOUNT}:ro"
   stdin_open: true # docker run -i
   tty: true        # docker run -t
 
@@ -15,35 +25,22 @@ services:
   test:
     <<: *base
     build:
-      context: .
-      dockerfile: ./Dockerfile
-      args:
-        VERSION: '20.04'
-        APT_PROXY: "${APT_PROXY}"
-        USER: "${DUSER}"
-        WORKDIR: "${WORKDIR}"
+      <<: *build
       target: dev
     user: "${DUSER}"
-    volumes:
-      - "./:${MOUNT}:ro"
     command: >
       bash -c '
       ./scripts/lint-shellcheck &&
       ./scripts/test-bats
       '
-  e2e:
+  prod:
     <<: *base
     build:
-      context: .
-      dockerfile: ./Dockerfile
-      args:
-        VERSION: '20.04'
-        APT_PROXY: "${APT_PROXY}"
-        USER: "${DUSER}"
-        WORKDIR: "${WORKDIR}"
-      target: e2e
+      <<: *build
+      target: base
     user: "${DUSER}"
     volumes:
-      - "./.env:${WORKDIR}/.env:ro"
-      - "./dist/.env:${WORKDIR}/dist/.env:ro"
-    command: bash -c './dist/setup-cm desktop'
+      - "./:${MOUNT}:ro"
+      - "./packages/bash/content/.bashc/plugins/local:${MOUNT}/packages/bash/content/.bashc/plugins/local:rw"
+    entrypoint: "./dist/setup-cm"
+

@@ -2,12 +2,12 @@ ARG VERSION
 
 FROM ubuntu:${VERSION:-20.04} as base
 ARG APT_PROXY
-ARG USER=${USER:-user}
+ARG USER
 RUN [ -n "$APT_PROXY" ] && echo "$APT_PROXY" | sed "s/'//g" > '/etc/apt/apt.conf.d/00proxy' || :
 RUN apt-get update -y && \
     apt-get install -y wget file sudo xz-utils uuid-runtime gnupg tzdata && \
     rm -rf /var/lib/apt/lists/* && \
-    useradd --create-home --shell /bin/bash "$USER" && \
+    useradd --no-log-init --create-home --shell /bin/bash "$USER" && \
     usermod -aG sudo "$USER" && \
     echo "$USER ALL=NOPASSWD:ALL" > /etc/sudoers.d/nopasswd && \
     rm '/etc/localtime' && \
@@ -27,8 +27,9 @@ RUN apt-get update -y && \
     git clone https://github.com/bats-core/bats-assert.git /usr/local/lib/bats-assert && \
     git clone https://github.com/bats-core/bats-support.git /usr/local/lib/bats-support
 
-FROM base as e2e
-ARG WORKDIR
-ARG USER=${USER:-user}
-COPY . "${WORKDIR}"
-RUN chown -R "${USER}:${USER}" "${WORKDIR}"
+# FROM base as prod
+# ARG WORKDIR
+# ARG USER
+# COPY . "${WORKDIR}"
+# RUN chown -R "${USER}:${USER}" "${WORKDIR}"
+# ENTRYPOINT ["./dist/setup-cm"]

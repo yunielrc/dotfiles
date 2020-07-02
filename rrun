@@ -203,7 +203,10 @@ main() {
     ON_EXIT_FN_STACK+=(suggest_stop_instance_onexit)
   fi
 
-  ON_EXIT_FN_STACK=(restore_local_workspace "${ON_EXIT_FN_STACK[@]}")
+  if [[ "${RESTORE_LOCAL_WORKSPACE:-}" != false ]]; then
+    ON_EXIT_FN_STACK=(restore_local_workspace "${ON_EXIT_FN_STACK[@]}")
+  fi
+
   publish_test_branch
   ON_EXIT_FN_STACK=(delete_public_test_branch_onexit "${ON_EXIT_FN_STACK[@]}")
 
