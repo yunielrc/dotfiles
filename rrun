@@ -121,7 +121,7 @@ run_tests_in_server () {
   scp -q "$env_tmp_file" "${TEST_SERVER_USER}@${test_server_ip}":~/"$env_name" # without APT_PROXY
   rm "$env_tmp_file"
   # shellcheck disable=2215,2087,SC2153
-  ssh -T "${TEST_SERVER_USER}@${test_server_ip}" <<- SSHEOF
+  ssh -o 'UserKnownHostsFile=/dev/null' -o 'UserKnownHostsFile=/dev/null' -T "${TEST_SERVER_USER}@${test_server_ip}" <<- SSHEOF
     set -eEu
 
     inf() {
