@@ -33,7 +33,7 @@ __test_dir() {
 
 cd './dist/packages'
 
-echo -e "\n${LIGHTPURPLE}Testing Packages${NOCOLOR}\n"
+echo -e "\n${LIGHTPURPLE}Testing Packages Units${NOCOLOR}\n"
 
 for pkg in *; do
   echo -e "\n> package: ${YELLOW}${pkg}${NOCOLOR}\n"
@@ -46,8 +46,12 @@ for pkg in *; do
 done
 cd - > /dev/null
 
-echo -e "\n${LIGHTPURPLE}Testing Dist${NOCOLOR}\n"
+echo -e "\n${LIGHTPURPLE}Testing Units${NOCOLOR}\n"
 
  __test_dir "./dist/test"
+
+echo -e "\n${LIGHTPURPLE}Testing e2e${NOCOLOR}\n"
+
+ __test_dir "./e2e"
 
 exit $?

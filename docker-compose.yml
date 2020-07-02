@@ -1,18 +1,10 @@
 version: '3.8'
 
+
+
 x-base: &base
   env_file: .env
-  build:
-    context: .
-    dockerfile: ./Dockerfile
-    args:
-      VERSION: '20.04'
-      APT_PROXY: "${APT_PROXY}"
-      USER: "${DUSER}"
-    target: dev
   container_name: "${NAME}"
-  volumes:
-    - "./:${MOUNT}:ro"
   working_dir: "${WORKDIR}"
   environment: &env
     LIBS: /usr/local/lib/
@@ -22,12 +14,36 @@ x-base: &base
 services:
   test:
     <<: *base
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        VERSION: '20.04'
+        APT_PROXY: "${APT_PROXY}"
+        USER: "${DUSER}"
+        WORKDIR: "${WORKDIR}"
+      target: dev
     user: "${DUSER}"
+    volumes:
+      - "./:${MOUNT}:ro"
     command: >
       bash -c '
       ./scripts/lint-shellcheck &&
       ./scripts/test-bats
       '
-  stagin:
+  e2e:
     <<: *base
-    command: bash
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        VERSION: '20.04'
+        APT_PROXY: "${APT_PROXY}"
+        USER: "${DUSER}"
+        WORKDIR: "${WORKDIR}"
+      target: e2e
+    user: "${DUSER}"
+    volumes:
+      - "./.env:${WORKDIR}/.env:ro"
+      - "./dist/.env:${WORKDIR}/dist/.env:ro"
+    command: bash -c './dist/setup-cm desktop'

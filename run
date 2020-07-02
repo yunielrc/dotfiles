@@ -10,6 +10,10 @@ case "$1" in
     shift
     docker-compose run --rm test "$@"
   ;;
+  e2e)
+    shift
+    docker-compose run --rm e2e "$@"
+  ;;
   *)
     echo "./run test"
     echo "./run bulld-test"

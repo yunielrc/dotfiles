@@ -27,3 +27,8 @@ RUN apt-get update -y && \
     git clone https://github.com/bats-core/bats-assert.git /usr/local/lib/bats-assert && \
     git clone https://github.com/bats-core/bats-support.git /usr/local/lib/bats-support
 
+FROM base as e2e
+ARG WORKDIR
+ARG USER=${USER:-user}
+COPY . "${WORKDIR}"
+RUN chown -R "${USER}:${USER}" "${WORKDIR}"
