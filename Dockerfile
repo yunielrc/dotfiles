@@ -12,20 +12,22 @@ RUN apt-get update -y && \
     echo "$USER ALL=NOPASSWD:ALL" > /etc/sudoers.d/nopasswd && \
     rm '/etc/localtime' && \
     ln -s '/usr/share/zoneinfo/America/Havana' '/etc/localtime' && \
-    echo 'America/Havana' > '/etc/timezone'
+    echo 'America/Havana' > '/etc/timezone' && \
+    echo -e 'XKBMODEL="pc105"\nXKBLAYOUT="us"\nXKBVARIANT="alt-intl"\nBACKSPACE="guess"' > '/etc/default/keyboard'
 
 
 FROM base as dev
 RUN apt-get update -y && \
     apt-get install -y git shellcheck build-essential && \
-    rm -rf /var/lib/apt/lists/* && \
     cd /tmp/ && \
     git clone https://github.com/bats-core/bats-core.git && \
     cd bats-core && \
     ./install.sh /usr/local && \
     cd - && rm -r /tmp/bats-core && \
     git clone https://github.com/bats-core/bats-assert.git /usr/local/lib/bats-assert && \
-    git clone https://github.com/bats-core/bats-support.git /usr/local/lib/bats-support
+    git clone https://github.com/bats-core/bats-support.git /usr/local/lib/bats-support && \
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/*
 
 FROM base as prod
 ARG WORKDIR
