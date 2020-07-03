@@ -6,7 +6,7 @@
   set +o allexport
 }
 
-echorc() {
+echoec() {
   local -r color="${2-$BLUE}"
 
   if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
@@ -15,6 +15,7 @@ echorc() {
     echo -e "${color}$*${NOCOLOR}" >&2
   fi
 }
+export -f echoec
 
 echoc() {
   local -r color="${2-$BLUE}"
@@ -25,6 +26,7 @@ echoc() {
     echo -e "${color}$*${NOCOLOR}"
   fi
 }
+export -f echoc
 
 err() {
   local -r color="${2-$RED}"
@@ -35,6 +37,7 @@ err() {
     echo -e "${color}ERROR> $*${NOCOLOR}" >&2
   fi
 }
+export -f err
 
 inf() {
   local -r color="${2-$LIGHTBLUE}"
@@ -45,6 +48,7 @@ inf() {
     echo -e "${color}INFO> $*${NOCOLOR}"
   fi
 }
+export -f inf
 
 infn() {
   local -r color="${2-$LIGHTBLUE}"
@@ -55,12 +59,14 @@ infn() {
     echo -e -n "${color}INFO> $*${NOCOLOR}"
   fi
 }
+export -f infn
 
 debug() {
   if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
     echo "DEBUG> $*"
   fi
 }
+export -f debug
 
 install_plugin() {
   local -r plugin="$1"
@@ -95,6 +101,7 @@ install_plugin() {
   inf "DONE. ${msg}: ${plugin}" "$GREEN"
   return 0
 }
+export -f install_plugin
 
 install_package() {
   local -r pkg="$1"
@@ -123,8 +130,9 @@ install_package() {
 
   return 0
 }
+export -f install_package
 
-addp() {
+dotf-i() {
   local -r pkg="$1"
   # local -r color="\e[3$(( "$RANDOM" * 6 / 32767 + 1 ))m"
 
@@ -146,5 +154,10 @@ addp() {
   fi
  fi
 }
+export -f dotf-i
 
-export -f echoc err inf infn debug install_plugin install_package addp
+apt-u(){ sudo apt update -y "$@"; }
+export -f apt-u
+
+apt-i(){ sudo apt install -y "$@"; }
+export -f apt-i

@@ -1,2 +1,2 @@
-addp pkgfail
-addp brew
+dotf-i pkgfail
+dotf-i brew

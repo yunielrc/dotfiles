@@ -1,6 +1,13 @@
 
-echoc '# Installing configured Base packages'
+echoc '# Installing apt packages\n'
 
-addp bash
+apt-i wget
+apt-i curl
+apt-i git
+apt-i htop
+apt-i bmon
+apt-i vim
 
-echoc '\n# END. Installing configured Base packages\n'
+echoc '\n# Installing configured Base packages'
+
+dotf-i bash

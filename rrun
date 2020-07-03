@@ -103,7 +103,8 @@ run_tests_in_server () {
   inf "$msg"
   EXIT_ERROR_MSG="${msg}. FAILED"
 
-  local -r clone_folder="${NAME}-$(uuidgen)"
+  local -r work_dir="${TEST_SERVER_DIR}/$(uuidgen)"
+  local -r clone_folder="${NAME}"
   local test_server_ip=''
   test_server_ip="$(./scripts/aws-ec2 public-ip "$AWS_EC2_INSTANCE_ID")"
   readonly test_server_ip
@@ -132,19 +133,19 @@ run_tests_in_server () {
       echo -e "\n${PURPLE}[TEST SERVER]${NOCOLOR} \${color}INFO> \$*${NOCOLOR}\n"
     }
 
-    if [ ! -d "$TEST_SERVER_DIR" ]; then
-      mkdir -p "$TEST_SERVER_DIR"
+    if [ ! -d "$work_dir" ]; then
+      mkdir -p "$work_dir"
     fi
 
-    cd "$TEST_SERVER_DIR"
+    cd "$work_dir"
     inf "Cloning git repository: ${PUBLIC_REPO}"
     git clone --origin "$PUBLIC_REPO_ORIGIN" "$PUBLIC_REPO" "$clone_folder"
     cd "./${clone_folder}"
     inf "Cloning git repository. DONE" "$GREEN"
 
     on_exit() {
-      sudo rm -r "${TEST_SERVER_DIR}/${clone_folder}"
-      inf "Directory ${TEST_SERVER_DIR}/${clone_folder} removed" "$GREEN"
+      sudo rm -r "${work_dir}/${clone_folder}"
+      inf "Directory ${work_dir}/${clone_folder} removed" "$GREEN"
     }
     trap on_exit EXIT
 
