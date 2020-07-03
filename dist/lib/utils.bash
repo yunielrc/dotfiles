@@ -126,7 +126,7 @@ install_package() {
 
 addp() {
   local -r pkg="$1"
-  local -r color="\e[3$(( "$RANDOM" * 6 / 32767 + 1 ))m"
+  # local -r color="\e[3$(( "$RANDOM" * 6 / 32767 + 1 ))m"
 
  if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
   local -r msg="Installing package ${pkg}"
