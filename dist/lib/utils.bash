@@ -129,18 +129,20 @@ addp() {
   local -r color="\e[3$(( "$RANDOM" * 6 / 32767 + 1 ))m"
 
  if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
-  echo -e "\n> Installing package ${pkg}"
+  local -r msg="Installing package ${pkg}"
+  echo -e "\n> ${msg}"
   if install_package "$1"; then
-    echo -e "> DONE"
+    echo -e "> DONE. ${msg}"
   else
-    echo -e "> FAIL"
+    echo -e "> FAIL. ${msg}"
   fi
  else
-   echo -e "\n${WHITE}>${NOCOLOR}${WHITE} Installing package${NOCOLOR} ${YELLOW}${pkg}${NOCOLOR}"
+   local -r msg="${WHITE} Installing package${NOCOLOR} ${YELLOW}${pkg}${NOCOLOR}"
+   echo -e "\n${WHITE}>${NOCOLOR}${msg}"
   if install_package "$1"; then
-    echo -e "${WHITE}>${NOCOLOR}${LIGHTGREEN} DONE${NOCOLOR}"
+    echo -e "${WHITE}>${NOCOLOR}${LIGHTGREEN} DONE.${msg}"
   else
-    echo -e "${WHITE}>${NOCOLOR}${LIGHTRED} FAIL${NOCOLOR}"
+    echo -e "${WHITE}>${NOCOLOR}${LIGHTRED} FAIL.${msg}"
   fi
  fi
 }

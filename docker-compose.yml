@@ -16,8 +16,6 @@ x-base: &base
   working_dir: "${WORKDIR}"
   environment:
     LIBS: /usr/local/lib/
-  volumes:
-    - "./:${MOUNT}:ro"
   stdin_open: true # docker run -i
   tty: true        # docker run -t
 
@@ -28,6 +26,8 @@ services:
       <<: *build
       target: dev
     user: "${DUSER}"
+    volumes:
+      - "./:${MOUNT}:ro"
     command: >
       bash -c '
       ./scripts/lint-shellcheck &&
@@ -37,10 +37,10 @@ services:
     <<: *base
     build:
       <<: *build
-      target: base
+      target: prod
     user: "${DUSER}"
     volumes:
-      - "./:${MOUNT}:ro"
-      - "./packages/bash/content/.bashc/plugins/local:${MOUNT}/packages/bash/content/.bashc/plugins/local:rw"
+      - "./.env:${WORKDIR}/.env:ro"
+      - "./dist/.env:${WORKDIR}/dist/.env:ro"
     entrypoint: "./dist/setup-cm"
 

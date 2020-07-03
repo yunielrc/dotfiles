@@ -157,7 +157,7 @@ run_tests_in_server () {
     mv ~/"$env_name" ./.env
     mv ~/"$env_dist_name" ./dist/.env
 
-    time bash ./run "$@"
+    time bash ./run $@
 SSHEOF
   inf "${msg}. DONE" "$GREEN" && unset EXIT_ERROR_MSG
 }

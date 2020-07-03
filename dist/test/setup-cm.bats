@@ -19,13 +19,13 @@ setup() {
   assert_line --index 0 "> Installing package pkgfail"
   assert_line --index 1 "pkgfail setup"
   assert_line --index 2 "ERROR> Installing package: pkgfail, executing package setup"
-  assert_line --index 3 "> FAIL"
+  assert_line --index 3 "> FAIL. Installing package pkgfail"
   assert_line --index 4 "> Installing package brew"
   assert_line --index 5 "brew setup"
   assert_line --index 6 "INFO> Installing bash plugin: brew"
   assert_line --index 7 "'/tmp/brew.plugin.bash' -> '/home/user/dotfiles/dist/test/fixtures/packages/brew/content/brew.plugin.bash'"
   assert_line --index 8 --regexp "INFO> DONE. Installing bash plugin: brew"
-  assert_line --index 9 --regexp "> DONE"
+  assert_line --index 9 --regexp "> DONE. Installing package brew"
 }
 
 

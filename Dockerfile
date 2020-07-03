@@ -27,9 +27,9 @@ RUN apt-get update -y && \
     git clone https://github.com/bats-core/bats-assert.git /usr/local/lib/bats-assert && \
     git clone https://github.com/bats-core/bats-support.git /usr/local/lib/bats-support
 
-# FROM base as prod
-# ARG WORKDIR
-# ARG USER
-# COPY . "${WORKDIR}"
-# RUN chown -R "${USER}:${USER}" "${WORKDIR}"
-# ENTRYPOINT ["./dist/setup-cm"]
+FROM base as prod
+ARG WORKDIR
+ARG USER
+COPY . "${WORKDIR}"
+RUN chown -R "${USER}:${USER}" "${WORKDIR}"
+ENTRYPOINT ["./dist/setup-cm"]
