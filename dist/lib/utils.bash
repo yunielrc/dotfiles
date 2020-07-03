@@ -6,13 +6,23 @@
   set +o allexport
 }
 
-echoc() {
+echorc() {
   local -r color="${2-$BLUE}"
 
   if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
     echo -e "$*"
   else
     echo -e "${color}$*${NOCOLOR}" >&2
+  fi
+}
+
+echoc() {
+  local -r color="${2-$BLUE}"
+
+  if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
+    echo -e "$*"
+  else
+    echo -e "${color}$*${NOCOLOR}"
   fi
 }
 
@@ -94,8 +104,6 @@ install_package() {
   local -r plugin_file_path="${pkg_dir}/content/${pkg}.plugin.bash"
   local -r msg='Installing package'
 
-  inf "${msg}: ${pkg}"
-
   if [[ ! -f "$setup_file_path" ]]; then
     err "${msg}: ${pkg}, package doesn't exist: $setup_file_path"
     return 10
@@ -113,14 +121,28 @@ install_package() {
     }
   fi
 
-  inf "DONE. ${msg}: ${pkg}" "$GREEN"
   return 0
 }
 
 addp() {
-  echo
-  install_package "$@"
-  echo
+  local -r pkg="$1"
+  local -r color="\e[3$(( "$RANDOM" * 6 / 32767 + 1 ))m"
+
+ if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
+  echo -e "\n> Installing package ${pkg}"
+  if install_package "$1"; then
+    echo -e "> DONE"
+  else
+    echo -e "> FAIL"
+  fi
+ else
+   echo -e "\n${WHITE}>${NOCOLOR}${WHITE} Installing package${NOCOLOR} ${YELLOW}${pkg}${NOCOLOR}"
+  if install_package "$1"; then
+    echo -e "${WHITE}>${NOCOLOR}${LIGHTGREEN} DONE${NOCOLOR}"
+  else
+    echo -e "${WHITE}>${NOCOLOR}${LIGHTRED} FAIL${NOCOLOR}"
+  fi
+ fi
 }
 
 export -f echoc err inf infn debug install_plugin install_package addp

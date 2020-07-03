@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Bootstrap a configuration management inside cm folder
+# Bootstrap a configuration management available in cm folder
 
 #  BASH SETTINGS
 set -o errexit
@@ -37,7 +37,7 @@ usage(){
   Usage:
   ${SCRIPT_NAME} <cm>
 
-  Bootstrap a configuration management inside cm folder
+  Bootstrap a configuration management available in cm folder
 
   Options:
     -h, --help          Show this help
