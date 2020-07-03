@@ -3,5 +3,5 @@
 !**/local/README.md
 **/*.local
 /.env
-/.env.override.*
+/.env.override.server
 /dist/.env
