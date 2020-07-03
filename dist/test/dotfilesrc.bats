@@ -1,18 +1,12 @@
 load test_helper
 
 setup() {
-  TMP_DIR="$(mktemp -d)"
-  DIST_PATH="$(realpath ../fixtures)"
-  PKG_PATH="${DIST_PATH}/packages"
-
-  BASH_PLUGINS_DIR="${TMP_DIR}/plugins"
-  mkdir -p "$BASH_PLUGINS_DIR"
-  BASH_GEN_SETTINGS_FILE="${TMP_DIR}/settings_gen.bash"
-  touch "${BASH_GEN_SETTINGS_FILE}"
+  . "${DIST_PATH}/.dotfilesrc"
+  touch "$BASH_GEN_SETTINGS_FILE"
 }
 
 @test "plugin doesn't exists" {
-    run install_plugin 'plugin1'
+    run __install_plugin 'plugin1'
 
     assert_failure 10
     assert_line --index 1 --regexp "ERROR> Installing bash plugin: plugin1, plugin doesn't exist in: .*/dist/test/fixtures/packages/plugin1/content/plugin1.plugin.bash"
@@ -20,7 +14,7 @@ setup() {
 
 @test "plugin dir doesn't exists" {
     BASH_PLUGINS_DIR="123456654321"
-    run install_plugin 'brew'
+    run __install_plugin 'brew'
 
     assert_failure 11
     assert_output "INFO> Installing bash plugin: brew
@@ -30,7 +24,7 @@ ERROR> Installing bash plugin: brew, plugins dir doesn't exist: 123456654321"
 @test 'error creating link' {
   chmod 0550 "${BASH_PLUGINS_DIR}"
 
-  run install_plugin 'brew'
+  run __install_plugin 'brew'
 
   assert_failure 12
   assert_line --index 2 'ERROR> Installing bash plugin: brew, creating link'
@@ -39,7 +33,7 @@ ERROR> Installing bash plugin: brew, plugins dir doesn't exist: 123456654321"
 @test 'error adding plugin to settings' {
   chmod 0440 "${BASH_GEN_SETTINGS_FILE}"
 
-  run install_plugin 'brew'
+  run __install_plugin 'brew'
 
   assert_failure 13
   assert_line --index 3 'ERROR> Installing bash plugin: brew, adding plugin to settings'
@@ -48,7 +42,7 @@ ERROR> Installing bash plugin: brew, plugins dir doesn't exist: 123456654321"
 @test "should install plugin" {
   local -r plugin='brew'
 
-  run install_plugin "$plugin"
+  run __install_plugin "$plugin"
 
   assert_success
   assert_line --index 2 --regexp "INFO> DONE. Installing bash plugin: brew"
@@ -62,13 +56,13 @@ ERROR> Installing bash plugin: brew, plugins dir doesn't exist: 123456654321"
 @test "error package doesn't exist" {
   local pkg='pkg1'
 
-  run install_package "$pkg"
+  run __install_package "$pkg"
 
   assert_failure 10
   assert_output --regexp "ERROR> Installing package: pkg1, package doesn't exist: .*/dist/test/fixtures/packages/pkg1/setup"
 
   pkg='pkgfail'
-  run install_package "$pkg"
+  run __install_package "$pkg"
 
   assert_failure 11
   assert_output "pkgfail setup
@@ -80,7 +74,7 @@ ERROR> Installing package: pkgfail, executing package setup"
   local -r plugin="$pkg"
   chmod 0440 "${BASH_GEN_SETTINGS_FILE}"
 
-  run install_package "$pkg"
+  run __install_package "$pkg"
 
   assert_failure 12
   assert_line --index 5 'ERROR> Installing package: brew, installing bash plugin'
@@ -89,7 +83,7 @@ ERROR> Installing package: pkgfail, executing package setup"
 @test 'should install package' {
   local -r pkg='brew'
   local -r plugin="$pkg"
-  run install_package "$pkg"
+  run __install_package "$pkg"
 
   assert_success
   assert_line --index 0 --regexp "brew setup"

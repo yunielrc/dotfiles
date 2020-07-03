@@ -28,11 +28,8 @@ services:
     user: "${DUSER}"
     volumes:
       - "./:${MOUNT}:ro"
-    command: >
-      bash -c '
-      ./scripts/lint-shellcheck &&
-      ./scripts/test-bats
-      '
+    entrypoint: "./scripts/test"
+
   prod:
     <<: *base
     build:
@@ -42,5 +39,5 @@ services:
     volumes:
       - "./.env:${WORKDIR}/.env:ro"
       - "./dist/.env:${WORKDIR}/dist/.env:ro"
-    entrypoint: "./dist/setup-cm"
+    entrypoint: "./dist/dotfiles"
 

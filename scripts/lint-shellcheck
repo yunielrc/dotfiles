@@ -2,6 +2,7 @@
 
 set -e
 
+
 targets=()
 while read -r bscript; do
     targets+=("$bscript")

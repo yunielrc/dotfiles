@@ -1,16 +1,24 @@
 #!/bin/bash
 set -eu
 
-# shellcheck disable=SC1091
 . './lib/colors.bash'
 
 set -o allexport
-# shellcheck disable=SC1091
 . ./.env
 set +o allexport
 
 # shellcheck disable=SC2155
 export DIST_PATH="$(realpath ./dist)"
+
+__test_suite() {
+  local -r suite="$1"
+  echo -e "\n💚/💔 >> ${LIGHTBLUE}${suite##*/}${NOCOLOR} in ${suite%/*}\n"
+  if [[ "${BATS_PRETTY:-}" != false ]]; then
+    bats --pretty "./$suite"
+  else
+    bats "./$suite"
+  fi
+}
 
 __test_dir() {
   local -r test_dir="$1"
@@ -18,18 +26,20 @@ __test_dir() {
 
   while read -r suite; do
     has_tests=true
-    echo -e "\n💚/💔 >> ${LIGHTBLUE}${suite##*/}${NOCOLOR} in ${suite%/*}\n"
-    if [[ "${BATS_PRETTY:-}" != false ]]; then
-      bats --pretty "./$suite"
-    else
-      bats "./$suite"
-    fi
+    __test_suite "$suite"
   done < <(find "$test_dir" -ignore_readdir_race -name '*.bats' -type f 2> /dev/null )
 
   if [[ $has_tests == false ]]; then
     echo -e "${LIGHTRED}>> NO TESTS${NOCOLOR}"
   fi
 }
+
+if [[ $# -gt 0 ]]; then
+  for suite in "$@"; do
+    __test_suite "$suite"
+  done
+  exit $?
+fi
 
 cd './dist/packages'
 
@@ -50,8 +60,8 @@ echo -e "\n${LIGHTPURPLE}Testing Units${NOCOLOR}\n"
 
  __test_dir "./dist/test"
 
-echo -e "\n${LIGHTPURPLE}Testing e2e${NOCOLOR}\n"
+# echo -e "\n${LIGHTPURPLE}Testing e2e${NOCOLOR}\n"
 
- __test_dir "./e2e"
+#  __test_dir "./e2e"
 
 exit $?
