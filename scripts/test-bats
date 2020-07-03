@@ -1,5 +1,57 @@
 #!/bin/bash
+set -eu
 
-set -e
+# shellcheck disable=SC1091
+. './lib/colors.bash'
 
-bats -r './test'
+set -o allexport
+# shellcheck disable=SC1091
+. ./.env
+set +o allexport
+
+# shellcheck disable=SC2155
+export DIST_PATH="$(realpath ./dist)"
+
+__test_dir() {
+  local -r test_dir="$1"
+  local has_tests=false
+
+  while read -r suite; do
+    has_tests=true
+    echo -e "\n💚/💔 >> ${LIGHTBLUE}${suite##*/}${NOCOLOR} in ${suite%/*}\n"
+    if [[ "${BATS_PRETTY:-}" != false ]]; then
+      bats --pretty "./$suite"
+    else
+      bats "./$suite"
+    fi
+  done < <(find "$test_dir" -ignore_readdir_race -name '*.bats' -type f 2> /dev/null )
+
+  if [[ $has_tests == false ]]; then
+    echo -e "${LIGHTRED}>> NO TESTS${NOCOLOR}"
+  fi
+}
+
+cd './dist/packages'
+
+echo -e "\n${LIGHTPURPLE}Testing Packages Units${NOCOLOR}\n"
+
+for pkg in *; do
+  echo -e "\n> package: ${YELLOW}${pkg}${NOCOLOR}\n"
+
+  if [[ -n "${BATS_IGNORED_TESTS_PKG:-}" ]] && echo "$BATS_IGNORED_TESTS_PKG" | grep --quiet --word-regexp "$pkg"; then
+    echo -e "${LIGHTRED}>>TESTS IGNORED${NOCOLOR}"
+    continue
+  fi
+  __test_dir "${pkg}/test"
+done
+cd - > /dev/null
+
+echo -e "\n${LIGHTPURPLE}Testing Units${NOCOLOR}\n"
+
+ __test_dir "./dist/test"
+
+echo -e "\n${LIGHTPURPLE}Testing e2e${NOCOLOR}\n"
+
+ __test_dir "./e2e"
+
+exit $?

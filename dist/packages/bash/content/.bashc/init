@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+
+# TODO replace dirname by builtin
+BASHC_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# shellcheck disable=SC1090
+. "${BASHC_PATH}/lib/utils.bash"
+
+BASHC_FILES=(environment.pre.local environment environment.local aliases functions settings_gen.local settings)
+BASHC_FOLDERS=(local 3rd user)
+
+#
+# Load user bash files
+#
+# Globals:
+#   BASHC_FILES
+#   BASHC_PATH
+#
+bashc::__load_files() {
+
+  if [[ "${#BASHC_FILES[@]}" -eq 0 ]]; then
+    debug "BASHC_FILES empty"
+    return 0
+  fi
+  # load personal files
+  for file in "${BASHC_FILES[@]}"; do
+    local file_path="${BASHC_PATH}/${file}"
+    # shellcheck disable=SC1090
+    if [[ -r "$file_path" && -f "$file_path" ]]; then
+      . "$file_path"
+      debug "file loaded '$file_path'"
+      continue
+    fi
+    debug "don't exists: '$file' in '${BASHC_PATH}'"
+  done
+
+  return 0
+}
+
+#
+# Globals:
+#   BASHC_THEME
+#   BASHC_PATH
+#   BASHC_FOLDERS
+#
+bashc::__load_theme() {
+  local -r theme="$BASHC_THEME"
+
+  if [[ -z "$theme" ]]; then
+    debug "theme arg empty"
+    return 0
+  fi
+  for (( i = "${#BASHC_FOLDERS[@]}" - 1 ; i >= 0 ; i-- )); do
+    local folder="${BASHC_FOLDERS[i]}"
+    local theme_path="${BASHC_PATH}/themes/${folder}/${theme}.theme.bash"
+    # shellcheck disable=SC1090
+    if [[ -f "$theme_path" ]]; then
+      . "$theme_path"
+      debug "theme loaded '${theme}' from '${theme_path}'"
+      return 0
+    fi
+  done
+
+  err "theme doesn't exist: '${theme}' in '${BASHC_PATH}/{${BASHC_FOLDERS[*]}}'"
+  return 1
+}
+
+#
+# Globals:
+#   BASHC_PLUGINS
+#   BASHC_FOLDERS
+#   BASHC_PATH
+#
+bashc::__load_plugins() {
+
+  if [[ "${#BASHC_PLUGINS[@]}" -eq 0 ]]; then
+    debug "BASHC_PLUGINS empty"
+    return 0
+  fi
+
+  for plugin in "${BASHC_PLUGINS[@]}"; do
+    local exist=false
+
+    for folder in "${BASHC_FOLDERS[@]}"; do
+      local plugin_path="${BASHC_PATH}/plugins/${folder}/${plugin}.plugin.bash"
+
+      if [[ -r "$plugin_path" && -f "$plugin_path" ]]; then
+        exist=true
+        # shellcheck disable=SC1090
+        . "$plugin_path"
+        debug "plugin loaded '$plugin_path'"
+      fi
+    done
+
+    if [[ "$exist" == false ]]; then
+      err "plugin doesn't exist: '$plugin' folders '${BASHC_PATH}/{${BASHC_FOLDERS[*]}}"
+      return 1
+    fi
+  done
+  return 0
+}
+
+#
+# Globals:
+#   BASHC_PATH
+#   BASHC_FILES
+#   BASHC_FOLDERS
+#   BASHC_PLUGINS
+#   BASHC_THEME
+#
+bashc::main() {
+  bashc::__load_files
+  bashc::__load_theme
+  bashc::__load_plugins
+}
+
+if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
+  bashc::main "$@"
+fi
+

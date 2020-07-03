@@ -1,0 +1,4 @@
+{
+  "shellcheck.exclude": [1091, 1090, 2155],
+  "shellcheck.ignoreFileSchemes": ["git", "gitfs"],
+}

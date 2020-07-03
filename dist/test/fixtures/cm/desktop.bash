@@ -1,0 +1,2 @@
+addp pkgfail
+addp brew

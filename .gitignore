@@ -1,1 +1,7 @@
-.env
+**/local/*
+!**/.gitkeep
+!**/local/README.md
+**/*.local
+/.env
+/.env.override.*
+/dist/.env

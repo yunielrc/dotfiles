@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+echo 'pkgfail setup'
+
+exit 11
+

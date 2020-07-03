@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Install
+
+if [[ ! -f ~/.bashc ]]; then
+  infn 'Symbolic link created: '
+  ln --symbolic --verbose "${PKG_PATH}/bash/content/.bashc" ~/.bashc
+fi
+# shellcheck disable=SC2088
+if ! grep --silent '~/.bashc/init' ~/.bashrc ; then
+
+  cat <<EOF >> ~/.bashrc
+# BASHC
+. ~/.bashc/init
+# :BASHC
+EOF
+  inf "Added: '~/.bashc/init' to '$(realpath ~/.bashrc)'"
+fi

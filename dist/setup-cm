@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+
+# Bootstrap a configuration management available in cm folder
+
+#  BASH SETTINGS
+set -o errexit
+set -o errtrace
+set -o nounset
+set -o pipefail
+# :BASH SETTINGS
+
+
+readonly SCRIPT_NAME="$(basename "${0}")"
+readonly BASE_PATH="${BASE_PATH:-"$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"}"
+
+readonly INCLUDE_BASE_CM="${INCLUDE_BASE_CM:-true}"
+
+readonly CM_PATH="${BASE_PATH}/cm"
+readonly LIBS_PATH="${LIBS_PATH:-"${BASE_PATH}/lib"}"
+
+export DIST_PATH="${BASE_PATH}"
+readonly DIST_PATH
+export PKG_PATH="${DIST_PATH}/packages"
+readonly PKG_PATH
+
+cd "$BASE_PATH"
+
+set -o allexport
+. ./.env
+set +o allexport
+
+. "${LIBS_PATH}/utils.bash"
+
+usage(){
+
+  cat <<HELPMSG
+  Usage:
+  ${SCRIPT_NAME} <cm>
+
+  Bootstrap a configuration management available in cm folder
+
+  Options:
+    -h, --help          Show this help
+
+  Examples:
+  ${SCRIPT_NAME} desktop
+
+  Exit status:
+  0: Ok
+  >= 1: Error
+HELPMSG
+}
+
+on_exit() {
+  :
+}
+
+setup_cm() {
+  local -r cm="${CM_PATH}/${1:-}.bash"
+
+  if [[ ! -f "$cm" ]]; then
+     err "Configuration management '${cm}' doesn't exists"
+     usage
+     return 1
+  fi
+
+  bash "$cm"
+}
+
+load_base_cm(){
+  if [[ -n "${BASE_CM:-}" && "${#BASE_CM[@]}" -gt 0 ]]; then
+    for cm in "${BASE_CM[@]}"; do
+      setup_cm "$cm"
+    done
+  fi
+}
+
+main() {
+  if [[ "$#" == 0 ]]; then
+    set -- '-h'
+    usage
+    return 1
+  fi
+  if [[ "${INCLUDE_BASE_CM:-}" == true ]]; then
+    load_base_cm
+  fi
+  setup_cm "$@"
+}
+
+trap on_exit EXIT
+
+if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
+  main "$@"
+  exit $?
+fi

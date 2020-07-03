@@ -1,0 +1,176 @@
+#!/usr/bin/env bash
+
+# start, stop aws ec2 development instance
+
+set -o errexit
+set -o errtrace
+set -o nounset
+set -o pipefail
+
+readonly SCRIPT_NAME="$(basename "${0}")"
+
+err() {
+  echo "ERROR> $*" >&2
+}
+
+inf() {
+  echo "INFO> $*"
+}
+
+infn() {
+  echo -n "INFO> $*"
+}
+
+validate_instance_id() {
+  local instance_id="${1:-}"
+
+  if [[ -z "$instance_id" ]]; then
+    err '<instance-id> missing'
+    echo
+    usage
+    return 1
+  fi
+}
+
+state() {
+  local -r instance_id="$1"
+
+  local out=''
+  out="$(aws ec2 --output text describe-instances --instance-ids "$instance_id")"
+
+  echo "$out" | grep '^STATE\s\+' | awk '{ print $3 }'
+}
+
+start() {
+  local -r instance_id="$1"
+  local -r wait_running="${2:-}"
+
+  if [[ -n "$wait_running" && "$wait_running" != '--wait' && "$wait_running" != '-w' ]]; then
+    err "Not recognized option: ${wait_running}"
+    echo
+    usage
+    return 1
+  fi
+
+  local out=''
+  out="$(aws ec2 --output text start-instances --instance-ids "$instance_id")"
+  out="$(echo "$out" | grep '^CURRENTSTATE\s\+' | awk '{ print $3 }')"
+
+  if [[ -n "$wait_running" ]]; then
+    local -i retries=3
+    local -ir wait_time=5
+
+    while [[ "$out" == 'pending' && $((retries--)) -gt 0 ]]; do
+      sleep $wait_time
+      out="$(state "$instance_id")"
+    done
+
+    if [[ "$out" != "running" ]]; then
+      err "wait time expired: $out"
+      exit 1
+    fi
+  fi
+  echo "$out"
+}
+
+stop() {
+  local -r instance_id="$1"
+
+  local out=''
+  out="$(aws ec2 --output text stop-instances --force --instance-ids "$instance_id")"
+
+  echo "$out" | grep '^CURRENTSTATE\s\+' | awk '{ print $3 }'
+}
+
+public-ip() {
+  local -r instance_id="$1"
+
+  local out=''
+  out="$(aws --output text ec2 describe-instances --instance-ids "$instance_id")"
+  local -r public_ip="$(echo "$out" | grep '^ASSOCIATION\s\+' | head -n 1 | grep -Po '\d+(\.\d+){3}$')"
+
+  if [[ -z "$public_ip" ]]; then
+    err "public ip empty"
+    exit 1
+  fi
+  echo "$public_ip"
+}
+
+usage(){
+
+  cat <<HELPMSG
+  Usage:
+  ${SCRIPT_NAME} [OPTIONS] COMMAND <instance-id> [COMMAND OPTIONS]
+
+  Start carefully and stop aws ec2 instance
+
+  Options:
+    -h, --help          Show this help
+
+  Commands:
+    start               Start carefully ec2 instance
+
+      Options:
+      --wait-running    Wait until ec2 instance is running
+
+    stop                Stop ec2 instance
+
+    state               Show state of ec2 instance
+    public-ip           Show ec2 instante public ip
+
+  Examples:
+  ${SCRIPT_NAME} start i-602522176312
+  ${SCRIPT_NAME} stop i-602522176312
+  ${SCRIPT_NAME} status i-602522176312
+
+  Exit status:
+  0: Ok
+  >= 1: Error
+HELPMSG
+}
+
+on_exit() {
+  :
+}
+
+main() {
+
+  if [[ "$#" == 0 ]]; then
+    set -- '-h'
+  fi
+
+  validate_instance_id "$2"
+
+  case "$1" in
+    -h|--help|'')
+      usage
+    ;;
+    start)
+      shift
+      start "$@"
+    ;;
+    stop)
+      shift
+      stop "$@"
+    ;;
+    state)
+      shift
+      state "$@"
+    ;;
+    public-ip)
+      shift
+      public-ip "$@"
+    ;;
+    *)
+    usage
+    exit 1
+    ;;
+  esac
+}
+
+trap on_exit EXIT
+
+if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
+  main "$@"
+  exit $?
+fi

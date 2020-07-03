@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Idempotent
+
+type -P brew &> /dev/null && {
+  inf 'brew currently installed'
+  exit 0
+}
+
+# Dependencies
+sudo apt-get update -y
+sudo apt-get install -y curl git build-essential
+
+# Install
+curl -fsSL 'https://raw.githubusercontent.com/Homebrew/install/master/install.sh' | bash
+
+# Configure
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+brew install patchelf
+brew install gcc

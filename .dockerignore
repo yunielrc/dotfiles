@@ -1,6 +1,5 @@
 **/.classpath
 **/.dockerignore
-**/.env
 **/.git
 **/.gitignore
 **/.project
@@ -22,4 +21,8 @@
 **/values.dev.yaml
 .editorconfig
 README.md
-./run
+/run
+**/3rd/*
+/.env
+/.env.override.*
+/dist/.env
