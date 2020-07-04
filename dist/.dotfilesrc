@@ -54,6 +54,8 @@ set +o allexport
 
 # Functions
 
+## echo functions
+
 echoec() {
   local -r color="${2-$BLUE}"
 
@@ -115,6 +117,11 @@ debug() {
   fi
 }
 export -f debug
+
+## :echo functions
+
+
+## dotfiles functions
 
 __install_plugin() {
   local -r plugin="$1"
@@ -203,6 +210,53 @@ dotf-i() {
  fi
 }
 export -f dotf-i
+
+## :dotfiles functions
+
+create_desktop_file(){
+	local -r name="$1"
+  local -r comment="$2"
+  local -r categories="$3"
+  local -r keywords="$4"
+  local -r exec="$5"
+  local -r icon="$6"
+  local -r startupWMClass=${7:-}
+  local -r fileName="${8:-$name}"
+  local -r appDir=${9:-'/usr/share/applications'}
+
+  local startupWMClassEntry=''
+  if [[ -n "$startupWMClass" ]]; then
+     startupWMClassEntry="StartupWMClass=${startupWMClass}"
+  fi
+  # https://developer.gnome.org/menu-spec/
+  local -r desktop_path="${appDir}/${fileName}.desktop"
+
+  [[ ! -d "$appDir" ]] && {
+    mkdir -p "$appDir" 2> /dev/null || sudo mkdir -p "$appDir"
+  }
+
+  local tee='tee'
+
+  [[ "$(realpath "$appDir")" != '/home/'* ]] && {
+    tee='sudo tee'
+  }
+
+  cat <<EOF | eval "$tee" "$desktop_path" > /dev/null
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=${name}
+Comment=${comment}
+Categories=${categories}
+Keywords=${keywords}
+Exec=${exec}
+Icon=${icon}
+Terminal=false
+Type=Application
+${startupWMClassEntry}
+EOF
+  echo "Created desktop file: ${desktop_path}"
+}
+export -f create_desktop_file
 
 apt-u(){ sudo apt update -y "$@"; }
 export -f apt-u

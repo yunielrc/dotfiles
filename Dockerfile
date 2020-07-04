@@ -6,14 +6,15 @@ ARG USER
 RUN [ -n "$APT_PROXY" ] && echo "$APT_PROXY" | sed "s/'//g" > '/etc/apt/apt.conf.d/00proxy' || :
 RUN apt-get update -y && \
     apt-get install -y wget file sudo xz-utils uuid-runtime gnupg tzdata && \
-    rm -rf /var/lib/apt/lists/* && \
     useradd --no-log-init --create-home --shell /bin/bash "$USER" && \
     usermod -aG sudo "$USER" && \
     echo "$USER ALL=NOPASSWD:ALL" > /etc/sudoers.d/nopasswd && \
     rm '/etc/localtime' && \
     ln -s '/usr/share/zoneinfo/America/Havana' '/etc/localtime' && \
     echo 'America/Havana' > '/etc/timezone' && \
-    echo -e 'XKBMODEL="pc105"\nXKBLAYOUT="us"\nXKBVARIANT="alt-intl"\nBACKSPACE="guess"' > '/etc/default/keyboard'
+    echo -e 'XKBMODEL="pc105"\nXKBLAYOUT="us"\nXKBVARIANT="alt-intl"\nBACKSPACE="guess"' > '/etc/default/keyboard' && \
+    apt-get install -y 9base && \
+    rm -rf /var/lib/apt/lists/*
 
 
 FROM base as dev
