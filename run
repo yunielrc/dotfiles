@@ -19,6 +19,9 @@ case "$1" in
     shift
     docker-compose run --rm prod "$@"
   ;;
+  host)
+    echo "hostname: $(hostname)"
+  ;;
   *)
     echo "./run test"
     echo "./run bulld-test"

@@ -21,18 +21,8 @@ infn() {
   echo -n "INFO> $*"
 }
 
-validate_instance_id() {
-  local instance_id="${1:-}"
-
-  if [[ -z "$instance_id" ]]; then
-    err '<instance-id> missing'
-    echo
-    usage
-    return 1
-  fi
-}
-
 state() {
+  validate_instance_id "${1:-}"
   local -r instance_id="$1"
 
   local out=''
@@ -42,6 +32,7 @@ state() {
 }
 
 start() {
+  validate_instance_id "${1:-}"
   local -r instance_id="$1"
   local -r wait_running="${2:-}"
 
@@ -74,6 +65,7 @@ start() {
 }
 
 stop() {
+  validate_instance_id "${1:-}"
   local -r instance_id="$1"
 
   local out=''
@@ -83,6 +75,7 @@ stop() {
 }
 
 public-ip() {
+  validate_instance_id "${1:-}"
   local -r instance_id="$1"
 
   local out=''
@@ -133,15 +126,24 @@ on_exit() {
   :
 }
 
+validate_instance_id() {
+  if [[ -z "${1:-}" ]]; then
+    err '<instance-id> missing'
+    echo
+    usage
+    return 1
+  fi
+}
+
 main() {
 
   if [[ "$#" == 0 ]]; then
     set -- '-h'
   fi
 
-  validate_instance_id "$2"
+  local -r cmd="${1:-}"
 
-  case "$1" in
+  case "$cmd" in
     -h|--help|'')
       usage
     ;;
@@ -153,7 +155,7 @@ main() {
       shift
       stop "$@"
     ;;
-    state)
+    state|status)
       shift
       state "$@"
     ;;
