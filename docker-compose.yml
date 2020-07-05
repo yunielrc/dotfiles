@@ -15,7 +15,7 @@ x-base: &base
   container_name: "${NAME}"
   working_dir: "${WORKDIR}"
   environment:
-    LIBS: /usr/local/lib/
+    LIBS: /usr/local/lib
   stdin_open: true # docker run -i
   tty: true        # docker run -t
 

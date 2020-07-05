@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# Idempotent
+readonly install_dir='/opt/Postman'
+
+[[ -f "${install_dir}/Postman" ]] && {
+  inf 'Postman currently installed'
+  exit 0
+}
+
+# Download & Install
+wget -qO - 'https://dl.pstmn.io/download/latest/linux64' | sudo tar -xvzf - -C /opt
+#
+chmod --verbose +x "${install_dir}/Postman"
+# chown --verbose -R "${USER_NAME}:${USER_NAME}" "${install_dir}"
+
+create_desktop_file "Postman" \
+  'Make and view REST API calls and responses' \
+  'Development;' \
+  'DEV;api;desarrollo;development;test;testing;' \
+  "${install_dir}/Postman %U" \
+  "${install_dir}/app/resources/app/assets/icon.png"
