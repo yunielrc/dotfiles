@@ -105,7 +105,7 @@ run_tests_in_server () {
   inf "$msg"
   EXIT_ERROR_MSG="${msg}. FAILED"
 
-  local -r work_dir="${TEST_SERVER_DIR}/$(uuidgen)"
+  local -r work_dir="${TEST_SERVER_DIR}/$(date +%Y%m%d-%H%M%S)"
   local -r clone_folder="${NAME}"
   local test_server_ip=''
   test_server_ip="$(./scripts/aws-ec2 public-ip "$AWS_EC2_INSTANCE_ID")"
@@ -129,7 +129,7 @@ run_tests_in_server () {
   rm "$env_tmp_file"
   # shellcheck disable=2215,2087,SC2153
   eval ssh "$ssh_options" -T "${TEST_SERVER_USER}@${test_server_ip}" <<- SSHEOF
-    set -eEu
+    set -eEux
 
     inf() {
       local -r color="\${2:-$LIGHTBLUE}"
@@ -147,8 +147,10 @@ run_tests_in_server () {
     inf "Cloning git repository. DONE" "$GREEN"
 
     on_exit() {
-      sudo rm -r "${work_dir}/${clone_folder}"
-      inf "Directory ${work_dir}/${clone_folder} removed" "$GREEN"
+      if [[ "${TEST_SERVER_DELETE_REPO:-}" != false ]]; then
+        sudo rm -r "${work_dir}"
+        inf "Directory ${work_dir} removed" "$GREEN"
+      fi
     }
     trap on_exit EXIT
 
