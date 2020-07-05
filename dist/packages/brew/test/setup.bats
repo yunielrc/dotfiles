@@ -1,24 +1,13 @@
 load test_helper
 
 @test 'should install brew & config' {
-  run bash ../setup
+  bash ../setup &> /dev/null
 
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
-  run type -P brew
-
-  assert_success
-  assert_output --regexp '.*/brew$'
-
-  brew install hello
-
-  run type -P hello
-
-  assert_success
-  assert_output --regexp '.*/hello$'
+  [[ -f /home/linuxbrew/.linuxbrew/bin/brew ]]
+  [[ -f /home/linuxbrew/.linuxbrew/bin/patchelf ]]
 
   run bash ../setup
 
   assert_success
-  assert_output --regexp 'brew currently installed'
+  assert_output --partial 'brew currently installed'
 }

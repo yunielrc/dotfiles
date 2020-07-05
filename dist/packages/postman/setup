@@ -11,7 +11,7 @@ readonly install_dir='/opt/Postman'
 # Download & Install
 wget -qO - 'https://dl.pstmn.io/download/latest/linux64' | sudo tar -xvzf - -C /opt
 #
-chmod --verbose +x "${install_dir}/Postman"
+sudo chmod --verbose +x "${install_dir}/app/Postman"
 # chown --verbose -R "${USER_NAME}:${USER_NAME}" "${install_dir}"
 
 create_desktop_file "Postman" \

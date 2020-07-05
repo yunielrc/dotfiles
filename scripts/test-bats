@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -eE
 
 . './lib/colors.bash'
 

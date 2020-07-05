@@ -129,7 +129,7 @@ run_tests_in_server () {
   rm "$env_tmp_file"
   # shellcheck disable=2215,2087,SC2153
   eval ssh "$ssh_options" -T "${TEST_SERVER_USER}@${test_server_ip}" <<- SSHEOF
-    set -eEux
+    set -eEu
 
     inf() {
       local -r color="\${2:-$LIGHTBLUE}"

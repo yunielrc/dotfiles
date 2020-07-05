@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -e
 
 bash ./scripts/lint-shellcheck
 bash ./scripts/test-bats "$@"

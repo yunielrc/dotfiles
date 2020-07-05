@@ -2,7 +2,7 @@ load test_helper
 
 
 @test 'should install vscode & config' {
-  run bash ../setup
+  bash ../setup
 
   run type -P code
 

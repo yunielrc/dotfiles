@@ -126,21 +126,21 @@ ERROR> Installing package: pkgfail, executing package setup"
 Name=Coronavirus App
 StartupWMClass=coronavirus.app"
 
-  app_dir='/usr/share/applications'
-  desktop_path="${app_dir}/${file_name}.desktop"
+  # app_dir='/usr/share/applications'
+  # desktop_path="${app_dir}/${file_name}.desktop"
 
-  run create_desktop_file 'Coronavirus App' \
-    'Track the spread of the Coronavirus Covid-19 outbreak' \
-    'Maps;Education' \
-    "mapa;coronavirus;covid" \
-    "https://coronavirus.app" \
-    "coronavirus-app" \
-    'coronavirus.app' \
-    "${file_name}" \
-    "${app_dir}"
+  # run create_desktop_file 'Coronavirus App' \
+  #   'Track the spread of the Coronavirus Covid-19 outbreak' \
+  #   'Maps;Education' \
+  #   "mapa;coronavirus;covid" \
+  #   "https://coronavirus.app" \
+  #   "coronavirus-app" \
+  #   'coronavirus.app' \
+  #   "${file_name}" \
+  #   "${app_dir}"
 
-  assert_line --index 2 "Created desktop file: ${desktop_path}"
+  # assert_line --index 2 "Created desktop file: ${desktop_path}"
 
-  run bash -c "ls -l $desktop_path | cut -d' ' -f3,4"
-  assert_output 'root root'
+  # run bash -c "ls -l $desktop_path | cut -d' ' -f3,4"
+  # assert_output 'root root'
 }

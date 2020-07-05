@@ -263,3 +263,9 @@ export -f apt-u
 
 apt-i(){ sudo apt install -y "$@"; }
 export -f apt-i
+
+add_apt_key() {
+	local -r apt_key="$1"
+	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "$apt_key"
+}
+export -f add_apt_key

@@ -1,7 +1,7 @@
 load test_helper
 
 @test 'should install google chrome & config' {
-  run bash ../setup
+  bash ../setup
 
   run type -P google-chrome
 
