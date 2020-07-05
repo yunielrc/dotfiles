@@ -9,5 +9,5 @@ load test_helper
 
   run bash ../setup
   assert_success
-  assert_output --regexp 'typora currently installed'
+  assert_output --partial 'typora currently installed'
 }
