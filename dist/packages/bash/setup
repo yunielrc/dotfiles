@@ -13,7 +13,7 @@ if ! grep --silent '~/.bashc/init' ~/.bashrc ; then
 
   cat <<EOF >> ~/.bashrc
 # BASHC
-. ~/.bashc/init
+. ~/.bashc/init && bashc::main
 # :BASHC
 EOF
   inf "Added: '~/.bashc/init' to '$(realpath ~/.bashrc)'"
