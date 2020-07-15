@@ -202,10 +202,10 @@ dotf-i() {
  else
    local -r msg="${WHITE} Installing package${NOCOLOR} ${YELLOW}${pkg}${NOCOLOR}"
    echo -e "\n${WHITE}>${NOCOLOR}${msg}"
-  if install_package "$1"; then
-    echo -e "${WHITE}>${NOCOLOR}${LIGHTGREEN} DONE.${msg}"
+  if __install_package "$1"; then
+    echo -e "${WHITE}>${NOCOLOR}${LIGHTGREEN} DONE.${msg}${NOCOLOR}"
   else
-    echo -e "${WHITE}>${NOCOLOR}${LIGHTRED} FAIL.${msg}"
+    echo -e "${WHITE}>${NOCOLOR}${LIGHTRED} FAIL.${msg}${NOCOLOR}"
   fi
  fi
 }
@@ -258,7 +258,7 @@ EOF
 }
 export -f create_desktop_file
 
-apt-u(){ sudo apt update -y "$@"; }
+apt-u(){ sudo apt update -y; }
 export -f apt-u
 
 apt-i(){ sudo apt install -y "$@"; }

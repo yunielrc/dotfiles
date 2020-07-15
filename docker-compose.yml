@@ -37,7 +37,8 @@ services:
       target: prod
     user: "${DUSER}"
     volumes:
-      - "./.env:${WORKDIR}/.env:ro"
-      - "./dist/.env:${WORKDIR}/dist/.env:ro"
+      #- "./.env:${WORKDIR}/.env:ro"
+      #- "./dist/.env:${WORKDIR}/dist/.env:ro"
+      - "./:${MOUNT}:ro"
     entrypoint: "./dist/dotfiles"
 

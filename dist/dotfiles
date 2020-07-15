@@ -44,8 +44,9 @@ setup_cm() {
      usage
      return 1
   fi
-
+  echo -e "${WHITE}# Setting cm ${NOCOLOR}${LIGHTPURPLE}${1}${NOCOLOR}\n"
   bash "$cm"
+  echo
 }
 
 load_base_cm(){
