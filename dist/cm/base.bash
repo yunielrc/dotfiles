@@ -6,5 +6,3 @@ apt-i git
 apt-i htop
 apt-i bmon
 apt-i vim
-
-dotf-i bash
