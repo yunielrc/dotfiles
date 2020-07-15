@@ -261,6 +261,9 @@ export -f create_desktop_file
 apt-u(){ sudo apt update -y; }
 export -f apt-u
 
+apt-ug(){ sudo apt upgrade -y; }
+export -f apt-ug
+
 apt-i(){ sudo apt install -y "$@"; }
 export -f apt-i
 

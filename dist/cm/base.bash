@@ -1,4 +1,5 @@
 apt-u
+apt-ug
 apt-i wget
 apt-i curl
 apt-i git
