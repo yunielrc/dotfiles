@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#!/usr/bin/env bash
+set -euE
 
 # Idempotent
 type -P typora &> /dev/null && {

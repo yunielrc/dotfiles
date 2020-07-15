@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euE
+
 # Idempotent
 readonly install_dir='/opt/Postman'
 

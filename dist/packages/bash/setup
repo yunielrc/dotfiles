@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-set -e
+set -euE
 
 # Install
 
 if [[ ! -f ~/.bashc ]]; then
   infn 'Symbolic link created: '
-  ln --symbolic --verbose "${PKG_PATH}/bash/content/.bashc" ~/.bashc
+  ln --symbolic --verbose "${PKG_CONTENT}/.bashc" ~/.bashc
 fi
 # shellcheck disable=SC2088
 if ! grep --silent '~/.bashc/init' ~/.bashrc ; then
