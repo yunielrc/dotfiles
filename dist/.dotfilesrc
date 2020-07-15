@@ -44,9 +44,9 @@ if [[ -z "${WORK_DIR:-}" ]]; then
   readonly WORK_DIR="${WORK_DIR:-"$BASE_PATH"}"
 fi
 
-export PKG_PATH="${WORK_DIR}/packages"
-readonly PKG_PATH
-# export PKG_PATH="${WORK_DIR}/packages"
+export PKGS_PATH="${WORK_DIR}/packages"
+readonly PKGS_PATH
+# export PKGS_PATH="${WORK_DIR}/packages"
 
 set -o allexport
 . "${WORK_DIR}/.env"
@@ -127,7 +127,7 @@ __install_plugin() {
   local -r plugin="$1"
 
   local -r pkg="$plugin"
-  local -r plugin_file_path="${PKG_PATH}/${pkg}/content/${plugin}.plugin.bash"
+  local -r plugin_file_path="${PKGS_PATH}/${pkg}/content/${plugin}.plugin.bash"
   local -r plugin_file_dest_path="${BASH_PLUGINS_DIR}/${plugin}.plugin.bash"
 
   local -r msg="Installing bash plugin"
@@ -161,7 +161,7 @@ export -f __install_plugin
 __install_package() {
   local -r pkg="$1"
 
-  local -r pkg_dir="${PKG_PATH}/${pkg}"
+  local -r pkg_dir="${PKGS_PATH}/${pkg}"
   local -r setup_file_path="${pkg_dir}/setup"
   local -r plugin_file_path="${pkg_dir}/content/${pkg}.plugin.bash"
   local -r msg='Installing package'
@@ -171,7 +171,7 @@ __install_package() {
     return 10
   fi
 
-  bash "$setup_file_path" || {
+  env PKG_CONTENT="${PKGS_PATH}/${pkg}/content" PKG_PATH="${PKGS_PATH}/${pkg}" bash "$setup_file_path" || {
     err "${msg}: ${pkg}, executing package setup"
     return 11
   }

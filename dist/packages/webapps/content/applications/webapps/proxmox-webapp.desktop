@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Proxmox
+Comment=Proxmox offers server virtualization management platform
+Categories=Network;Utility;Development;
+Keywords=private;cloud;nube;privada;virt;container;virtualizacion;contenedores;servidor;vm;CT;DEV;development;desarrollo;LAN;NET;ADMIN;NETWORK;settings;administrar;red;ajustes;webapp;
+Exec=/opt/google/chrome/google-chrome --app=https://proxmox.casa.dylgran.com:8006
+Icon=proxmox
+Terminal=false
+Type=Application
+StartupWMClass=proxmox.casa.dylgran.com

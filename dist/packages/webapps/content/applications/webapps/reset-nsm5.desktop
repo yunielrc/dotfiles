@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Reboot NanoStation M5
+Comment=Reinicia el dispositivo M5 con nombre y mac nueva
+Categories=Network;Utility;
+Keywords=router;externo;wan;ubiquiti;LAN;NET;ADMIN;NETWORK;settings;administrar;red;ajustes;webapp;
+Exec=/usr/bin/gnome-terminal -- ssh -o 'ConnectTimeout=2' -o 'BatchMode=yes' -o 'UserKnownHostsFile=/dev/null' -o 'StrictHostKeyChecking=no' user@192.168.1.18 -- cron/airos-random-mac-name; echo $?; sleep 3
+Icon=reset-nsm5
+Terminal=false
+Type=Application
+

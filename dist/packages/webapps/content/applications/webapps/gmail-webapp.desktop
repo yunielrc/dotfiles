@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Gmail
+Comment=Gmail is email that's intuitive, efficient, and useful
+Categories=Network;Email;
+Keywords=mail;correo;internet;webapp;
+Exec=/opt/google/chrome/google-chrome --app=https://mail.google.com
+Icon=gmail
+Terminal=false
+Type=Application
+StartupWMClass=mail.google.com

@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Windy
+Comment=Worldwide animated weather map
+Categories=Maps;Education;Science;Utility;
+Keywords=mapa;pronóstico;forecast;tiempo;clima;radar;viento;olas;lluvia;oleaje;mar;marea;tormenta;ciclón;ciclones;meteorología;parte;webapp;
+Exec=/opt/google/chrome/google-chrome --app=https://www.windy.com
+Icon=windy
+Terminal=false
+Type=Application
+StartupWMClass=www.windy.com

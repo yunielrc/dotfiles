@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Todoist
+Comment=Organiza las tareas
+Categories=Office;Utility;
+Keywords=productividad;plan;Task;Productivity;Todo;webapp;
+Exec=/opt/google/chrome/google-chrome --app=https://todoist.com/app
+Icon=todoist
+Terminal=false
+Type=Application
+StartupWMClass=todoist.com__app

@@ -2,6 +2,7 @@
 !**/.gitkeep
 !**/local/README.md
 **/*.local
+!**/.local/
 /.env
 /.env.override.server
 /dist/.env

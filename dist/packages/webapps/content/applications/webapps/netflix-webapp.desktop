@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Netflix
+Comment=Watch TV Shows Online, Watch Movies Online
+Categories=Video;TV;
+Keywords=entretenimiento;películas;pelis;films;shows;series;streaming;videos;docu;documentales;webapp;
+Exec=/opt/google/chrome/google-chrome --app=https://www.netflix.com
+Icon=netflix
+Terminal=false
+Type=Application
+StartupWMClass=www.netflix.com

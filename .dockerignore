@@ -26,3 +26,4 @@ README.md
 /.env
 /.env.override.*
 /dist/.env
+!**/.local/

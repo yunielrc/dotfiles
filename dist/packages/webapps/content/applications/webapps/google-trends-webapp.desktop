@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Google Trends
+Comment=Tendencias de búsqueda en google
+Categories=Science;Utility;
+Keywords=tendencias;trends;análisis;estudio;estadística;webapp;
+Exec=/opt/google/chrome/google-chrome --app=https://trends.google.com
+Icon=google-trends
+Terminal=false
+Type=Application
+StartupWMClass=trends.google.com

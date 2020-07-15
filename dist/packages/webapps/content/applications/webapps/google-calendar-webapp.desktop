@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Calendar
+Comment=The Google Calendar app helps you spend less time managing your schedule
+Categories=Office;Calendar;
+Keywords=calendario;productividad;plan;task;todo;Productivity;webapp;
+Exec=/opt/google/chrome/google-chrome --app=https://calendar.google.com
+Icon=google-calendar
+Terminal=false
+Type=Application
+StartupWMClass=calendar.google.com

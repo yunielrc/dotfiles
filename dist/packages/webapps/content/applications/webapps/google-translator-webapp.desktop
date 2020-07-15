@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Traductor
+Comment=El servicio gratuito de Google traduce instantaneamente palabras, frases y paginas web
+Categories=Office;Utility;
+Keywords=translate;traductor;traducir;webapp;
+Exec=/opt/google/chrome/google-chrome --app=https://translate.google.com
+Icon=google-translator
+Terminal=false
+Type=Application
+StartupWMClass=translate.google.com

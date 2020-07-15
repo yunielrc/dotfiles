@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Gnome Extension Store
+Comment=Tienda de extensiones gnome
+Categories=Settings;
+Keywords=gnome;extensions;extensiones;instalar;repo;repositorio;tienda;plugin;addon;webapp;
+Exec=/opt/google/chrome/google-chrome --app=https://extensions.gnome.org
+Icon=gnome-logo
+Terminal=false
+Type=Application
+StartupWMClass=extensions.gnome.org

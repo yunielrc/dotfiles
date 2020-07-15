@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=WhatsApp
+Comment=Comunicate con tus contactos
+Categories=Chat;InstantMessaging;Network;
+Keywords=mensaje;chat;im;messaging;messenger;sms;internet;webapp;
+Exec=/opt/google/chrome/google-chrome --app=https://web.whatsapp.com
+Icon=whatsapp
+Terminal=false
+Type=Application
+StartupWMClass=web.whatsapp.com

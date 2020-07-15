@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Coronavirus App
+Comment=Track the spread of the Coronavirus Covid-19 outbreak, browse an interactive map, view fatality rate and recoveries, check affected regions in real-time
+Categories=Maps;Education;Science;Utility;
+Keywords=mapa;coronavirus;covid;map;pandemia;cov;cov-2;webapp;
+Exec=/opt/google/chrome/google-chrome --app=https://coronavirus.app
+Icon=coronavirus-app
+Terminal=false
+Type=Application
+StartupWMClass=coronavirus.app

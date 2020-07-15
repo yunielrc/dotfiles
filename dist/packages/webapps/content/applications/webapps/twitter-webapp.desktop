@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Twitter
+Comment=Sigue lo que te interesa. Entérate de lo que está hablando la gente.
+Categories=Network;
+Keywords=microblogging;red;social;noticias;news;personas;internet;webapp;
+Exec=/opt/google/chrome/google-chrome --app=https://twitter.com/home
+Icon=twitter
+Terminal=false
+Type=Application
+StartupWMClass=twitter.com__home
