@@ -30,9 +30,9 @@ RUN apt-get update -y && \
     apt-get install -y curl && \
     rm -rf /var/lib/apt/lists/*
 
-FROM base as prod
-ARG WORKDIR
-ARG USER
-COPY . "${WORKDIR}"
-RUN chown -R "${USER}:${USER}" "${WORKDIR}"
-ENTRYPOINT ["./dist/setup-cm"]
+# FROM base as prod
+# ARG WORKDIR
+# ARG USER
+# COPY . "${WORKDIR}"
+# RUN chown -R "${USER}:${USER}" "${WORKDIR}"
+# ENTRYPOINT ["./dist/setup-cm"]

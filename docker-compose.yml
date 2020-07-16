@@ -37,12 +37,12 @@ services:
     <<: *base
     build:
       <<: *build
-      target: prod
+      target: base
     entrypoint: "/bin/bash"
 
   dotfiles:
     <<: *base
     build:
       <<: *build
-      target: prod
+      target: base
     entrypoint: "./dist/dotfiles"
