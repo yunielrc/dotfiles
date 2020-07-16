@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -euE
+
+# Idempotent
+type -P nethogs &> /dev/null && {
+  inf 'nethogs currently installed'
+  exit 0
+}
+
+# Install
+apt-i nethogs
+
+# Configure
+# https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos
+echo "${USER:-user} ALL=NOPASSWD:/usr/sbin/nethogs" | sudo tee /etc/sudoers.d/nethogs

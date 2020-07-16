@@ -5,4 +5,4 @@ echoc '\nBase'
 dotf-i bashc
 # :base
 
-dotf-i aws-cli
+dotf-i nethogs
