@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+set -euE
+
+# Idempotent
+type -P docker &> /dev/null && {
+  inf 'docker currently installed'
+  exit 0
+}
+
+# Dependencies
+apt-u
+apt-i \
+  apt-transport-https \
+  ca-certificates \
+  curl \
+  gnupg-agent \
+  software-properties-common
+
+# Add Repo
+proxy_param=''
+
+if [[ -n "${PROXY_URL:-}" ]]; then
+  proxy_param="--proxy ${PROXY_URL}"
+fi
+readonly proxy_param
+
+eval curl "$proxy_param" -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+apt-key fingerprint 0EBFCD88
+
+sudo add-apt-repository \
+  "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) \
+  stable"
+
+apt-u
+
+# Install
+apt-i docker-ce docker-ce-cli containerd.io
+
+# install docker compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+sudo curl -L https://raw.githubusercontent.com/docker/compose/1.25.5/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
+
+# Configure
+if [[ -n "${PROXY_URL:-}" ]]; then
+  sudo mkdir -p /etc/systemd/system/docker.service.d
+
+  cat <<EOF | sudo tee '/etc/systemd/system/docker.service.d/http-proxy.conf'
+[Service]
+Environment="HTTP_PROXY=${PROXY_URL}" "HTTPS_PROXY=${PROXY_URL}" "NO_PROXY=localhost,127.0.0.1,${DOMAIN}"
+EOF
+
+  cat <<EOF | sudo tee '/etc/docker/daemon.json'
+{
+"max-concurrent-downloads": 2,
+"insecure-registries" : [
+  "registry.${DOMAIN}:5000"
+],
+"registry-mirrors": ["http://registry-cache.${DOMAIN}:5001"]
+}
+EOF
+
+  sudo systemctl daemon-reload
+  sudo systemctl restart docker.service
+fi
+
+sudo usermod -aG docker "${USER:-user}"
