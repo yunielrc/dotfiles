@@ -16,4 +16,6 @@ echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sud
 sudo -s <<EOF
 apt update -y
 apt install -y google-chrome-stable
+apt install -y chrome-gnome-shell
 EOF
+
