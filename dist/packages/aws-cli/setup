@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+set -euE
+
+# Idempotent
+type -P aws &> /dev/null && {
+  inf 'aws cli currently installed'
+  exit 0
+}
+
+# setup
+readonly tmp_dir="$(mktemp -d)"
+cd "$tmp_dir"
+
+# Download
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+
+# Install
+sudo ./aws/install
+
+# clean
+cd -
+rm --recursive "$tmp_dir"
+
+# Configure
+aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
+aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
+aws configure set output table
+aws configure set region us-east-2

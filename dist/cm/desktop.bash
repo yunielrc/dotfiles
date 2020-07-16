@@ -21,3 +21,4 @@ echoc 'Development'
 dotf-i vscode
 dotf-i postman
 dotf-i insomnia
+dotf-i aws-cli

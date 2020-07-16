@@ -12,5 +12,5 @@ load test_helper
   run bash ../setup
 
   assert_success
-  assert_output --regexp 'vscode currently installed'
+  assert_output --partial 'vscode currently installed'
 }

@@ -13,7 +13,7 @@ RUN apt-get update -y && \
     ln -s '/usr/share/zoneinfo/America/Havana' '/etc/localtime' && \
     echo 'America/Havana' > '/etc/timezone' && \
     echo -e 'XKBMODEL="pc105"\nXKBLAYOUT="us"\nXKBVARIANT="alt-intl"\nBACKSPACE="guess"' > '/etc/default/keyboard' && \
-    apt-get install -y 9base && \
+    apt-get install -y 9base unzip && \
     rm -rf /var/lib/apt/lists/*
 
 
