@@ -17,11 +17,11 @@ x-base: &base
   environment:
     LIBS: /usr/local/lib
   user: "${DUSER}"
+  volumes:
+    - "./:${MOUNT}:ro"
   tmpfs:
     - "${MOUNT}/dist/packages/bashc/content/.bashc/plugins/local:uid=1000,gid=1000"
     - "${MOUNT}/dist/packages/bashc/content/.bashc/gen:uid=1000,gid=1000"
-  volumes:
-    - "./:${MOUNT}:ro"
   stdin_open: true # docker run -i
   tty: true        # docker run -t
 

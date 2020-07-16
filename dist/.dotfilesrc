@@ -148,7 +148,7 @@ __install_plugin() {
     err "${msg}: ${plugin}, creating link"
     return 12
   }
-  echo "BASHC_PLUGINS=+($plugin)" >> "$BASH_GEN_SETTINGS_FILE" || {
+  echo "BASHC_PLUGINS+=($plugin)" >> "$BASH_GEN_SETTINGS_FILE" || {
     err "${msg}: ${plugin}, adding plugin to settings"
     return 13
   }
