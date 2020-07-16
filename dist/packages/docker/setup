@@ -67,3 +67,4 @@ EOF
 fi
 
 sudo usermod -aG docker "${USER:-user}"
+sudo docker run -d --restart unless-stopped --name watchtower -v /var/run/docker.sock:/var/run/docker.sock containrrr/watchtower

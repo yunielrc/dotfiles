@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# readonly TMP_FILE="$(mktemp)"
+# export TMP_FILE
+
+# on_exit() {
+#   rm "$TMP_FILE"
+# }
+
+# trap on_exit INT TERM EXIT
+
 case "$1" in
   build-test)
     shift

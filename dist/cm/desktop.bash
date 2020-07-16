@@ -36,3 +36,4 @@ dotf-i vscode
 dotf-i postman
 dotf-i insomnia
 dotf-i aws-cli
+dotf-i node

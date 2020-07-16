@@ -5,7 +5,7 @@ BASHC_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 . "${BASHC_PATH}/lib/utils.bash"
 
-BASHC_FILES=(environment.pre.local environment environment.local aliases functions settings_gen.local settings)
+BASHC_FILES=(environment.pre.local environment environment.local aliases functions gen/settings_gen.local settings)
 BASHC_FOLDERS=(local 3rd user)
 
 #
