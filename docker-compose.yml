@@ -16,6 +16,9 @@ x-base: &base
   working_dir: "${WORKDIR}"
   environment:
     LIBS: /usr/local/lib
+  user: "${DUSER}"
+  volumes:
+    - "./:${MOUNT}:ro"
   stdin_open: true # docker run -i
   tty: true        # docker run -t
 
@@ -25,9 +28,6 @@ services:
     build:
       <<: *build
       target: dev
-    user: "${DUSER}"
-    volumes:
-      - "./:${MOUNT}:ro"
     entrypoint: "./scripts/test"
 
   prod:
@@ -35,10 +35,11 @@ services:
     build:
       <<: *build
       target: prod
-    user: "${DUSER}"
-    volumes:
-      #- "./.env:${WORKDIR}/.env:ro"
-      #- "./dist/.env:${WORKDIR}/dist/.env:ro"
-      - "./:${MOUNT}:ro"
-    entrypoint: "./dist/dotfiles"
+    entrypoint: "/bin/bash"
 
+  dotfiles:
+    <<: *base
+    build:
+      <<: *build
+      target: prod
+    entrypoint: "./dist/dotfiles"
