@@ -49,8 +49,8 @@ ERROR> Installing bash plugin: brew, plugins dir doesn't exist: 123456654321"
 
   [[ -L "${BASH_PLUGINS_DIR}/${plugin}.plugin.bash" && -f "${BASH_PLUGINS_DIR}/${plugin}.plugin.bash" ]]
 
-  run grep "BASHC_PLUGINS=+($plugin)" "$BASH_GEN_SETTINGS_FILE"
-  assert_output "BASHC_PLUGINS=+($plugin)"
+  run grep "BASHC_PLUGINS+=($plugin)" "$BASH_GEN_SETTINGS_FILE"
+  assert_output "BASHC_PLUGINS+=($plugin)"
 }
 
 @test "error package doesn't exist" {
@@ -91,8 +91,8 @@ ERROR> Installing package: pkgfail, executing package setup"
 
   [[ -L "${BASH_PLUGINS_DIR}/${plugin}.plugin.bash" && -f "${BASH_PLUGINS_DIR}/${plugin}.plugin.bash" ]]
 
-  run grep "BASHC_PLUGINS=+($plugin)" "$BASH_GEN_SETTINGS_FILE"
-  assert_output "BASHC_PLUGINS=+($plugin)"
+  run grep "BASHC_PLUGINS+=($plugin)" "$BASH_GEN_SETTINGS_FILE"
+  assert_output "BASHC_PLUGINS+=($plugin)"
 }
 
 @test 'should create desktop file' {

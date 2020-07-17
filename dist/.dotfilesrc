@@ -171,6 +171,12 @@ __install_package() {
     return 10
   fi
 
+  # Idempotent
+  type -P "$pkg" &> /dev/null && {
+    inf "${pkg} currently installed"
+    return 0
+  }
+
   env PKG_CONTENT="${PKGS_PATH}/${pkg}/content" PKG_PATH="${PKGS_PATH}/${pkg}" bash "$setup_file_path" || {
     err "${msg}: ${pkg}, executing package setup"
     return 11

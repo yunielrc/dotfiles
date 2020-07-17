@@ -28,6 +28,9 @@ dotf-i webapps
 echoc 'Internet'
 dotf-i google-chrome
 
+echoc 'Network Tools'
+dotf-i nethogs
+
 echoc 'Text editors'
 dotf-i typora
 
