@@ -29,6 +29,7 @@ RUN apt-get update -y && \
     git clone https://github.com/bats-core/bats-support.git /usr/local/lib/bats-support && \
     apt-get install -y curl && \
     rm -rf /var/lib/apt/lists/*
+ENV LIBS=/usr/local/lib
 
 # FROM base as prod
 # ARG WORKDIR

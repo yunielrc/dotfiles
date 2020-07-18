@@ -27,6 +27,7 @@ dotf-i webapps
 
 echoc 'Internet'
 dotf-i google-chrome
+dotf-i 4kvideodownloader
 
 echoc 'Network Tools'
 dotf-i nethogs
@@ -35,8 +36,9 @@ echoc 'Text editors'
 dotf-i typora
 
 echoc 'Development'
+dotf-i node
 dotf-i vscode
 dotf-i postman
 dotf-i insomnia
 dotf-i aws-cli
-dotf-i node
+dotf-i docker

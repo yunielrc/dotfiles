@@ -14,8 +14,6 @@ x-base: &base
   env_file: .env
   container_name: "${NAME}"
   working_dir: "${WORKDIR}"
-  environment:
-    LIBS: /usr/local/lib
   user: "${DUSER}"
   volumes:
     - "./:${MOUNT}:ro"
