@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euE
+
+# Download & Install
+readonly url="$(util_html_query_selector 'https://www.4kdownload.com/products/product-videodownloader' '.btn--videodownloader' 'href' | sed 's/?source=website//')"
+
+readonly tmp_dir="$(mktemp -d)"
+cd "$tmp_dir"
+
+wget "$url" -O 4kvideodownloader.deb
+sudo dpkg --install 4kvideodownloader.deb
+
+cd -
+rm -rf "$tmp_dir"

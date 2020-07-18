@@ -2,12 +2,6 @@
 
 set -euE
 
-# Idempotent
-type -P nethogs &> /dev/null && {
-  inf 'nethogs currently installed'
-  exit 0
-}
-
 # Install
 apt-i nethogs
 

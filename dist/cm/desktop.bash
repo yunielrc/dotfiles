@@ -35,8 +35,8 @@ echoc 'Text editors'
 dotf-i typora
 
 echoc 'Development'
+dotf-i node
 dotf-i vscode
 dotf-i postman
 dotf-i insomnia
 dotf-i aws-cli
-dotf-i node

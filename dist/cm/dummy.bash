@@ -5,4 +5,4 @@ echoc '\nBase'
 dotf-i bashc
 # :base
 
-dotf-i nethogs
+dotf-i 4kvideodownloader
