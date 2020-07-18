@@ -14,7 +14,7 @@ readonly install_dir='/opt/Postman'
 wget -qO - 'https://dl.pstmn.io/download/latest/linux64' | sudo tar -xvzf - -C /opt
 #
 sudo chmod --verbose +x "${install_dir}/app/Postman"
-# chown --verbose -R "${USER_NAME}:${USER_NAME}" "${install_dir}"
+sudo chown -R "${USER:-user}:${USER:-user}" "${install_dir}"
 
 create_desktop_file "Postman" \
   'Make and view REST API calls and responses' \
