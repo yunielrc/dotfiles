@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -euE
+
+# Install
+
+readonly url="$(util_html_query_selector 'https://electrum.org/#download' '#panel-download a[href$="x86_64.AppImage"]' 'href')"
+
+echo "$url"
+
+# Configure
+
