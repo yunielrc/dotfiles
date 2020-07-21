@@ -2,14 +2,18 @@
 
 set -euE
 
+
 # Download & Install
 readonly url="$(util_html_query_selector 'https://www.4kdownload.com/products/product-videodownloader' '.btn--videodownloader' 'href' | sed 's/?source=website//')"
 
 readonly tmp_dir="$(mktemp -d)"
 cd "$tmp_dir"
 
+on_exit() {
+  cd -
+  rm -rf "$tmp_dir"
+}
+trap on_exit INT TERM EXIT
+
 wget "$url" -O 4kvideodownloader.deb
 sudo dpkg --install 4kvideodownloader.deb
-
-cd -
-rm -rf "$tmp_dir"
