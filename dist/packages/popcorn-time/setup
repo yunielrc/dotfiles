@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -euE
+
+[[ -f /opt/Popcorn-Time/Popcorn-Time ]] && {
+  inf 'Popcorn-Time currently installed'
+}
+
+# Download & Install
+readonly url="$(curl --silent https://api.github.com/repos/popcorn-official/popcorn-desktop/releases/latest | sed 's/"//g' | grep -P 'browser_download_url:\s+.+Popcorn-Time-.+-amd64.deb' | grep -Po 'https://.*Popcorn-Time-.+-amd64.deb$')"
+
+readonly tmp_dir="$(mktemp -d)"
+cd "$tmp_dir"
+
+on_exit() {
+  cd -
+  rm -rf "$tmp_dir"
+}
+trap on_exit INT TERM EXIT
+
+wget "$url" -O Popcorn-Time-amd64.deb
+sudo apt install -y ./Popcorn-Time-amd64.deb

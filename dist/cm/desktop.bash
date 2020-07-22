@@ -31,6 +31,7 @@ dotf-i apt
 echoc 'Video'
 dotf-i celluloid
 dotf-i handbrake
+dotf-i popcorn-time
 
 echoc 'Web apps'
 dotf-i webapps
