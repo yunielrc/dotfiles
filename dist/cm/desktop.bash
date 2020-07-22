@@ -6,14 +6,19 @@ apt-i default-jre
 apt-i ubuntu-restricted-extras
 apt-i ttf-mscorefonts-installer
 apt-i lm-sensors
+apt-i dconf-editor
 
 apt-i vlc
 apt-i mpv
-apt-i hplip hplip-gui
-apt-i virtualbox virtualbox-guest-additions-iso
 apt-i gpick
 apt-i kazam
-apt-i pinta
+apt-i gnome-shell-pomodoro
+
+# apt-i hplip hplip-gui
+# apt-i virtualbox virtualbox-guest-additions-iso
+# apt-i pinta
+# apt-i assaultcube
+# apt-i gimp gimp-help-en gimp-help-es
 
 # base
 dotf-i bashc
@@ -25,6 +30,7 @@ dotf-i apt
 
 echoc 'Video'
 dotf-i celluloid
+dotf-i handbrake
 
 echoc 'Web apps'
 dotf-i webapps
