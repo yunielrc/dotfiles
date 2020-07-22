@@ -32,6 +32,9 @@ dotf-i 4kvideodownloader
 echoc 'Network Tools'
 dotf-i nethogs
 
+echoc 'Finance'
+dotf-i electrum
+
 echoc 'Text editors'
 dotf-i typora
 
