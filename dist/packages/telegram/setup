@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+set -euE
+
+name='Telegram'
+readonly app_image="${name}.AppImage"
+readonly app_icon="${name,,}"
+readonly app_desktop="telegramdesktop"
+
+readonly dest_base_dir="$(realpath ~/.local)"
+readonly app_image_dest_dir="${dest_base_dir}/bin"
+readonly app_desktop_dest_dir="${dest_base_dir}/share/applications"
+readonly app_icon_dest_dir="${dest_base_dir}/share/icons"
+
+# Idempotent
+type -P "$app_image" &> /dev/null && {
+  inf "${app_image} currently installed"
+  exit 0
+}
+
+mkdir --parents ~/.local/{bin,share/applications,share/icons} || :
+
+readonly tmp_dir="$(mktemp -d)"
+cd "$tmp_dir"
+
+on_exit() {
+  cd -
+  rm -rf "$tmp_dir"
+}
+trap on_exit INT TERM EXIT
+
+# Download
+wget -qO - 'https://telegram.org/dl/desktop/linux' | tar xfJ -
+
+cd Telegram/
+
+# Install
+chmod --verbose +x 'Telegram' 'Updater'
+
+mv --verbose 'Telegram' "${app_image_dest_dir}/${app_image}"
+mv --verbose 'Updater' "$app_image_dest_dir"
+cp --verbose "${PKG_CONTENT}/${app_icon}.png" "$app_icon_dest_dir"
+
+create_desktop_file 'Telegram' \
+  'Official desktop version of Telegram messaging app' \
+  'Chat;Network;InstantMessaging;Qt;' \
+  'tg;chat;im;messaging;messenger;sms;tdesktop;' \
+  "${app_image} -- %u" \
+  "$app_icon" \
+  'TelegramDesktop' \
+  "$app_desktop" \
+  "$app_desktop_dest_dir"
+
+cat <<EOF >> "${app_desktop_dest_dir}/${app_desktop}.desktop"
+TryExec=${app_image}
+MimeType=x-scheme-handler/tg;
+X-GNOME-UsesNotifications=true
+EOF
