@@ -20,6 +20,7 @@ dotf-i bashc
 
 echoc 'Package Managers'
 dotf-i brew
+dotf-i apt
 # :base
 
 echoc 'Web apps'
@@ -28,6 +29,7 @@ dotf-i webapps
 echoc 'Internet'
 dotf-i google-chrome
 dotf-i 4kvideodownloader
+dotf-i telegram
 
 echoc 'Network Tools'
 dotf-i nethogs
@@ -45,3 +47,4 @@ dotf-i postman
 dotf-i insomnia
 dotf-i aws-cli
 dotf-i docker
+dotf-i staruml

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euE
+
+echo "Acquire::http::Proxy \"${APT_PROXY_URL}\";" | sudo tee /etc/apt/apt.conf.d/00proxy
