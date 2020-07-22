@@ -23,6 +23,9 @@ dotf-i brew
 dotf-i apt
 # :base
 
+echoc 'Video'
+dotf-i celluloid
+
 echoc 'Web apps'
 dotf-i webapps
 
