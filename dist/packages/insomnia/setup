@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-# Idempotent
-type -P insomnia &> /dev/null && {
-  inf 'insomnia currently installed'
-  exit 0
-}
-
 # Add Repo
 echo "deb https://dl.bintray.com/getinsomnia/Insomnia /" |
   sudo tee /etc/apt/sources.list.d/insomnia.list

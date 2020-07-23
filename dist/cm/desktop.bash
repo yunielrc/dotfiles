@@ -32,6 +32,7 @@ echoc 'Video'
 dotf-i celluloid
 dotf-i handbrake
 dotf-i popcorn-time
+dotf-i stremio
 
 echoc 'Web apps'
 dotf-i webapps
@@ -56,5 +57,5 @@ dotf-i vscode
 dotf-i postman
 dotf-i insomnia
 dotf-i aws-cli
-dotf-i docker
+# dotf-i docker
 dotf-i staruml

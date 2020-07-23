@@ -48,6 +48,7 @@ services:
   gui:
     image: dorowu/ubuntu-desktop-lxde-vnc
     <<: *base
+    user: root
     ports:
       - '5900:5900'
     environment:
