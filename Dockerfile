@@ -1,6 +1,6 @@
 ARG VERSION
 
-FROM ubuntu:${VERSION:-20.04} as base
+FROM dorowu/ubuntu-desktop-lxde-vnc:focal as base
 ARG APT_PROXY
 ARG USER
 RUN [ -n "$APT_PROXY" ] && echo "$APT_PROXY" | sed "s/'//g" > '/etc/apt/apt.conf.d/00proxy' || :

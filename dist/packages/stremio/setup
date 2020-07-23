@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -euE
+
+
+# Download & Install
+readonly url="$(util_html_query_selector 'https://www.stremio.com/downloads' 'a#dl-linux-four-deb' 'href')"
+
+readonly tmp_dir="$(mktemp -d)"
+cd "$tmp_dir"
+
+on_exit() {
+  cd -
+  rm -rf "$tmp_dir"
+}
+trap on_exit INT TERM EXIT
+
+wget "$url" -O stremio_amd64.deb
+sudo apt update -y
+sudo apt install -y ./stremio_amd64.deb

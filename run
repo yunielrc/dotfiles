@@ -47,6 +47,10 @@ case "$1" in
     shift
     docker-compose run dotfiles "$@"
   ;;
+  gui)
+    shift
+    docker-compose up gui
+  ;;
   host)
     echo "hostname: $(hostname)"
   ;;

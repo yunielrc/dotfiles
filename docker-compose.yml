@@ -44,3 +44,15 @@ services:
       <<: *build
       target: base
     entrypoint: "./dist/dotfiles"
+
+  gui:
+    image: dorowu/ubuntu-desktop-lxde-vnc
+    <<: *base
+    ports:
+      - '5900:5900'
+    environment:
+      - VNC_PASSWORD=${VNC_PASSWORD}
+      - USER=${DUSER}
+    volumes:
+      - '/dev/shm:/dev/shm'
+      - "./:${MOUNT}:ro"
