@@ -57,5 +57,10 @@ dotf-i vscode
 dotf-i postman
 dotf-i insomnia
 dotf-i aws-cli
-# dotf-i docker
+#  dotf-i docker
 dotf-i staruml
+
+# TODO: crear imagen docker con ubuntu gnome
+# TODO: agregar appimages al PATH
+# TODO: hacer compatible entorno de prueba con appimages
+# TODO: Telegram no aparece
