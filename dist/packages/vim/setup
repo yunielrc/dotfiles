@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -euE
+
+apt-i vim 1> /dev/null
+
+git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
+ln --symbolic --verbose ~/.vim_runtime/vimrcs/basic.vim ~/.vimrc

@@ -30,6 +30,7 @@ echoc '>> BREW packages'
 brew install fd
 brew install rg
 brew install fzf
+brew install bat
 
 echoc '>> CARGO packages'
 

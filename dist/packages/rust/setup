@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
+set -euE
+
 sh <(curl https://sh.rustup.rs -sSf) -y
