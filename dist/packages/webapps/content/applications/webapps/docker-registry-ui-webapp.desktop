@@ -1,11 +1,11 @@
 #!/usr/bin/env xdg-open
 [Desktop Entry]
 Name=Docker Registry UI
-Comment=UI for your docker private registry 
+Comment=UI for your docker private registry
 Categories=Development;
 Keywords=registro;docker;imagenes;DEV;development;desarrollo;webapp;
-Exec=/opt/google/chrome/google-chrome --app=https://registry.casa.dylgran.com/ui
+Exec=/opt/google/chrome/google-chrome --app=http://registry-ui.casa.dylgran.com
 Icon=docker-registry
 Terminal=false
 Type=Application
-StartupWMClass=registry.casa.dylgran.com__ui
+StartupWMClass=registry-ui.casa.dylgran.com

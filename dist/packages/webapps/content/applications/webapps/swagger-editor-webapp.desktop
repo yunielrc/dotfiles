@@ -4,8 +4,8 @@ Name=Swagger Editor
 Comment=Design your OpenAPI
 Categories=Development;
 Keywords=api;openapi;editor;design;DEV;development;desarrollo;webapp;
-Exec=/opt/google/chrome/google-chrome --app=http://192.168.1.46:8071
+Exec=/opt/google/chrome/google-chrome --app=http://swagger-editor.casa.dylgran.com:82
 Icon=swagger-editor
 Terminal=false
 Type=Application
-StartupWMClass=192.168.1.46
+StartupWMClass=swagger-editor.casa.dylgran.com

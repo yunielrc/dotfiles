@@ -1,11 +1,11 @@
 #!/usr/bin/env xdg-open
 [Desktop Entry]
-Name=Portainer
+Name=Portainer - Docker Apps
 Comment=Docker Management User Interface
 Categories=Development;Network;Utility;
 Keywords=docker;contenedores;LAN;NET;ADMIN;NETWORK;settings;administrar;red;ajustes;DEV;development;desarrollo;webapp;
-Exec=/opt/google/chrome/google-chrome --app=https://portainer.casa.dylgran.com
+Exec=/opt/google/chrome/google-chrome --app=http://docker-apps.casa.dylgran.com:9000
 Icon=portainer
 Terminal=false
 Type=Application
-StartupWMClass=portainer.casa.dylgran.com
+StartupWMClass=docker-apps.casa.dylgran.com

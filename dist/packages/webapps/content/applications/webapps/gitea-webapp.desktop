@@ -4,7 +4,7 @@ Name=Gitea
 Comment=Gitea is a community managed lightweight code hosting solution written in Go
 Categories=Development;
 Keywords=git;repo;codigo;forja;source;repository;DEV;development;desarrollo;webapp;
-Exec=/opt/google/chrome/google-chrome --app=https://gitea.casa.dylgran.com
+Exec=/opt/google/chrome/google-chrome --app=http://gitea.casa.dylgran.com
 Icon=gitea
 Terminal=false
 Type=Application
