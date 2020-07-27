@@ -305,7 +305,9 @@ util_html_query_selector() {
   local -r property="$3"
 
   dotf-i node &> /dev/null
+  # TODO instalar jsdom minimist en directorio temporal y después eliminar al final de esta función
   sudo npm install -g jsdom minimist &> /dev/null
+  # poner a directorio temporal creado
   export NODE_PATH="$(npm root --quiet -g)"
 
   cat <<EOF | node - --url "$url" --selector "$selector" --property "$property"
