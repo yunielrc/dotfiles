@@ -72,3 +72,6 @@ dotf-i insomnia
 dotf-i aws-cli
 dotf-i docker # TODO test
 dotf-i staruml
+
+
+gnome-shell --replace
