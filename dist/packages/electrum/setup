@@ -23,7 +23,6 @@ readonly tmp_dir="$(mktemp -d)"
 cd "$tmp_dir"
 
 on_exit() {
-  cd -
   rm -rf "$tmp_dir"
 }
 trap on_exit INT TERM EXIT

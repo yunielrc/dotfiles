@@ -1,7 +1,8 @@
 # base
 dotf-i bashc
-dotf-i apt
+dotf-i apt__config
 dotf-i brew
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 dotf-i rust
 PATH="${PATH}:${HOME}/.cargo/bin"
 # :base

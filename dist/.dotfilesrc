@@ -8,6 +8,8 @@ set -o pipefail
 
 # Constants
 
+export DEBIAN_FRONTEND=noninteractive
+
 ## Colors
 
 export NOCOLOR='\033[0m'
@@ -272,8 +274,6 @@ export -f apt-ug
 
 apt-i(){ sudo apt install -y "$@"; }
 export -f apt-i
-
-export DEBIAN_FRONTEND=noninteractive
 
 add_apt_key() {
 	local -r apt_key="$1"

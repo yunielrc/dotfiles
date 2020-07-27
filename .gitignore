@@ -4,6 +4,8 @@
 **/*.local
 **/*.local.*
 !**/.local/
+passwd
 /.env
 /.env.override.server
 /dist/.env
+.vagrant

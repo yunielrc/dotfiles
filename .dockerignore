@@ -27,3 +27,5 @@ README.md
 /.env.override.*
 /dist/.env
 !**/.local/
+passwd
+.vagrant
