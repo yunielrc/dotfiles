@@ -162,6 +162,7 @@ export -f __install_plugin
 
 __install_package() {
   local -r pkg="$1"
+  local -r force="${2:-false}"
 
   local -r pkg_dir="${PKGS_PATH}/${pkg}"
   local -r setup_file_path="${pkg_dir}/setup"
@@ -174,7 +175,7 @@ __install_package() {
   fi
 
   # Idempotent
-  type -P "$pkg" &> /dev/null && {
+  [[ "$force" == false ]] && type -P "$pkg" &> /dev/null && {
     inf "${pkg} currently installed"
     return 0
   }
@@ -196,13 +197,30 @@ __install_package() {
 export -f __install_package
 
 dotf-i() {
+  local force=false
+
+  local positional=()
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -f|--force)
+      force=true
+      shift
+      ;;
+      *)
+      positional+=("$1")
+      shift
+      ;;
+    esac
+  done
+
+  set -- "${positional[@]}" # restore local positional params
   local -r pkg="$1"
   # local -r color="\e[3$(( "$RANDOM" * 6 / 32767 + 1 ))m"
 
  if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
   local -r msg="Installing package ${pkg}"
   echo -e "\n> ${msg}"
-  if __install_package "$1"; then
+  if __install_package "$1" $force; then
     echo -e "> DONE. ${msg}"
   else
     echo -e "> FAIL. ${msg}"
@@ -210,7 +228,7 @@ dotf-i() {
  else
    local -r msg="${WHITE} Installing package${NOCOLOR} ${YELLOW}${pkg}${NOCOLOR}"
    echo -e "\n${WHITE}>${NOCOLOR}${msg}"
-  if __install_package "$1"; then
+  if __install_package "$1" $force; then
     echo -e "${WHITE}>${NOCOLOR}${LIGHTGREEN} DONE.${msg}${NOCOLOR}"
   else
     echo -e "${WHITE}>${NOCOLOR}${LIGHTRED} FAIL.${msg}${NOCOLOR}"
