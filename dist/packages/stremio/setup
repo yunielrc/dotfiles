@@ -17,3 +17,7 @@ trap on_exit INT TERM EXIT
 wget "$url" -O stremio_amd64.deb
 sudo apt update -y
 sudo apt install -y ./stremio_amd64.deb
+
+wget http://archive.ubuntu.com/ubuntu/pool/universe/x/x264/libx264-152_0.152.2854+gite9a5903-2_amd64.deb
+sudo apt install -y ./libx264-152_0.152.2854+gite9a5903-2_amd64.deb
+
