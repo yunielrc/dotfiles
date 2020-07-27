@@ -9,8 +9,6 @@
 
 # trap on_exit INT TERM EXIT
 
-# TODO: usar vagrant para test visual
-
 case "$1" in
   build-test)
     shift

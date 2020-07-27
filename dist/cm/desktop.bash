@@ -1,6 +1,6 @@
 # base
 dotf-i bashc
-dotf-i apt__config
+# dotf-i apt --force
 dotf-i brew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 dotf-i rust
@@ -30,23 +30,25 @@ echoc '>> BREW packages'
 
 brew install fd
 brew install rg
-brew install fzf
 brew install bat
 
 echoc '>> CARGO packages'
 
-cargo install dutree
+cargo install dutree # TODO test
 
 echoc '>> DOTFILES packages'
+
+echoc 'Tools'
+dotf-i fzf # TODO test
 
 echoc 'Video'
 dotf-i celluloid
 dotf-i handbrake
 dotf-i popcorn-time
-dotf-i stremio
+dotf-i stremio # TODO test
 
 echoc 'Web apps'
-dotf-i webapps
+dotf-i webapps # TODO test, no aparecen los iconos en APPs menu
 
 echoc 'Internet'
 dotf-i google-chrome
@@ -68,9 +70,5 @@ dotf-i vscode
 dotf-i postman
 dotf-i insomnia
 dotf-i aws-cli
-#  dotf-i docker
+dotf-i docker # TODO test
 dotf-i staruml
-
-# TODO: agregar appimages al PATH
-# TODO: hacer compatible entorno de prueba con appimages
-# TODO: Telegram no aparece

@@ -7,4 +7,4 @@ apt-i git
 apt-i htop
 apt-i bmon
 
-dotf-i vim
+dotf-i vim --force

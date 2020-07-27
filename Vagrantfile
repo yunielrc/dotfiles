@@ -10,6 +10,7 @@ Vagrant.configure("2") do |config|
     aws.keypair_name = "yuniel@yuniel-Z370-AORUS-Gaming-5"
     aws.region = "us-east-2"
     aws.ami = "ami-01237fce26136c8cc"
+    aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 16 }]
     aws.security_groups = ['default']
 
     override.ssh.username = "ubuntu"

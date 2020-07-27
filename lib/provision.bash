@@ -12,6 +12,9 @@ sudo -s <<EOF
 apt-get update -y
 apt-get install -y --no-install-recommends ubuntu-desktop-minimal
 apt-get install -y tigervnc-standalone-server tigervnc-common
+apt-get autoremove -y
+apt-get autoclean -y
+rm -rf /var/lib/apt/lists/*
 EOF
 
 # Configure Gnome
