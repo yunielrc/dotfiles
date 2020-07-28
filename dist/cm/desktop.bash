@@ -12,7 +12,7 @@ echoc '>> APT packages'
 apt-i nfs-common
 apt-i default-jre
 apt-i ubuntu-restricted-extras
-apt-i ttf-mscorefonts-installer
+# apt-i ttf-mscorefonts-installer
 apt-i lm-sensors
 apt-i dconf-editor
 apt-i vlc
@@ -34,21 +34,21 @@ brew install bat
 
 echoc '>> CARGO packages'
 
-cargo install dutree # TODO test
+cargo install dutree
 
 echoc '>> DOTFILES packages'
 
 echoc 'Tools'
-dotf-i fzf # TODO test
+dotf-i fzf
 
 echoc 'Video'
 dotf-i celluloid
 dotf-i handbrake
 dotf-i popcorn-time
-dotf-i stremio # TODO test
+dotf-i stremio
 
 echoc 'Web apps'
-dotf-i webapps # TODO test, no aparecen los iconos en APPs menu
+dotf-i webapps
 
 echoc 'Internet'
 dotf-i google-chrome
@@ -70,7 +70,7 @@ dotf-i vscode
 dotf-i postman
 dotf-i insomnia
 dotf-i aws-cli
-dotf-i docker # TODO test
+dotf-i docker
 dotf-i staruml
 
 
