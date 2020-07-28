@@ -20,10 +20,10 @@ apt-i mpv
 apt-i gpick
 apt-i kazam
 apt-i gnome-shell-pomodoro
-# apt-i hplip hplip-gui
-# apt-i virtualbox virtualbox-guest-additions-iso
-# apt-i pinta
-# apt-i assaultcube
+apt-i hplip hplip-gui
+apt-i virtualbox virtualbox-guest-additions-iso
+apt-i pinta
+apt-i assaultcube
 # apt-i gimp gimp-help-en gimp-help-es
 
 echoc '>> BREW packages'

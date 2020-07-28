@@ -5,7 +5,7 @@ load test_helper
   env PKG_CONTENT="${PKGS_PATH}/telegram/content" bash ../setup
 
   local -r name='Telegram'
-  local -r app_image="${name}.AppImage"
+  local -r app_image="${name}"
   local -r app_icon="${name,,}.png"
   local -r app_desktop="telegramdesktop.desktop"
 

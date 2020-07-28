@@ -3,7 +3,7 @@
 set -euE
 
 name='Telegram'
-readonly app_image="${name}.AppImage"
+readonly app_image="${name}"
 readonly app_icon="${name,,}"
 readonly app_desktop="telegramdesktop"
 
