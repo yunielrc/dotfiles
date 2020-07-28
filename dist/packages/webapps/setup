@@ -16,9 +16,4 @@ else
   inf "Directory: '${applications_dir}/webapps' already exists"
 fi
 
-if [[ ! -d "${icons_dir}/webapps" ]]; then
-  infn 'Symbolic link created: '
-  ln --symbolic --verbose "${PKG_CONTENT}/icons/webapps" "${icons_dir}/webapps"
-else
-  inf "Directory: '${icons_dir}/webapps' already exists"
-fi
+cp -f "${PKG_CONTENT}"/icons/webapps/* "$icons_dir"

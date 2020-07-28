@@ -2,10 +2,10 @@ load test_helper
 
 
 @test 'should install staruml & config' {
-  env PKG_CONTENT="${PKGS_PATH}/staruml/content" bash ../setup
+  env PKG_PATH="${PKGS_PATH}/staruml" PKG_CONTENT="${PKGS_PATH}/staruml/content" bash ../setup
 
   local -r name='StarUML'
-  local -r app_image="${name}.AppImage"
+  local -r app_image="${name}-x86_64.AppImage"
   local -r app_icon="${name,,}.png"
   local -r app_desktop="${name}.desktop"
 
@@ -20,7 +20,7 @@ load test_helper
   [[ -f "${app_icon_dest_dir}/${app_icon}" ]]
   [[ -f "${app_desktop_dest_dir}/${app_desktop}" ]]
 
-  run env PKG_CONTENT="${PKGS_PATH}/staruml/content" bash ../setup
+  run env PKG_PATH="${PKGS_PATH}/staruml" PKG_CONTENT="${PKGS_PATH}/staruml/content" bash ../setup
 
   assert_output --partial "${app_image} currently installed"
 }
