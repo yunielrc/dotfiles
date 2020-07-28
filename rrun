@@ -47,6 +47,17 @@ gen_test_branch_name() {
   echo "test_$(uuidgen | sed 's/-.*//')"
 }
 
+inf 'This script is obsolete, instead Use:'
+
+cat <<-'EOF'
+  $ vagrant up docker
+  $ vagrant ssh docker
+  on remote in .dotfiles $ ./run test # or other command
+  $ vagrant halt
+EOF
+
+exit 0
+
 if [[ -f ./.env ]]; then
 	set -o allexport
 	# shellcheck disable=SC1091
