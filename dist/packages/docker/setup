@@ -39,9 +39,10 @@ apt-u
 apt-i docker-ce docker-ce-cli containerd.io
 
 # install docker compose
-sudo curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+readonly latest="$(curl --silent https://api.github.com/repos/docker/compose/releases/latest | grep -P 'tag_name' | head -n 1 | sed 's/"//g' | grep -Po '\d+\.\d+\.\d+')"
+sudo curl -L "https://github.com/docker/compose/releases/download/${latest}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
-sudo curl -L https://raw.githubusercontent.com/docker/compose/1.25.5/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
+sudo curl -L "https://raw.githubusercontent.com/docker/compose/${latest}/contrib/completion/bash/docker-compose" -o /etc/bash_completion.d/docker-compose
 
 # Configure
 if [[ -n "${PROXY_URL:-}" ]]; then
