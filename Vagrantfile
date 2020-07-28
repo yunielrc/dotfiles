@@ -1,4 +1,4 @@
-require_relative 'lib/patches.rb'
+require_relative 'lib/vagrant-patches.rb'
 
 Vagrant.configure("2") do |config|
   config.vm.box = "dummy"
@@ -19,5 +19,5 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder '.', '/vagrant', disabled: true
   config.vm.synced_folder "./", "/home/ubuntu/.dotfiles"
-  config.vm.provision :shell, path: "./lib/provision.bash", privileged: false
+  config.vm.provision :shell, path: "./lib/vagrant-provision.bash", privileged: false
 end
