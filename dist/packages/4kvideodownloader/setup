@@ -4,7 +4,7 @@ set -euE
 
 
 # Download & Install
-readonly url="$(util_html_query_selector 'https://www.4kdownload.com/products/product-videodownloader' '.btn--videodownloader' 'href' | sed 's/?source=website//')"
+readonly url="$(util_html_query_selector 'https://www.4kdownload.com/downloads' 'a[href$="_amd64.deb?source=website"]' 'href' | sed 's/?source=website//')"
 
 readonly tmp_dir="$(mktemp -d)"
 cd "$tmp_dir"
