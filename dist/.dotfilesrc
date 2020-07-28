@@ -151,7 +151,7 @@ __install_plugin() {
     return 12
   }
 
-  if ! grep --silent "BASHC_PLUGINS+=($plugin)" "$BASH_GEN_SETTINGS_FILE"; then
+  if [[ ! -f "$BASH_GEN_SETTINGS_FILE" ]] || ! grep --silent "BASHC_PLUGINS+=($plugin)" "$BASH_GEN_SETTINGS_FILE"; then
     echo "BASHC_PLUGINS+=($plugin)" >> "$BASH_GEN_SETTINGS_FILE" || {
       err "${msg}: ${plugin}, adding plugin to settings"
       return 13
