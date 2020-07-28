@@ -11,7 +11,7 @@ readonly install_dir='/opt/Postman'
 }
 
 # Download & Install
-wget -qO - 'https://dl.pstmn.io/download/latest/linux64' | sudo tar -xvzf - -C /opt
+wget -qO - 'https://dl.pstmn.io/download/latest/linux64' | sudo tar -xzf - -C /opt
 #
 sudo chmod --verbose +x "${install_dir}/app/Postman"
 sudo chown -R "${USER:-user}:${USER:-user}" "${install_dir}"
