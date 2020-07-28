@@ -20,6 +20,12 @@ x-base: &base
   tmpfs:
     - "${MOUNT}/dist/packages/bashc/content/.bashc/plugins/local:uid=1000,gid=1000"
     - "${MOUNT}/dist/packages/bashc/content/.bashc/gen:uid=1000,gid=1000"
+  cap_add:
+    - SYS_ADMIN
+  devices:
+    - "/dev/fuse"
+  security_opt:
+    - "apparmor:unconfined"
   stdin_open: true # docker run -i
   tty: true        # docker run -t
 
