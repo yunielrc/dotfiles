@@ -1,7 +1,9 @@
-require_relative 'lib/vagrant/patches.rb'
+require_relative 'vagrant/patches.rb'
 
 $script = <<-SCRIPT
   cat "/home/ubuntu/.dotfiles/.env.override.server" >> "/home/ubuntu/.dotfiles/.env"
+  cat "/home/ubuntu/.dotfiles/dist/.env.override.server" >> "/home/ubuntu/.dotfiles/dist/.env"
+  echo 'cd /home/ubuntu/.dotfiles' >>  /home/ubuntu/.bashrc
 SCRIPT
 
 Vagrant.configure("2") do |config|
@@ -22,15 +24,16 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.synced_folder '.', '/vagrant', disabled: true
-  config.vm.synced_folder "./", "/home/ubuntu/.dotfiles"
-  config.vm.provision "shell", inline: $script
+  config.vm.synced_folder ".", "/home/ubuntu/.dotfiles", type: "rsync", rsync__exclude: ".git/", rsync__auto: true
+
+  config.vm.provision "shell", inline: $script, privileged: false
 
   # this vm is reusable, everything runs inside docker
   config.vm.define "docker", primary: true do |docker|
-    docker.vm.provision :shell, path: "./lib/vagrant/provision-ubuntu-docker.bash", privileged: false
+    docker.vm.provision "shell", path: "./vagrant/provision-ubuntu-docker.bash", privileged: false
   end
   # this vm is not reusable, everything runs directly inside the vm
   config.vm.define "vnc", autostart: false do |vnc|
-    vnc.vm.provision :shell, path: "./lib/vagrant/provision-ubuntu-desktop-vnc.bash", privileged: false
+    vnc.vm.provision "shell", path: "./vagrant/provision-ubuntu-desktop-vnc.bash", privileged: false
   end
 end

@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+set -euE
+
+set -o allexport
+. ./.env
+set +o allexport
+
+readonly tmp_dir="$(mktemp -d)"
+cd "$tmp_dir"
+
+on_exit() {
+  rm -rf "$tmp_dir"
+}
+trap on_exit INT TERM EXIT
+
+sudo apt update -y
+sudo apt install -y curl
+
+# Vagrant
+if ! type -P vagrant &> /dev/null; then
+  readonly latest="$(curl --silent "https://api.github.com/repos/hashicorp/vagrant/tags" | sed 's/\"//g' | grep -P 'name\:\s+v\d+\.\d+\.\d+,' | grep -Po '\d+\.\d+\.\d+' | head -n 1)"
+  wget "https://releases.hashicorp.com/vagrant/${latest}/vagrant_${latest}_x86_64.deb" -O vagrant_x86_64.deb
+
+  sudo apt install -y ./vagrant_x86_64.deb
+
+  vagrant plugin install vagrant-aws
+  vagrant plugin install vagrant-readenv
+fi
+
+# Docker
+if ! type -P docker &> /dev/null; then
+  # Dependencies
+  sudo apt install -y apt-transport-https ca-certificates gnupg-agent \
+    software-properties-common
+
+  # Add Repo
+  proxy_param=''
+
+  if [[ -n "${PROXY_URL:-}" ]]; then
+    proxy_param="--proxy ${PROXY_URL}"
+  fi
+  readonly proxy_param
+
+  eval curl "$proxy_param" -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  apt-key fingerprint 0EBFCD88
+
+  sudo add-apt-repository \
+    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+    $(lsb_release -cs) \
+    stable"
+
+  # Install
+  sudo apt install -y docker-ce docker-ce-cli containerd.io
+
+  # install docker compose
+  # readonly latest="$(git ls-remote https://github.com/docker/compose | grep refs/tags | grep -oE "[0-9]+\.[0-9][0-9]+\.[0-9]+$" | sort --version-sort | tail -n 1)"
+  readonly latest="$(curl --silent https://api.github.com/repos/docker/compose/releases/latest | grep -P 'tag_name' | head -n 1 | sed 's/"//g' | grep -Po '\d+\.\d+\.\d+')"
+  sudo curl -L "https://github.com/docker/compose/releases/download/${latest}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  sudo chmod +x /usr/local/bin/docker-compose
+  sudo curl -L "https://raw.githubusercontent.com/docker/compose/${latest}/contrib/completion/bash/docker-compose" -o /etc/bash_completion.d/docker-compose
+
+  # Configure
+  if [[ -n "${PROXY_URL:-}" ]]; then
+    sudo mkdir -p /etc/systemd/system/docker.service.d
+
+    cat <<-EOF | sudo tee '/etc/systemd/system/docker.service.d/http-proxy.conf'
+  [Service]
+  Environment="HTTP_PROXY=${PROXY_URL}" "HTTPS_PROXY=${PROXY_URL}" "NO_PROXY=localhost,127.0.0.1,${DOMAIN}"
+  EOF
+
+    cat <<-EOF | sudo tee '/etc/docker/daemon.json'
+  {
+  "max-concurrent-downloads": 2,
+  "insecure-registries" : [
+    "registry.${DOMAIN}:5000"
+  ],
+  "registry-mirrors": ["http://registry-cache.${DOMAIN}:5001"]
+  }
+EOF
+
+    sudo systemctl daemon-reload
+    sudo systemctl restart docker.service
+  fi
+
+  sudo usermod -aG docker "${USER:-user}"
+  sudo docker run -d --restart unless-stopped --name watchtower -v /var/run/docker.sock:/var/run/docker.sock containrrr/watchtower
+
+fi

@@ -1,6 +1,6 @@
 # base
 dotf-i bashc
-# dotf-i apt --force
+dotf-i apt --force
 dotf-i brew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 dotf-i rust
