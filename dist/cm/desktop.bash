@@ -38,6 +38,8 @@ cargo install dutree
 
 echoc '>> DOTFILES packages'
 
+dotf-i core-config
+
 echoc 'Tools'
 dotf-i fzf
 
@@ -72,6 +74,5 @@ dotf-i insomnia
 dotf-i aws-cli
 dotf-i docker
 dotf-i staruml
-
 
 gnome-shell --replace

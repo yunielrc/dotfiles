@@ -1,0 +1,14 @@
+[user]
+	email = yuniel.work@gmail.com
+	name = yuniel
+[gc]
+	autoDetach = false
+	writeCommitGraph = true
+[core]
+	quotepath = false
+	commitGraph = true
+	editor = vim
+[color]
+	ui = auto
+[cola]
+	spellcheck = false

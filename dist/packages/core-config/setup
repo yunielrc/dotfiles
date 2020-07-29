@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+shopt -s dotglob
+
+cd "$PKG_CONTENT"
+
+for f in *; do
+  ln -s --force --verbose "${PKG_CONTENT}/${f}" ~/"${f}"
+done
