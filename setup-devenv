@@ -17,6 +17,8 @@ trap on_exit INT TERM EXIT
 sudo apt update -y
 sudo apt install -y curl
 
+# TODO: reutilizar scripts de instalación
+
 # Vagrant
 if ! type -P vagrant &> /dev/null; then
   readonly latest="$(curl --silent "https://api.github.com/repos/hashicorp/vagrant/tags" | sed 's/\"//g' | grep -P 'name\:\s+v\d+\.\d+\.\d+,' | grep -Po '\d+\.\d+\.\d+' | head -n 1)"
