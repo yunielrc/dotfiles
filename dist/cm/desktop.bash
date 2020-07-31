@@ -67,6 +67,7 @@ echoc 'Text editors'
 dotf-i typora
 
 echoc 'Development'
+dotf-i ruby
 dotf-i node
 dotf-i vscode
 dotf-i postman
