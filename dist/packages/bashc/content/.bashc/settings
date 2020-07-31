@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 # BASHC_THEME=''
-# BASHC_PLUGINS+=()
+BASHC_PLUGINS+=(ruby)

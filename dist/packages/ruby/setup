@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+if [[ type -P brew ]]; then
+  [[ type -P ruby ]] && sudo apt-get remove -y ruby
+  brew install ruby
+else
+  apt-i ruby
+fi
