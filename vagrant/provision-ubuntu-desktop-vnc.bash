@@ -11,7 +11,7 @@ set +o allexport
 sudo -s <<EOF
 apt-get update -y
 apt-get install -y --no-install-recommends ubuntu-desktop-minimal
-apt-get install -y tigervnc-standalone-server tigervnc-common
+apt-get install -y tigervnc-standalone-server tigervnc-common xrdp
 apt-get autoremove -y
 apt-get autoclean -y
 rm -rf /var/lib/apt/lists/*
@@ -89,6 +89,10 @@ on-remote$ ~/vncserver-start
 on-remote$ ~/vncserver-list
 on-remote$ ~/vncserver-stop
 EOF
+
+sudo touch /run/xrdp/xrdp.pid
+sudo chmod 660 /run/xrdp/xrdp.pid
+sudo systemctl enable xrdp --now
 
 ~/vncserver-start
 ~/vncserver-list
