@@ -1,3 +1,5 @@
+[alias]
+  l = log --oneline --graph
 [user]
 	email = yuniel.work@gmail.com
 	name = yuniel
