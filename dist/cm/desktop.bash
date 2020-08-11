@@ -24,17 +24,39 @@ apt-i hplip hplip-gui
 apt-i virtualbox virtualbox-guest-additions-iso
 apt-i pinta
 apt-i assaultcube
+apt-i tldr
 # apt-i gimp gimp-help-en gimp-help-es
 
 echoc '>> BREW packages'
-
+# so slow executin with starship prompt: $ time for i in $(seq 1 1000000); do [ 1 = 1 ]; done
+# brew install starship
+# echo -e '\neval "$(starship init bash)"' >> ~/.bashrc
 brew install fd
 brew install rg
 brew install bat
+brew install exa
+brew install procs
+brew install sd
+brew install dust
+brew install tealdeer
+brew install tokei
+brew tap cjbassi/ytop
+brew install ytop
+brew install tealdeer
+brew install bandwhich
+brew install grex
+brew install lsd
+brew install cointop
+brew install navi
+echo -e '\nsource <(navi widget bash)' >> ~/.bashrc
 
 echoc '>> CARGO packages'
 
 cargo install dutree
+# cargo install exa
+# cargo install procs
+# cargo install du-dust
+# cargo install starship
 
 echoc '>> DOTFILES packages'
 

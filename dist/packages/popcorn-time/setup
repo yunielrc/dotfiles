@@ -4,6 +4,7 @@ set -euE
 
 [[ -f /opt/Popcorn-Time/Popcorn-Time ]] && {
   inf 'Popcorn-Time currently installed'
+  exit 0
 }
 
 # Download & Install

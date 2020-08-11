@@ -19,9 +19,6 @@ apt-u
 apt-i apt-transport-https code
 # extensions dependencies
 apt-i bats shellcheck
-
-
-
 [[ type -P gem ]] && gem install --user-install solargraph
 
 # Configure

@@ -38,3 +38,8 @@ alias ec2-stop="aws ec2 stop-instances --instance-ids ${EC2_INSTANCE}"
 alias ec2-start="aws ec2 start-instances --instance-ids ${EC2_INSTANCE}"
 alias ec2-status="aws ec2 describe-instance-status --instance-ids ${EC2_INSTANCE}"
 alias ec2-ip="aws --output text ec2 describe-instances --instance-ids ${EC2_INSTANCE} | grep '^ASSOCIATION\s\+' | head -n 1 | grep -Po '\d+(\.\d+){3}$'"
+
+# tools
+alias ls='ls --color=auto -h'
+alias ll='ls -alFh'
+alias la='ls -Ah'
