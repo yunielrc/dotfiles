@@ -1,21 +1,7 @@
 #!/usr/bin/env bash
 
-set -euE
-
-# Idempotent
-type -P google-chrome &> /dev/null && {
-  inf 'google-chrome currently installed'
-  exit 0
-}
-
-# Add Repo
-wget -qO - 'https://dl.google.com/linux/linux_signing_key.pub' | sudo apt-key add -
-echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee '/etc/apt/sources.list.d/google-chrome.list'
+set -euEo pipefail
 
 # Install
-sudo -s <<EOF
-apt update -y
-apt install -y google-chrome-stable
-apt install -y chrome-gnome-shell
-EOF
+wget -qO - https://raw.githubusercontent.com/yunielrc/install-scripts/master/dist/packages/google-chrome/google-chrome-ubuntu | bash
 

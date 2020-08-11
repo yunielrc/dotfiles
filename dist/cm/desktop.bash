@@ -4,6 +4,7 @@ dotf-i apt --force
 dotf-i brew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 dotf-i rust
+apt-i ruby-full
 PATH="${PATH}:${HOME}/.cargo/bin"
 # :base
 
@@ -89,7 +90,6 @@ echoc 'Text editors'
 dotf-i typora
 
 echoc 'Development'
-dotf-i ruby
 dotf-i node
 dotf-i vscode
 dotf-i postman

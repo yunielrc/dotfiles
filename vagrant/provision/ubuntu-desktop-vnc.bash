@@ -1,17 +1,22 @@
 #!/usr/bin/env bash
 
-set -euE
+set -euEo pipefail
 
-export DEBIAN_FRONTEND=noninteractive
+type -P vncserver &> /dev/null && {
+  echo 'vncserver currently installed'
+  exit 0
+}
 
 set -o allexport
-. ~/.dotfiles/.env
+. "${WORKDIR}/.env"
 set +o allexport
+
+export DEBIAN_FRONTEND=noninteractive
 
 sudo -s <<EOF
 apt-get update -y
 apt-get install -y --no-install-recommends ubuntu-desktop-minimal
-apt-get install -y tigervnc-standalone-server tigervnc-common xrdp
+apt-get install -y tigervnc-standalone-server tigervnc-common
 apt-get autoremove -y
 apt-get autoclean -y
 rm -rf /var/lib/apt/lists/*
@@ -35,38 +40,11 @@ cat <<'EOF' > ~/.vnc/xstartup
 vncconfig -iconic &
 dbus-launch --exit-with-session gnome-session &
 EOF
-
 chmod 700 ~/.vnc/xstartup
-# echo "$VNC_PASSWORD" | vncpasswd -f > ~/.vnc/passwd, # I don't know why this don't work
-# autostart tigervnc server
-# cat <<EOF | sudo tee /lib/systemd/system/vncserver@.service
-# [Unit]
-# Description=Start TightVNC server at startup
-# After=syslog.target network.target
-
-# [Service]
-# Type=forking
-# User=${USER}
-# Group=${USER}
-
-# WorkingDirectory=/home/${USER}
-
-# PIDFile=/home/sammy/.vnc/%H:%i.pid
-# ExecStartPre=-/usr/bin/vncserver -kill :%i > /dev/null 2>&1
-# ExecStart=/usr/bin/vncserver :%i -passwd /home/${USER}/.dotfiles/passwd -localhost no -geometry 1024x768 -depth 32
-# ExecStop=/usr/bin/vncserver -kill :%i
-
-# [Install]
-# WantedBy=multi-user.target
-# EOF
-
-# sudo systemctl daemon-reload
-# sudo systemctl enable vncserver@1.service
-# sudo systemctl start vncserver@1.service
 
 cat <<EOF > ~/vncserver-start
 #!/usr/bin/env bash
-vncserver :1 -passwd /home/${USER}/.dotfiles/passwd -localhost no -geometry 1024x768 -depth 32
+vncserver :1 -passwd ${WORKDIR}/passwd -localhost no -geometry 1024x768 -depth 32
 EOF
 chmod +x ~/vncserver-start
 
@@ -90,10 +68,9 @@ on-remote$ ~/vncserver-list
 on-remote$ ~/vncserver-stop
 EOF
 
-sudo touch /run/xrdp/xrdp.pid
-sudo chmod 660 /run/xrdp/xrdp.pid
-sudo systemctl enable xrdp --now
-
 ~/vncserver-start
 ~/vncserver-list
 # disown %%
+
+
+echo -e "\n>>RUN: vncviewer $(dig +short myip.opendns.com @resolver1.opendns.com):5901"

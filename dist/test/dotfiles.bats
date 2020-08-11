@@ -22,7 +22,7 @@ setup() {
   assert_line --index 5 "> Installing package brew"
   assert_line --index 6 "brew setup"
   assert_line --index 7 "INFO> Installing bash plugin: brew"
-  assert_line --index 8 --regexp "'/tmp/.*/brew.plugin.bash' -> '/home/user/dotfiles/dist/test/fixtures/packages/brew/content/brew.plugin.bash'"
+  assert_line --index 8 --regexp "'/tmp/.*/brew.plugin.bash' -> '/home/ubuntu/dotfiles/dist/test/fixtures/packages/brew/content/brew.plugin.bash'"
   assert_line --index 9 --regexp "INFO> DONE. Installing bash plugin: brew"
   assert_line --index 10 --regexp "> DONE. Installing package brew"
 }

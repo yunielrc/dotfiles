@@ -2,26 +2,8 @@
 
 set -euE
 
-# Idempotent
-type -P aws &> /dev/null && {
-  inf 'aws cli currently installed'
-  exit 0
-}
-
-# setup
-readonly tmp_dir="$(mktemp -d)"
-cd "$tmp_dir"
-
-on_exit() {
-  rm -rf "$tmp_dir"
-}
-trap on_exit INT TERM EXIT
-# Download
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-
 # Install
-sudo ./aws/install
+wget -qO - https://raw.githubusercontent.com/yunielrc/install-scripts/master/dist/packages/aws-cli/aws-cli-linux | bash
 
 # Configure
 aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"

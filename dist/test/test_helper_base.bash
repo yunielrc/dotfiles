@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-. "${LIBS}/bats-support/load.bash"
-. "${LIBS}/bats-assert/load.bash"
+. "${LIBS_DIR}/bats-support/load.bash"
+. "${LIBS_DIR}/bats-assert/load.bash"
 
 export DEBUG=true
 export PATH="${PATH}:~/.local/bin"

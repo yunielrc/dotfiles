@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+# Install
+wget -qO - https://raw.githubusercontent.com/yunielrc/install-scripts/master/dist/packages/vagrant/vagrant-ubuntu | bash

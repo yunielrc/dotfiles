@@ -146,7 +146,7 @@ __install_plugin() {
     return 11
   fi
 
-  ln --symbolic --verbose "$plugin_file_path" "$plugin_file_dest_path" || {
+  ln --symbolic --verbose --force "$plugin_file_path" "$plugin_file_dest_path" || {
     err "${msg}: ${plugin}, creating link"
     return 12
   }

@@ -4,7 +4,6 @@ load test_helper
   bash ../setup &> /dev/null
 
   [[ -f /home/linuxbrew/.linuxbrew/bin/brew ]]
-  [[ -f /home/linuxbrew/.linuxbrew/bin/patchelf ]]
 
   run bash ../setup
 

@@ -8,10 +8,10 @@ teardown() {
   run env PKG_CONTENT="${PKGS_PATH}/webapps/content" bash ../setup
 
   assert_success
-  assert_output "INFO> Symbolic link created: '/home/user/.local/share/applications/webapps' -> '/home/user/dotfiles/dist/packages/webapps/content/applications/webapps'"
+  assert_output "INFO> Symbolic link created: '/home/ubuntu/.local/share/applications/webapps' -> '/home/ubuntu/dotfiles/dist/packages/webapps/content/applications/webapps'"
 
-  [[ -L /home/user/.local/share/applications/webapps && -d /home/user/.local/share/applications/webapps ]]
+  [[ -L /home/ubuntu/.local/share/applications/webapps && -d /home/ubuntu/.local/share/applications/webapps ]]
 
   run env PKG_CONTENT="${PKGS_PATH}/webapps/content" bash ../setup
-  assert_output "INFO> Directory: '/home/user/.local/share/applications/webapps' already exists"
+  assert_output "INFO> Directory: '/home/ubuntu/.local/share/applications/webapps' already exists"
 }

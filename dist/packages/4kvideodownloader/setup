@@ -1,18 +1,6 @@
 #!/usr/bin/env bash
 
-set -euE
+set -euEo pipefail
 
-
-# Download & Install
-readonly url="$(util_html_query_selector 'https://www.4kdownload.com/downloads' 'a[href$="_amd64.deb?source=website"]' 'href' | sed 's/?source=website//')"
-
-readonly tmp_dir="$(mktemp -d)"
-cd "$tmp_dir"
-
-on_exit() {
-  rm -rf "$tmp_dir"
-}
-trap on_exit INT TERM EXIT
-
-wget "$url" -O 4kvideodownloader.deb
-sudo dpkg --install 4kvideodownloader.deb
+# Install
+wget -qO - https://raw.githubusercontent.com/yunielrc/install-scripts/master/dist/packages/4kvideodownloader/4kvideodownloader-ubuntu | bash

@@ -6,20 +6,20 @@ x-build: &build
   args:
     VERSION: '20.04'
     APT_PROXY: "${APT_PROXY}"
-    USER: "${DUSER}"
-    WORKDIR: "${WORKDIR}"
+    USER: "${DOCKER_USER}"
+    WORKDIR: "${DOCKER_WORKDIR}"
   target: dev
 
 x-base: &base
   env_file: .env
-  container_name: "${NAME}"
-  working_dir: "${WORKDIR}"
-  user: "${DUSER}"
+  container_name: "${PRODUCT_NAME}"
+  working_dir: "${DOCKER_WORKDIR}"
+  user: "${DOCKER_USER}"
   volumes:
-    - "./:${MOUNT}:ro"
-  tmpfs:
-    - "${MOUNT}/dist/packages/bashc/content/.bashc/plugins/local:uid=1000,gid=1000"
-    - "${MOUNT}/dist/packages/bashc/content/.bashc/gen:uid=1000,gid=1000"
+    - "./:${DOCKER_MOUNT}:ro"
+  environment:
+    - RUN_ON_DOCKER=true
+    - USER=${DOCKER_USER}
   cap_add:
     - SYS_ADMIN
   devices:
@@ -37,11 +37,11 @@ services:
       target: dev
     entrypoint: "./scripts/test"
 
-  prod:
+  play:
     <<: *base
     build:
       <<: *build
-      target: base
+      target: dev
     entrypoint: "/bin/bash"
 
   dotfiles:
@@ -50,16 +50,3 @@ services:
       <<: *build
       target: base
     entrypoint: "./dist/dotfiles"
-
-  gui:
-    image: dorowu/ubuntu-desktop-lxde-vnc
-    <<: *base
-    user: root
-    ports:
-      - '5900:5900'
-    environment:
-      - VNC_PASSWORD=${VNC_PASSWORD}
-      - USER=${DUSER}
-    volumes:
-      - '/dev/shm:/dev/shm'
-      - "./:${MOUNT}:ro"

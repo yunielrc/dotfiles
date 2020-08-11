@@ -97,7 +97,7 @@ ERROR> Installing package: pkgfail, executing package setup"
 
 @test 'should create desktop file' {
 
-  local app_dir='/home/user/.local/share/applications'
+  local app_dir='/home/ubuntu/.local/share/applications'
   local -r file_name='coronavirus-app-webapp'
   local desktop_path="${app_dir}/${file_name}.desktop"
 
@@ -114,7 +114,7 @@ ERROR> Installing package: pkgfail, executing package setup"
   assert_output "Created desktop file: ${desktop_path}"
 
   run bash -c "ls -l $desktop_path | cut -d' ' -f3,4"
-  assert_output 'user user'
+  assert_output 'ubuntu ubuntu'
 
   run grep --only-matching \
            --regexp '\[Desktop Entry\]' \
