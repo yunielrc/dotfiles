@@ -78,6 +78,7 @@ echoc 'Internet'
 dotf-i google-chrome
 dotf-i 4kvideodownloader
 dotf-i telegram
+dotf-i sweet-nauta-server
 
 echoc 'Network Tools'
 dotf-i nethogs
@@ -96,5 +97,3 @@ dotf-i insomnia
 dotf-i aws-cli
 dotf-i docker
 dotf-i staruml
-
-gnome-shell --replace

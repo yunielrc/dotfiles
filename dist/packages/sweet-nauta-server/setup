@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+# Idempotent
+[[ -f /opt/sweet-nauta-server/bin/login ]] && {
+  echo "sweet-nauta-server currently installed"
+  exit 0
+}
+
+# Add npm proxy
+if [[ -n "${PROXY_URL:-}"  ]]; then
+  if [[ ! -f ~/.npmrc  ]]; then
+cat <<EOF >> ~/.npmrc
+proxy=${PROXY_URL}
+https-proxy=${PROXY_URL}
+EOF
+  else
+    if ! grep -q '^proxy=' ~/.npmrc; then
+      echo "proxy=${PROXY_URL}" >> ~/.npmrc
+    fi
+    if ! grep -q '^https-proxy=' ~/.npmrc; then
+      echo "https-proxy=${PROXY_URL}" >> ~/.npmrc
+    fi
+  fi
+fi
+
+# Install
+wget -qO - https://raw.githubusercontent.com/yunielrc/sweet-nauta-server/master/bin/install | sudo bash
+
+# Configure
+cat <<EOF | sudo tee /opt/sweet-nauta-server/.env
+NODE_ENV=prod
+NAUTA_USER=${SWEET_NAUTA_SERVER_NAUTA_USER}
+NAUTA_PASSWORD=${SWEET_NAUTA_SERVER_NAUTA_PASSWORD}
+AIROS_IP=${SWEET_NAUTA_SERVER_AIROS_IP}
+PORT=${SWEET_NAUTA_SERVER_PORT}
+TIMEOUT=${SWEET_NAUTA_SERVER_TIMEOUT}
+EOF
+
+sudo chown nauta:nauta /opt/sweet-nauta-server/.env
+sudo chmod 444 /opt/sweet-nauta-server/.env
+## Add custom keybinding
+# readonly custom_keybind_count=$(gsettings get org.gnome.settings-daemon.plugins.media-keys custom-keybindings | grep -Po '/custom-keybindings/custom' | wc -l)
+# readonly keybind_id="custom$((custom_keybind_count + 1))"
+# readonly schema_dir="org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/${keybind_id}/"
+
+# gsettings set "$schema_dir" name "'Sweet Nauta Server - Login Test'"
+# gsettings set "$schema_dir" binding "'${SWEET_NAUTA_SERVER_KEYBIND}'"
+# gsettings set "$schema_dir" command "'gtk-launch sweet-nauta-server-login-test'"
