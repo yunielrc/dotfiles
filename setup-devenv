@@ -1,14 +1,51 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2154
+set -euEo pipefail
 
-set -euE
+readonly BASE_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$BASE_PATH"
+
+[[ ! -f ./.env ]] && cp --verbose ./.env{.template,}
+[[ ! -f ./.env.override.server ]] && cp --verbose ./.env.override.server{.template,}
+[[ ! -f ./dist/.env ]] && cp --verbose ./dist/.env{.template,}
+[[ ! -f ./dist/.env.override.server ]] && cp --verbose ./dist/.env.override.server{.template,}
 
 set -o allexport
 . ./.env
 set +o allexport
 
+sudo apt-get update -y
+sudo apt-get install -y uuid-runtime
+
 # Install docker
 wget -qO - "${iscript}/docker/docker-ubuntu" | bash
+
+
 # Install Vagrant
 wget -qO - "${iscript}/vagrant/vagrant-ubuntu" | bash
+## vagrant plugins
 vagrant plugin install vagrant-aws
 vagrant plugin install vagrant-readenv
+## vagrant boxes
+vagrant box add dummy https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box
+vagrant box add ubuntu/focal64
+## dependencies
+sudo apt-get install -y virtualbox
+
+# Install vnc client
+sudo apt-get install -y tigervnc-viewer tigervnc-common
+readonly vnc_pass="$(uuidgen | cut -d- -f2)"
+echo "$vnc_pass" | vncpasswd -f > passwd
+echo "VNC_PASSWORD=${vnc_pass}" >> ./.env
+
+cat <<-EOF
+
+vnc password: $vnc_pass
+You can change the vnc password:
+\$ cd "$BASE_PATH"
+\$ echo "YOUR_PASSWORD" | vncpasswd -f > passwd
+\$ echo "VNC_PASSWORD=YOUR_PASSWORD" >> ./.env
+
+Edit, define your config:
+\$ vim ./.env
+EOF
