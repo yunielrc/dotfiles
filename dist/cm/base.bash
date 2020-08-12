@@ -1,3 +1,4 @@
+dotf-i apt --force
 apt-u
 apt-ug
 apt-i wget
