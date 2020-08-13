@@ -10,4 +10,4 @@ wget -qO - https://raw.githubusercontent.com/yunielrc/install-scripts/master/dis
 apt-i bats shellcheck
 type -P gem && gem install --user-install solargraph
 
-code --install-extension 'Shan.code-settings-sync'
+# code --install-extension 'Shan.code-settings-sync'
