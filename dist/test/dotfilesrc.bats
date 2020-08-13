@@ -144,3 +144,9 @@ StartupWMClass=coronavirus.app"
   # run bash -c "ls -l $desktop_path | cut -d' ' -f3,4"
   # assert_output 'root root'
 }
+
+@test 'should add custom keybindings' {
+  type -P gsettings
+
+  gnome_add_custom_keybinding 'Terminal' 'gtk-launch org.gnome.Terminal' 'F12'
+}

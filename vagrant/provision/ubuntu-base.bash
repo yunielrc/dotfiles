@@ -16,6 +16,7 @@ apt-get update -y
 apt-get upgrade -y
 
 # Install
+apt-get install -y --no-install-recommends ubuntu-desktop-minimal
 apt-get install -y tzdata wget file sudo xz-utils uuid-runtime gnupg tzdata 9base unzip curl
 ln -s --force /usr/share/zoneinfo/America/Havana /etc/localtime
 

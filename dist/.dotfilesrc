@@ -343,3 +343,31 @@ EOF
 }
 
 export -f util_html_query_selector
+
+## Add custom keybinding
+gnome_add_custom_keybinding() {
+  local -r name="$1"
+  local -r command="$2"
+  local -r binding="$3"
+
+  declare -ri custom_keybind_count=$(gsettings get org.gnome.settings-daemon.plugins.media-keys custom-keybindings | grep -Po '/custom-keybindings/custom' | wc -l)
+  readonly keybind_id="custom${custom_keybind_count}"
+
+  readonly path="/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/${keybind_id}/"
+  readonly schema="org.gnome.settings-daemon.plugins.media-keys.custom-keybinding"
+
+  custom_keybindings_new_value=''
+
+  if [[ $custom_keybind_count -eq 0 ]]; then
+    readonly custom_keybindings_new_value="['${path}']"
+  else
+    readonly custom_keybindings_new_value="$(gsettings get org.gnome.settings-daemon.plugins.media-keys custom-keybindings | sed 's/\]$//'), '${path}']"
+  fi
+
+  gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "$custom_keybindings_new_value"
+
+  gsettings set "${schema}:${path}" name "$name"
+  gsettings set "${schema}:${path}" command "$command"
+  gsettings set "${schema}:${path}" binding "$binding"
+}
+export -f gnome_add_custom_keybinding

@@ -40,11 +40,5 @@ EOF
 
 sudo chown nauta:nauta /opt/sweet-nauta-server/.env
 sudo chmod 444 /opt/sweet-nauta-server/.env
-## Add custom keybinding
-# readonly custom_keybind_count=$(gsettings get org.gnome.settings-daemon.plugins.media-keys custom-keybindings | grep -Po '/custom-keybindings/custom' | wc -l)
-# readonly keybind_id="custom$((custom_keybind_count + 1))"
-# readonly schema_dir="org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/${keybind_id}/"
 
-# gsettings set "$schema_dir" name "'Sweet Nauta Server - Login Test'"
-# gsettings set "$schema_dir" binding "'${SWEET_NAUTA_SERVER_KEYBIND}'"
-# gsettings set "$schema_dir" command "'gtk-launch sweet-nauta-server-login-test'"
+# gnome_add_custom_keybinding 'Sweet Nauta Server - Login Test' 'gtk-launch sweet-nauta-server-login-test' "${SWEET_NAUTA_SERVER_KEYBIND}"
