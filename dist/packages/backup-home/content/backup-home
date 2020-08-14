@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2153
+# Make a backup of home directories to mounted nfs unit
+
+set -euEo pipefail
+
+# Constants
+# readonly BASE_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+readonly SCRIPT_NAME="$(basename "${0}")"
+readonly WORK_DIR="${WORK_DIR:-"$(realpath ~/)"}"
+readonly ENV_FILE="${WORK_DIR}/.${SCRIPT_NAME}.env"
+# shellcheck disable=SC2034
+readonly LOG_FILE="${WORK_DIR}/.${SCRIPT_NAME}.log"
+
+cd "$WORK_DIR"
+
+# Environment
+# MOUNT_SOURCE='192.168.1.4:/nfs/PCBackup'
+# BACKUP_TARGET=~/Backup
+# EXCLUDE_FOLDERS="folder1,folder2,folder with spaces,foldern"
+
+if [[ -f "$ENV_FILE" ]]; then
+  set -o allexport
+  . "$ENV_FILE"
+  set +o allexport
+fi
+
+#
+# MOUNT NFS DEVICE
+#
+
+mount_nfs_device() {
+  local -r mount_source="$1"
+  local -r mount_target="$2"
+
+  if ! findmnt --types nfs --source "$mount_source" --target "$mount_target" > /dev/null; then
+    [[ ! -d "$mount_target" ]] && mkdir --verbose --parents "$mount_target"
+    sudo mount -t nfs "$mount_source" "$mount_target"
+  fi
+  return 0
+}
+
+#
+# MAKE BACKUP
+#
+make_home_backup() {
+  # shellcheck disable=SC2034
+  local -r backup_target="$1"
+  local -r exclude_folders="${2:-}" # d1,d2 w space,d3
+
+  local exclude_params="-not -name ${WORK_DIR##*/} "
+  # if backup_target is inside work_dir exclude it from backup
+  if [[ "$WORK_DIR" == "${backup_target%/*}" ]]; then
+    exclude_params="${exclude_params} -not -name ${backup_target##*/} "
+  fi
+  local -r ifs_copy="$IFS"
+  IFS=','
+  for f in $exclude_folders; do
+    f="${f%%' '}"
+    f="${f##' '}"
+    exclude_params="${exclude_params} -not -name '${f}'"
+  done
+  IFS="$ifs_copy"
+  readonly exclude_params
+
+  eval find "$WORK_DIR" -maxdepth 1 \
+    -type d \
+    -not -path "'*/\.*'" \
+    "$exclude_params" \
+    -exec \
+    "rsync -avz --delete {} '${backup_target}' --log-file '$LOG_FILE' \;"
+  return 0
+}
+
+main(){
+  mount_nfs_device "$MOUNT_SOURCE" "$BACKUP_TARGET"
+  make_home_backup "$BACKUP_TARGET" "${EXCLUDE_FOLDERS:-}"
+}
+
+if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
+  main "$@"
+  exit $?
+fi

@@ -97,3 +97,6 @@ dotf-i insomnia
 dotf-i aws-cli
 dotf-i docker
 dotf-i staruml
+
+echoc 'Others'
+dotf-i backup-home

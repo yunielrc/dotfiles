@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+[[ -f ~/.local/bin/backup-home ]] && {
+  echo 'backup-home currently installed'
+  exit 0
+}
+
+# Install dependencies
+sudo apt-get update -y
+sudo apt-get install -y rsync nfs-common || :
+# Install
+[[ ! -d ~/.local/bin ]] && mkdir -p ~/.local/bin
+ln --symbolic --force --verbose "${PKG_CONTENT}/backup-home" ~/.local/bin/backup-home
+
+# Configure
+## Add cron entry
+readonly tmpcron="$(mktemp)"
+crontab -l > "$tmpcron" || :
+echo "0 15 * * *  /bin/bash $(realpath ~)/.local/bin/backup-home" >> "$tmpcron"
+crontab "$tmpcron"
+rm "$tmpcron"
+
+cat <<EOF > ~/.backup-home.env
+MOUNT_SOURCE='${BACKUP_HOME_MOUNT_SOURCE}'
+BACKUP_TARGET='${BACKUP_HOME_BACKUP_TARGET}'
+EXCLUDE_FOLDERS='${BACKUP_HOME_EXCLUDE_FOLDERS}'
+EOF

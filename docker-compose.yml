@@ -28,6 +28,7 @@ x-base: &base
     - "apparmor:unconfined"
   stdin_open: true # docker run -i
   tty: true        # docker run -t
+  # privileged: true
 
 services:
   test:
