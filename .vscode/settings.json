@@ -2,6 +2,7 @@
   "shellcheck.exclude": [1091, 1090, 2155],
   "shellcheck.ignoreFileSchemes": ["git", "gitfs"],
   "files.associations": {
-    "Vagrantfile.vbox": "ruby"
+    "Vagrantfile.vbox": "ruby",
+    ".env*": "ini"
   }
 }
