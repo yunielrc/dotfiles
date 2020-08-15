@@ -11,6 +11,8 @@ readonly WORK_DIR="${WORK_DIR:-"$(realpath ~/)"}"
 readonly ENV_FILE="${WORK_DIR}/.${SCRIPT_NAME}.env"
 readonly LOG_FILE="${WORK_DIR}/.${SCRIPT_NAME}.log"
 
+# FIX: only one instance can be executed on backup-home script
+
 cd "$WORK_DIR"
 
 # Environment
@@ -27,7 +29,6 @@ fi
 #
 # MOUNT NFS DEVICE
 #
-
 mount_nfs_device() {
   local -r mount_source="$1"
   local -r mount_target="$2"
@@ -39,13 +40,18 @@ mount_nfs_device() {
   return 0
 }
 
+#
+# RESTORE A BACKUP
+#
 restore_home_backup() {
-  # TODO: restaurar copia de seguridad de home
-  :
+  local -r backup_target="$1"
+
+  rsync -avz "$backup_target"/* "$WORK_DIR" --log-file "$LOG_FILE"
+  return 0
 }
 
 #
-# MAKE BACKUP
+# MAKE A BACKUP
 #
 make_home_backup() {
   local -r backup_target="$1"
@@ -75,9 +81,89 @@ make_home_backup() {
   return 0
 }
 
+usage(){
+
+cat <<HELPMSG
+Make/restore a backup of user home directories to/from a nfs unit.
+
+Environment variables are loaded from ${ENV_FILE}
+Logs are saved to ${LOG_FILE}
+
+Usage:
+${SCRIPT_NAME} [OPTIONS] COMMAND
+
+Environment:
+  MOUNT_SOURCE        Define the mount source
+                      example: '192.168.1.4:/nfs/PCBackup'
+  BACKUP_TARGET       Define the mount target, this is the backup dest
+                      example: ~/Backup
+  EXCLUDE_FOLDERS     Command separated list of excluded folders from backup
+                      example: 'snap, VirtualBox VMs, vboxshare'
+
+Options:
+  -h, --help          Show this help
+  --no-mount-nfs      Ignore MOUNT_SOURCE, and don't mount nfs unit, use
+                      local filesystem for backup
+Commands:
+  backup              Make a backup of home directories 'BACKUP_TARGET'
+  restore             Restore a backup from 'BACKUP_TARGET' to user home
+
+Examples:
+${SCRIPT_NAME} backup
+${SCRIPT_NAME} restore
+
+Exit status:
+0: Ok
+>= 1: Error
+HELPMSG
+}
+
+
 main(){
-  mount_nfs_device "$MOUNT_SOURCE" "$BACKUP_TARGET"
-  make_home_backup "$BACKUP_TARGET" "${EXCLUDE_FOLDERS:-}"
+
+  [[ "$#" == 0 ]] && set -- '-h'
+
+  local no_mount_nfs=false
+  local positional=()
+
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+      -h|--help)
+        usage
+        exit 0
+      ;;
+      -n|--no-mount-nfs)
+        no_mount_nfs=true
+        shift
+      ;;
+      *) # unknown flag/switch
+      positional+=("$1")
+      shift
+      ;;
+    esac
+  done
+
+  set -- "${positional[@]}" # restore positional params
+
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+      backup)
+        [[ $no_mount_nfs ]] || mount_nfs_device "$MOUNT_SOURCE" "$BACKUP_TARGET"
+        make_home_backup "$BACKUP_TARGET" "${EXCLUDE_FOLDERS:-}"
+        exit $?
+      ;;
+      restore)
+        [[ $no_mount_nfs ]] || mount_nfs_device "$MOUNT_SOURCE" "$BACKUP_TARGET"
+        restore_home_backup "$BACKUP_TARGET"
+        exit $?
+      ;;
+      *)
+        echo -e "Invalid param: ${1}\n" >&2
+        usage
+        exit 13
+      ;;
+    esac
+  done
 }
 
 if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
