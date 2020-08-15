@@ -1,10 +1,11 @@
 # base
+dotf-i brew # brew must be before bashc
 dotf-i bashc
-dotf-i brew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 dotf-i rust
 PATH="${PATH}:${HOME}/.cargo/bin"
 apt-i ruby-full
+dotf-i apt --force
 # :base
 
 echoc '>> APT packages'
@@ -43,12 +44,9 @@ brew install tokei
 brew tap cjbassi/ytop
 brew install ytop
 brew install tealdeer
-brew install bandwhich
 brew install grex
 brew install lsd
 brew install cointop
-brew install navi
-echo -e '\nsource <(navi widget bash)' >> ~/.bashrc
 
 echoc '>> CARGO packages'
 
@@ -64,6 +62,8 @@ dotf-i core-config
 
 echoc 'Tools'
 dotf-i fzf
+dotf-i bandwhich
+dotf-i navi
 
 echoc 'Video'
 dotf-i celluloid

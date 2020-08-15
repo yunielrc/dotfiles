@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# TODO: hacer log de instalación para poder ver facilmente los errores
+
 #  BASH Settings
 set -o errexit
 set -o errtrace
