@@ -9,7 +9,6 @@ set -euEo pipefail
 readonly SCRIPT_NAME="$(basename "${0}")"
 readonly WORK_DIR="${WORK_DIR:-"$(realpath ~/)"}"
 readonly ENV_FILE="${WORK_DIR}/.${SCRIPT_NAME}.env"
-# shellcheck disable=SC2034
 readonly LOG_FILE="${WORK_DIR}/.${SCRIPT_NAME}.log"
 
 cd "$WORK_DIR"
@@ -40,11 +39,15 @@ mount_nfs_device() {
   return 0
 }
 
+restore_home_backup() {
+  # TODO: restaurar copia de seguridad de home
+  :
+}
+
 #
 # MAKE BACKUP
 #
 make_home_backup() {
-  # shellcheck disable=SC2034
   local -r backup_target="$1"
   local -r exclude_folders="${2:-}" # d1,d2 w space,d3
 

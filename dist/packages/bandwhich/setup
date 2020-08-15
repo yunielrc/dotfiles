@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euEo pipefail
+
+# Install
+brew install bandwhich
+sudo ln --symbolic --force --verbose "$(type -P bandwhich)" /usr/local/bin/bandwhich
+
+# Configure
+# https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos
+echo "${USER} ALL=NOPASSWD:/usr/local/bin/bandwhich" | sudo tee /etc/sudoers.d/bandwhich

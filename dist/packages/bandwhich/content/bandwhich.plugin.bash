@@ -1,0 +1,1 @@
+alias bandwhich='sudo bandwhich'

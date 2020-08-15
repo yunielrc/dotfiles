@@ -12,6 +12,5 @@ fi
 # ------------
 source "/home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.bash"
 
-
 # Environment
 export FZF_DEFAULT_COMMAND='fd -H'
