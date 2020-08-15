@@ -12,6 +12,15 @@ case "$1" in
     shift
     docker-compose run --rm test "$@"
   ;;
+  build-test-brew)
+    shift
+    docker-compose build
+    docker-compose run --rm test-brew "$@"
+  ;;
+  test-brew)
+    shift
+    docker-compose run --rm test-brew "$@"
+  ;;
   build-play)
     shift
     docker-compose build
@@ -20,6 +29,15 @@ case "$1" in
   play)
     shift
     docker-compose run --rm play "$@"
+  ;;
+  build-play-brew)
+    shift
+    docker-compose build
+    docker-compose run --rm play-brew "$@"
+  ;;
+  play-brew)
+    shift
+    docker-compose run --rm play-brew "$@"
   ;;
   build-dotfiles)
     shift

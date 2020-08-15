@@ -17,6 +17,9 @@ x-base: &base
   user: "${DOCKER_USER}"
   volumes:
     - "./:${DOCKER_MOUNT}:ro"
+  tmpfs:
+    - "${DOCKER_MOUNT}/dist/packages/bashc/content/.bashc/plugins/local:uid=1000,gid=1000"
+    - "${DOCKER_MOUNT}/dist/packages/bashc/content/.bashc/gen:uid=1000,gid=1000"
   environment:
     - RUN_ON_DOCKER=true
     - USER=${DOCKER_USER}
@@ -43,6 +46,20 @@ services:
     build:
       <<: *build
       target: dev
+    entrypoint: "/bin/bash"
+
+  test-brew:
+    <<: *base
+    build:
+      <<: *build
+      target: brew
+    entrypoint: "./scripts/test"
+
+  play-brew:
+    <<: *base
+    build:
+      <<: *build
+      target: brew
     entrypoint: "/bin/bash"
 
   dotfiles:

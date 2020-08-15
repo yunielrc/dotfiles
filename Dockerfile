@@ -33,3 +33,8 @@ RUN apt-get update -y && \
     cd - && rm -r /tmp/bats-core && \
     git clone https://github.com/bats-core/bats-assert.git /usr/local/lib/bats-assert && \
     git clone https://github.com/bats-core/bats-support.git /usr/local/lib/bats-support
+
+FROM dev as brew
+ARG USER
+RUN wget -qO - https://raw.githubusercontent.com/yunielrc/install-scripts/master/dist/packages/brew/brew-ubuntu | sudo --user="$USER" bash
+
