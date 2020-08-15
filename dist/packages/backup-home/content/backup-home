@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2153
-# Make a backup of home directories to mounted nfs unit
+[ "$FLOCKER" != "$0" ] && exec env FLOCKER="$0" flock -E 3 -en "$0" "$0" "$@" || :
 
 set -euEo pipefail
 
@@ -11,15 +11,11 @@ readonly WORK_DIR="${WORK_DIR:-"$(realpath ~/)"}"
 readonly ENV_FILE="${WORK_DIR}/.${SCRIPT_NAME}.env"
 readonly LOG_FILE="${WORK_DIR}/.${SCRIPT_NAME}.log"
 
-# FIX: only one instance can be executed on backup-home script
-
 cd "$WORK_DIR"
-
 # Environment
 # MOUNT_SOURCE='192.168.1.4:/nfs/PCBackup'
 # BACKUP_TARGET=~/Backup
 # EXCLUDE_FOLDERS="folder1,folder2,folder with spaces,foldern"
-
 if [[ -f "$ENV_FILE" ]]; then
   set -o allexport
   . "$ENV_FILE"
