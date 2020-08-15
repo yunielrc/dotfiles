@@ -13,12 +13,13 @@ sudo apt-get install -y rsync nfs-common || :
 # Install
 [[ ! -d ~/.local/bin ]] && mkdir -p ~/.local/bin
 ln --symbolic --force --verbose "${PKG_CONTENT}/backup-home" ~/.local/bin/backup-home
+chmod +x ~/.local/bin/backup-home
 
 # Configure
 ## Add cron entry
 readonly tmpcron="$(mktemp)"
 crontab -l > "$tmpcron" || :
-echo "0 15 * * *  /bin/bash $(realpath ~)/.local/bin/backup-home" >> "$tmpcron"
+echo "0 15 * * *  /bin/bash $(realpath ~)/.local/bin/backup-home backup" >> "$tmpcron"
 crontab "$tmpcron"
 rm "$tmpcron"
 

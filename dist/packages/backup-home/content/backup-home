@@ -105,8 +105,8 @@ Commands:
   restore             Restore a backup from 'BACKUP_TARGET' to user home
 
 Examples:
-${SCRIPT_NAME} backup
-${SCRIPT_NAME} restore
+\$ ${SCRIPT_NAME} backup
+\$ ${SCRIPT_NAME} restore
 
 Exit status:
 0: Ok
