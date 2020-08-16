@@ -13,7 +13,6 @@ sudo apt-get install -y rsync nfs-common || :
 # Install
 [[ ! -d ~/.local/bin ]] && mkdir -p ~/.local/bin
 ln --symbolic --force --verbose "${PKG_CONTENT}/backup-home" ~/.local/bin/backup-home
-chmod +x ~/.local/bin/backup-home
 
 # Configure
 ## Add cron entry

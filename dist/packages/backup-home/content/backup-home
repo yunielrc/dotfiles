@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2153
-[ "$FLOCKER" != "$0" ] && exec env FLOCKER="$0" flock -E 3 -en "$0" "$0" "$@" || :
+if [ "$FLOCKER" != "$0" ]; then
+  exec env FLOCKER="$0" flock -E 3 -en "$0" "$0" "$@" || :
+fi
 
 set -euEo pipefail
 
