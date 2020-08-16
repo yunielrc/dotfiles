@@ -1,8 +1,8 @@
-# Project Title
+# dotfiles
 
 ## About
 
-Personal dotfiles
+Personal dotfiles. Install apps with custom configurations
 
 ### Prerequisites
 
