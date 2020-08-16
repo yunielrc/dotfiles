@@ -11,16 +11,16 @@ if [[ -n "${PROXY_URL:-}" ]]; then
 
   cat <<EOF | sudo tee '/etc/systemd/system/docker.service.d/http-proxy.conf'
 [Service]
-Environment="HTTP_PROXY=${PROXY_URL}" "HTTPS_PROXY=${PROXY_URL}" "NO_PROXY=localhost,127.0.0.1,${DOMAIN}"
+Environment="HTTP_PROXY=${PROXY_URL}" "HTTPS_PROXY=${PROXY_URL}" "NO_PROXY=localhost,127.0.0.1,${LOCAL_DOMAIN}"
 EOF
 
   cat <<EOF | sudo tee '/etc/docker/daemon.json'
 {
 "max-concurrent-downloads": 2,
 "insecure-registries" : [
-  "registry.${DOMAIN}:5000"
+  "registry.${LOCAL_DOMAIN}:5000"
 ],
-"registry-mirrors": ["http://registry-cache.${DOMAIN}:5001"]
+"registry-mirrors": ["http://registry-cache.${LOCAL_DOMAIN}:5001"]
 }
 EOF
 
