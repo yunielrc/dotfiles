@@ -8,6 +8,8 @@ apt-i ruby-full
 dotf-i apt --force
 # :base
 
+dotf-i backup-home
+
 echoc '>> APT packages'
 
 apt-i nfs-common
@@ -45,7 +47,6 @@ brew tap cjbassi/ytop
 brew install ytop
 brew install tealdeer
 brew install grex
-brew install lsd
 brew install cointop
 
 echoc '>> CARGO packages'
@@ -58,12 +59,13 @@ cargo install dutree
 
 echoc '>> DOTFILES packages'
 
-dotf-i core-config
+dotf-i home-config
 
 echoc 'Tools'
 dotf-i fzf
 dotf-i bandwhich
 dotf-i navi
+dotf-i lsd
 
 echoc 'Video'
 dotf-i celluloid
@@ -97,6 +99,3 @@ dotf-i insomnia
 dotf-i aws-cli
 dotf-i docker
 dotf-i staruml
-
-echoc 'Others'
-dotf-i backup-home
