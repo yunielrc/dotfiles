@@ -1,3 +1,5 @@
+TODO: save ssh keys, .env*,*.local files in private repo
+DONE: registrar errores de instalación en log
 TODO: bashc: put into independent project
 TODO: bashc: put user specific files such as: aliases, functions, environment, etc into independent project to allow reuse
 TODO: backup-home: put into independent project 'bash-scripts'
