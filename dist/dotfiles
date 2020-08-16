@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+if [ "$FLOCKER" != "$0" ]; then
+  exec env FLOCKER="$0" flock -E 3 -en "$0" "$0" "$@" || :
+fi
+
 # Bootstrap a configuration management available in cm folder
 
 readonly BASE_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -25,10 +29,7 @@ usage(){
 
   Examples:
   ${SCRIPT_NAME} desktop
-
-  Exit status:
-  0: Ok
-  >= 1: Error
+~
 HELPMSG
 }
 
@@ -50,8 +51,8 @@ setup_cm() {
 }
 
 load_base_cm(){
-  if [[ -n "${BASE_CM:-}" && "${#BASE_CM[@]}" -gt 0 ]]; then
-    for cm in "${BASE_CM[@]}"; do
+  if [[ -n "${DOTF_BASE_CM:-}" && "${#DOTF_BASE_CM[@]}" -gt 0 ]]; then
+    for cm in "${DOTF_BASE_CM[@]}"; do
       setup_cm "$cm"
     done
   fi

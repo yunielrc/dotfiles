@@ -2,7 +2,7 @@ load test_helper
 
 setup() {
   . "${DIST_PATH}/.dotfilesrc"
-  touch "$BASH_GEN_SETTINGS_FILE"
+  touch "$DOTF_BASH_GEN_SETTINGS_FILE"
 }
 
 @test "plugin doesn't exists" {
@@ -13,7 +13,7 @@ setup() {
 }
 
 @test "plugin dir doesn't exists" {
-    BASH_PLUGINS_DIR="123456654321"
+    DOTF_BASH_PLUGINS_DIR="123456654321"
     run __install_plugin 'brew'
 
     assert_failure 11
@@ -22,7 +22,7 @@ ERROR> Installing bash plugin: brew, plugins dir doesn't exist: 123456654321"
 }
 
 @test 'error creating link' {
-  chmod 0550 "${BASH_PLUGINS_DIR}"
+  chmod 0550 "${DOTF_BASH_PLUGINS_DIR}"
 
   run __install_plugin 'brew'
 
@@ -31,7 +31,7 @@ ERROR> Installing bash plugin: brew, plugins dir doesn't exist: 123456654321"
 }
 
 @test 'error adding plugin to settings' {
-  chmod 0440 "${BASH_GEN_SETTINGS_FILE}"
+  chmod 0440 "${DOTF_BASH_GEN_SETTINGS_FILE}"
 
   run __install_plugin 'brew'
 
@@ -47,9 +47,9 @@ ERROR> Installing bash plugin: brew, plugins dir doesn't exist: 123456654321"
   assert_success
   assert_line --index 2 --regexp "INFO> DONE. Installing bash plugin: brew"
 
-  [[ -L "${BASH_PLUGINS_DIR}/${plugin}.plugin.bash" && -f "${BASH_PLUGINS_DIR}/${plugin}.plugin.bash" ]]
+  [[ -L "${DOTF_BASH_PLUGINS_DIR}/${plugin}.plugin.bash" && -f "${DOTF_BASH_PLUGINS_DIR}/${plugin}.plugin.bash" ]]
 
-  run grep "BASHC_PLUGINS+=($plugin)" "$BASH_GEN_SETTINGS_FILE"
+  run grep "BASHC_PLUGINS+=($plugin)" "$DOTF_BASH_GEN_SETTINGS_FILE"
   assert_output "BASHC_PLUGINS+=($plugin)"
 }
 
@@ -72,7 +72,7 @@ ERROR> Installing package: pkgfail, executing package setup"
 @test 'should no install package, plugin fail' {
   local -r pkg='brew'
   local -r plugin="$pkg"
-  chmod 0440 "${BASH_GEN_SETTINGS_FILE}"
+  chmod 0440 "${DOTF_BASH_GEN_SETTINGS_FILE}"
 
   run __install_package "$pkg"
 
@@ -89,9 +89,9 @@ ERROR> Installing package: pkgfail, executing package setup"
   assert_line --index 0 --regexp "brew setup"
   assert_line --index 3 --regexp "INFO> DONE. Installing bash plugin: brew"
 
-  [[ -L "${BASH_PLUGINS_DIR}/${plugin}.plugin.bash" && -f "${BASH_PLUGINS_DIR}/${plugin}.plugin.bash" ]]
+  [[ -L "${DOTF_BASH_PLUGINS_DIR}/${plugin}.plugin.bash" && -f "${DOTF_BASH_PLUGINS_DIR}/${plugin}.plugin.bash" ]]
 
-  run grep "BASHC_PLUGINS+=($plugin)" "$BASH_GEN_SETTINGS_FILE"
+  run grep "BASHC_PLUGINS+=($plugin)" "$DOTF_BASH_GEN_SETTINGS_FILE"
   assert_output "BASHC_PLUGINS+=($plugin)"
 }
 

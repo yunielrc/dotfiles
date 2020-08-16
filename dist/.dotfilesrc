@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 
-# TODO: hacer log de instalación para poder ver facilmente los errores
-
-#  BASH Settings
-set -o errexit
-set -o errtrace
-set -o nounset
-set -o pipefail
+set -euEo pipefail
 
 # Constants
 
@@ -42,7 +36,7 @@ export WHITE='\033[1;37m'
 ## :Colors
 
 if [[ -z "${BASE_PATH:-}" ]]; then
-  readonly BASE_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+  readonly BASE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 fi
 if [[ -z "${WORK_DIR:-}" ]]; then
   readonly WORK_DIR="${WORK_DIR:-"$BASE_PATH"}"
@@ -124,7 +118,6 @@ export -f debug
 
 ## :echo functions
 
-
 ## dotfiles functions
 
 __install_plugin() {
@@ -132,7 +125,7 @@ __install_plugin() {
 
   local -r pkg="$plugin"
   local -r plugin_file_path="${PKGS_PATH}/${pkg}/content/${plugin}.plugin.bash"
-  local -r plugin_file_dest_path="${BASH_PLUGINS_DIR}/${plugin}.plugin.bash"
+  local -r plugin_file_dest_path="${DOTF_BASH_PLUGINS_DIR}/${plugin}.plugin.bash"
 
   local -r msg="Installing bash plugin"
 
@@ -143,8 +136,8 @@ __install_plugin() {
     return 10
   fi
 
-  if [[ ! -d "$BASH_PLUGINS_DIR" ]]; then
-    err "${msg}: ${plugin}, plugins dir doesn't exist: $BASH_PLUGINS_DIR"
+  if [[ ! -d "$DOTF_BASH_PLUGINS_DIR" ]]; then
+    err "${msg}: ${plugin}, plugins dir doesn't exist: $DOTF_BASH_PLUGINS_DIR"
     return 11
   fi
 
@@ -153,8 +146,8 @@ __install_plugin() {
     return 12
   }
 
-  if [[ ! -f "$BASH_GEN_SETTINGS_FILE" ]] || ! grep --silent "BASHC_PLUGINS+=($plugin)" "$BASH_GEN_SETTINGS_FILE"; then
-    echo "BASHC_PLUGINS+=($plugin)" >> "$BASH_GEN_SETTINGS_FILE" || {
+  if [[ ! -f "$DOTF_BASH_GEN_SETTINGS_FILE" ]] || ! grep --silent "BASHC_PLUGINS+=($plugin)" "$DOTF_BASH_GEN_SETTINGS_FILE"; then
+    echo "BASHC_PLUGINS+=($plugin)" >> "$DOTF_BASH_GEN_SETTINGS_FILE" || {
       err "${msg}: ${plugin}, adding plugin to settings"
       return 13
     }
@@ -180,7 +173,7 @@ __install_package() {
   fi
 
   # Idempotent
-  [[ "$force" == false ]] && type -P "$pkg" &> /dev/null && {
+  [[ "$force" == false ]] && type -P "$pkg" &>/dev/null && {
     inf "${pkg} currently installed"
     return 0
   }
@@ -207,11 +200,11 @@ dotf-i() {
   local positional=()
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      -f|--force)
+    -f | --force)
       force=true
       shift
       ;;
-      *)
+    *)
       positional+=("$1")
       shift
       ;;
@@ -222,30 +215,56 @@ dotf-i() {
   local -r pkg="$1"
   # local -r color="\e[3$(( "$RANDOM" * 6 / 32767 + 1 ))m"
 
- if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
-  local -r msg="Installing package ${pkg}"
-  echo -e "\n> ${msg}"
-  if __install_package "$1" $force; then
-    echo -e "> DONE. ${msg}"
-  else
-    echo -e "> FAIL. ${msg}"
+  __dotf_i_out() {
+    local -i ecode=0
+
+    if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
+      local -r msg="Installing package ${pkg}"
+      echo -e "\n> ${msg}"
+      if __install_package "$pkg" $force; then
+        echo -e "> DONE. ${msg}"
+      else
+        ecode=$?
+        echo -e "> FAIL. ${msg}"
+      fi
+    else
+      local -r msg="${WHITE} Installing package${NOCOLOR} ${YELLOW}${pkg}${NOCOLOR}"
+      echo -e "\n${WHITE}>${NOCOLOR}${msg}"
+      if __install_package "$pkg" $force; then
+        echo -e "${WHITE}>${NOCOLOR}${LIGHTGREEN} DONE.${msg}${NOCOLOR}"
+      else
+        ecode=$?
+        echo -e "${WHITE}>${NOCOLOR}${LIGHTRED} FAIL.${msg}${NOCOLOR}"
+      fi
+    fi
+    return $ecode
+  }
+
+  local out
+  local -i ecode
+  out="$(__dotf_i_out 2>&1)"
+  ecode=$?
+
+  echo -e "$out"
+
+  if [[ $DOTF_LOG_ERRORS == true && $ecode -ne 0 ]]; then
+cat <<EOF >> ~/.dotfiles.err.log
+
+--------------------------------------------------------------
+$(date +%Y%m%d-%H%M%S)
+--------------------------------------------------------------
+$out
+EOF
   fi
- else
-   local -r msg="${WHITE} Installing package${NOCOLOR} ${YELLOW}${pkg}${NOCOLOR}"
-   echo -e "\n${WHITE}>${NOCOLOR}${msg}"
-  if __install_package "$1" $force; then
-    echo -e "${WHITE}>${NOCOLOR}${LIGHTGREEN} DONE.${msg}${NOCOLOR}"
-  else
-    echo -e "${WHITE}>${NOCOLOR}${LIGHTRED} FAIL.${msg}${NOCOLOR}"
-  fi
- fi
+
+  return $ecode
 }
 export -f dotf-i
 
 ## :dotfiles functions
 
-create_desktop_file(){
-	local -r name="$1"
+create_desktop_file() {
+  local -r name="$1"
   local -r comment="$2"
   local -r categories="$3"
   local -r keywords="$4"
@@ -257,13 +276,13 @@ create_desktop_file(){
 
   local startupWMClassEntry=''
   if [[ -n "$startupWMClass" ]]; then
-     startupWMClassEntry="StartupWMClass=${startupWMClass}"
+    startupWMClassEntry="StartupWMClass=${startupWMClass}"
   fi
   # https://developer.gnome.org/menu-spec/
   local -r desktop_path="${appDir}/${fileName}.desktop"
 
   [[ ! -d "$appDir" ]] && {
-    mkdir -p "$appDir" 2> /dev/null || sudo mkdir -p "$appDir"
+    mkdir -p "$appDir" 2>/dev/null || sudo mkdir -p "$appDir"
   }
 
   local tee='tee'
@@ -272,7 +291,7 @@ create_desktop_file(){
     tee='sudo tee'
   }
 
-  cat <<EOF | eval "$tee" "$desktop_path" > /dev/null
+  cat <<EOF | eval "$tee" "$desktop_path" >/dev/null
 #!/usr/bin/env xdg-open
 [Desktop Entry]
 Name=${name}
@@ -289,18 +308,18 @@ EOF
 }
 export -f create_desktop_file
 
-apt-u(){ sudo apt update -y; }
+apt-u() { sudo apt update -y; }
 export -f apt-u
 
-apt-ug(){ sudo apt upgrade -y; }
+apt-ug() { sudo apt upgrade -y; }
 export -f apt-ug
 
-apt-i(){ sudo apt install -y "$@"; }
+apt-i() { sudo apt install -y "$@"; }
 export -f apt-i
 
 add_apt_key() {
-	local -r apt_key="$1"
-	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "$apt_key"
+  local -r apt_key="$1"
+  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "$apt_key"
 }
 export -f add_apt_key
 
@@ -309,9 +328,9 @@ util_html_query_selector() {
   local -r selector="$2"
   local -r property="$3"
 
-  dotf-i node &> /dev/null
+  dotf-i node &>/dev/null
   # TODO instalar jsdom minimist en directorio temporal y después eliminar al final de esta función
-  sudo npm install -g jsdom minimist &> /dev/null
+  sudo npm install -g jsdom minimist &>/dev/null
   # poner a directorio temporal creado
   export NODE_PATH="$(npm root --quiet -g)"
 
