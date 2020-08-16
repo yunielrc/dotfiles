@@ -6,7 +6,7 @@ set -euE
 
 if [[ ! -d ~/.bashc ]]; then
   infn 'Symbolic link created: '
-  ln --symbolic --verbose "${PKG_CONTENT}/.bashc" ~/.bashc
+  ln --symbolic --force --verbose "${PKG_CONTENT}/.bashc" ~/.bashc
 else
   inf "Directory: '$(realpath ~/.bashc)' already exists"
 fi

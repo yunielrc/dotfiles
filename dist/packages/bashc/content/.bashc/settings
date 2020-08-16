@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2034
 
-# BASHC_THEME=''
-BASHC_PLUGINS+=(fzf)
+BASHC_THEME=default
+# BASHC_PLUGINS+=()

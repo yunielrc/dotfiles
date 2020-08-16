@@ -8,39 +8,24 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias ~="cd ~" # `cd` is probably faster to type though
 alias -- -="cd -"
+alias cdt='cd $(mktemp -d)'
 
 # Network
 alias net-public-ip='dig +short myip.opendns.com @resolver1.opendns.com'
 
-alias export_proxy='export http_proxy=\"${PROXY}\"'
+alias export_proxy="export http_proxy=${PROXY}"
 alias rmac="openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/:$//'"
 alias download_speed="wget --report-speed=bits -O /dev/null http://ipv4.download.thinkbroadband.com/5MB.zip"
+
 # proxmox server
 alias proxmox-suspend='ssh proxmox systemctl suspend'
 alias proxmox-poweroff='ssh proxmox poweroff'
 alias proxmox-reboot='ssh proxmox reboot'
 alias proxmox-wakeup="wakeonlan ${PROXMOX_MAC}"
+
 # storage server
 alias storage-wakeup="wakeonlan ${STORAGE_MAC}"
+
 # outdoor router
 alias orouter-reboot='ssh orouter reboot'
 alias orouter-newid="ssh lanbot.${lan} cron/airos-random-mac-name; echo $?"
-# without sudo
-alias nethogs='sudo nethogs'
-# npm
-alias npmr='npm --registry=https://registry.npmjs.org'
-# others
-alias cdt='cd $(mktemp -d)'
-# weatter
-alias weatter='curl http://wttr.in/habana'
-# ec2
-alias ec2-stop="aws ec2 stop-instances --instance-ids ${EC2_INSTANCE}"
-alias ec2-start="aws ec2 start-instances --instance-ids ${EC2_INSTANCE}"
-alias ec2-status="aws ec2 describe-instance-status --instance-ids ${EC2_INSTANCE}"
-alias ec2-ip="aws --output text ec2 describe-instances --instance-ids ${EC2_INSTANCE} | grep '^ASSOCIATION\s\+' | head -n 1 | grep -Po '\d+(\.\d+){3}$'"
-
-# tools
-alias ls='lsd --icon=never'
-alias ll='lsd -alF --icon=never'
-alias la='lsd -A --icon=never'
-alias l='lsd -F --icon=never'

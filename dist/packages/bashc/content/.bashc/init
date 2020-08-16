@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# set -xeuEo pipefail
+
 # TODO replace dirname by builtin
 BASHC_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
