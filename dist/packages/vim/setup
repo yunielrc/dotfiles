@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
-set -euE
+set -euEo pipefail
 
 apt-i vim 1> /dev/null
 
+# Configure
 git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
-ln --symbolic --verbose ~/.vim_runtime/vimrcs/basic.vim ~/.vimrc
+sh ~/.vim_runtime/install_awesome_vimrc.sh
+
+ln --symbolic --force --verbose "${PKG_CONTENT}/my_configs.vim" ~/.vim_runtime/my_configs.vim
