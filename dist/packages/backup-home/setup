@@ -16,14 +16,21 @@ ln --symbolic --force --verbose "${PKG_CONTENT}/backup-home" ~/.local/bin/backup
 
 # Configure
 ## Add cron entry
-readonly tmpcron="$(mktemp)"
-crontab -l > "$tmpcron" || :
-echo "0 15 * * *  /bin/bash $(realpath ~)/.local/bin/backup-home backup" >> "$tmpcron"
-crontab "$tmpcron"
-rm "$tmpcron"
+# readonly tmpcron="$(mktemp)"
+# crontab -l > "$tmpcron" || :
+# echo "0 15 * * *  /bin/bash $(realpath ~)/.local/bin/backup-home backup" >> "$tmpcron"
+# crontab "$tmpcron"
+# rm "$tmpcron"
 
 cat <<EOF > ~/.backup-home.env
 MOUNT_SOURCE='${BACKUP_HOME_MOUNT_SOURCE}'
 BACKUP_TARGET='${BACKUP_HOME_BACKUP_TARGET}'
 EXCLUDE_FOLDERS='${BACKUP_HOME_EXCLUDE_FOLDERS}'
 EOF
+
+cat <<EOF | sudo tee "/etc/cron.daily/backup-home-${USER}"
+#!/usr/bin/env sh
+sudo --user=${USER} bash -c "$(realpath ~)/.local/bin/backup-home backup"
+EOF
+
+sudo chmod +x "/etc/cron.daily/backup-home-${USER}"

@@ -1,5 +1,6 @@
+TODO: add anacron for user, http://akeil.net/posts/user-controlled-anacron.html#:~:text=By%20default%20anacron%20runs%20system,scheduled%20jobs%20without%20root%20privileges.
 TODO: save ssh keys, .env*,*.local files in private repo
-DONE: registrar errores de instalación en log
+DONE: save dotf-i installation errors on error.log
 TODO: bashc: put into independent project
 TODO: bashc: put user specific files such as: aliases, functions, environment, etc into independent project to allow reuse
 TODO: backup-home: put into independent project 'bash-scripts'
