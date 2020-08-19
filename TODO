@@ -1,4 +1,5 @@
 TODO: save ssh keys, .env*,*.local files in private repo
+TODO: Migrate server services to PC
 DONE: save dotf-i installation errors on error.log
 TODO: bashc: put into independent project
 TODO: bashc: put user specific files such as: aliases, functions, environment, etc into independent project to allow reuse
