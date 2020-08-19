@@ -1,7 +1,7 @@
 load test_helper
 
 
-@test 'should install fzf' {
+@test 'should install & configure navi' {
   type -P brew || skip
   bash ../setup
 

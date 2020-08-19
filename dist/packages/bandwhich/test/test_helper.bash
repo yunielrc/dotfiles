@@ -1,1 +1,1 @@
-. "${DIST_PATH}/test/test_helper_base2.bash"
+. "${DIST_PATH}/test/test_helper_base.bash"
