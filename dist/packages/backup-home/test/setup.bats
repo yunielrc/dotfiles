@@ -6,8 +6,8 @@ load test_helper
   . "$(realpath ../../../.env)"
   set +o allexport
 
-  PKG_CONTENT="$(realpath ../content)" bash ../setup
+  dotf-i backup-home
   [[ -f ~/.local/bin/backup-home ]]
   [[ -f ~/.backup-home.env ]]
-  PKG_CONTENT="$(realpath ../content)" bash ../setup | grep -q 'backup-home currently installed'
+  bash ../setup | grep -q 'backup-home currently installed'
 }

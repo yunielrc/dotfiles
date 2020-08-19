@@ -1,4 +1,4 @@
-load test_helper
+load test_helper2
 
 setup() {
   export WORK_DIR="$(mktemp -d)"
@@ -34,7 +34,7 @@ teardown() {
 # }
 
 @test 'should make backup' {
-  run bash ../content/backup-home --no-mount-nfs backup
+  run bash ../home/.local/bin/backup-home --no-mount-nfs backup
 
   output="$(echo "$output" | sed -e '/^$/d' -e '/^sending/d' -e '/^sent/d' -e '/^total/d')"
   assert_success
@@ -53,10 +53,10 @@ d with spaces1/f5'
 }
 
 @test 'should restore backup' {
-  bash ../content/backup-home --no-mount-nfs backup
+  bash ../home/.local/bin/backup-home --no-mount-nfs backup
   rm -r "${WORK_DIR}"/{d1,d2,'d with spaces1',dexc1,'dexc2 with spaces1'}
 
-  run bash ../content/backup-home restore --no-mount-nfs
+  run bash ../home/.local/bin/backup-home restore --no-mount-nfs
   output="$(echo "$output" | sed -e '/^$/d' -e '/^sending/d' -e '/^sent/d' -e '/^total/d')"
 
   assert_success
@@ -75,7 +75,7 @@ d2/f3'
 }
 
 @test 'invalid param' {
-  run bash ../content/backup-home --no-mount-nfs invalid
+  run bash ../home/.local/bin/backup-home --no-mount-nfs invalid
   assert_failure 13
   assert_line --index 0 'Invalid param: invalid'
 }

@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-set -euEo pipefail
-
-# TODO: implementar script para dejar el pc listo para usar
-
-# TODO: instalar dotfiles
