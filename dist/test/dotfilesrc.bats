@@ -54,12 +54,12 @@ ERROR> Installing bash plugin: brew, plugins dir doesn't exist: 123456654321"
 }
 
 @test "error package doesn't exist" {
-  local pkg='pkg1'
+  local pkg='pkg10'
 
   run __install_package "$pkg"
 
   assert_failure 10
-  assert_output --regexp "ERROR> Installing package: pkg1, package doesn't exist: .*/dist/test/fixtures/packages/pkg1/setup"
+  assert_output --regexp "ERROR> Installing package: pkg10, package doesn't exist: .*/dist/test/fixtures/packages/pkg10"
 
   pkg='pkgfail'
   run __install_package "$pkg"

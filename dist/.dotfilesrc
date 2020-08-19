@@ -124,7 +124,8 @@ __install_plugin() {
   local -r plugin="$1"
 
   local -r pkg="$plugin"
-  local -r plugin_file_path="${PKGS_PATH}/${pkg}/content/${plugin}.plugin.bash"
+  local plugin_file_path="${PKGS_PATH}/${pkg}/${plugin}.plugin.bash"
+  [[ ! -f "$plugin_file_path" ]] && plugin_file_path="${PKGS_PATH}/${pkg}/content/${plugin}.plugin.bash"
   local -r plugin_file_dest_path="${DOTF_BASH_PLUGINS_DIR}/${plugin}.plugin.bash"
 
   local -r msg="Installing bash plugin"
@@ -164,11 +165,14 @@ __install_package() {
 
   local -r pkg_dir="${PKGS_PATH}/${pkg}"
   local -r setup_file_path="${pkg_dir}/setup"
-  local -r plugin_file_path="${pkg_dir}/content/${pkg}.plugin.bash"
+  local -r plugin_file_path="${pkg_dir}/${pkg}.plugin.bash"
+  local -r plugin_file_path2="${pkg_dir}/content/${pkg}.plugin.bash"
+  local -r pkg_home_path="${pkg_dir}/home"
+
   local -r msg='Installing package'
 
-  if [[ ! -f "$setup_file_path" ]]; then
-    err "${msg}: ${pkg}, package doesn't exist: $setup_file_path"
+  if [[ ! -d "$pkg_dir" ]]; then
+    err "${msg}: ${pkg}, package doesn't exist: ${pkg_dir}"
     return 10
   fi
 
@@ -178,15 +182,24 @@ __install_package() {
     return 0
   }
 
-  env PKG_CONTENT="${PKGS_PATH}/${pkg}/content" PKG_PATH="${PKGS_PATH}/${pkg}" bash "$setup_file_path" || {
-    err "${msg}: ${pkg}, executing package setup"
-    return 11
-  }
+  if [[ -f "$setup_file_path" ]]; then
+    env PKG_CONTENT="${PKGS_PATH}/${pkg}/content" PKG_PATH="${PKGS_PATH}/${pkg}" bash "$setup_file_path" || {
+      err "${msg}: ${pkg}, executing package setup"
+      return 11
+    }
+  fi
 
-  if [[ -f "$plugin_file_path" ]]; then
+  if [[ -f "$plugin_file_path" || -f "$plugin_file_path2" ]]; then
     __install_plugin "$pkg" || {
       err "${msg}: ${pkg}, installing bash plugin"
       return 12
+    }
+  fi
+
+  if [[ -d "$pkg_home_path" ]]; then
+    links2home "$pkg_home_path" &> /dev/null || {
+      err "${msg}: ${pkg}, installing links2home"
+      return 13
     }
   fi
 
