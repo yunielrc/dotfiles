@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
 
+HISTSIZE=10000
+HISTFILESIZE=1000000
+
 BASHC_THEME=default
 # BASHC_PLUGINS+=()

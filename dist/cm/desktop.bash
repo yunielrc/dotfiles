@@ -59,8 +59,6 @@ cargo install dutree
 
 echoc '>> DOTFILES packages'
 
-dotf-i home-config
-
 echoc 'Tools'
 dotf-i fzf
 dotf-i bandwhich
@@ -99,3 +97,6 @@ dotf-i insomnia
 dotf-i aws-cli
 dotf-i docker
 dotf-i staruml
+
+echoc 'Home Config'
+dotf-i home-config

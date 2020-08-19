@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euE
+set -euEo pipefail
 
 mkdir --parents ~/.local/share/{applications,icons} || :
 
