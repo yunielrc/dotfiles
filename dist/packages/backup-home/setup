@@ -11,8 +11,7 @@ set -euEo pipefail
 sudo apt-get update -y
 sudo apt-get install -y rsync nfs-common || :
 # Install
-[[ ! -d ~/.local/bin ]] && mkdir -p ~/.local/bin
-ln --symbolic --force --verbose "${PKG_CONTENT}/backup-home" ~/.local/bin/backup-home
+links2home "$PKG_CONTENT"
 
 # Configure
 ## Add cron entry
@@ -22,11 +21,11 @@ ln --symbolic --force --verbose "${PKG_CONTENT}/backup-home" ~/.local/bin/backup
 # crontab "$tmpcron"
 # rm "$tmpcron"
 
-cat <<EOF > ~/.backup-home.env
-MOUNT_SOURCE='${BACKUP_HOME_MOUNT_SOURCE}'
-BACKUP_TARGET='${BACKUP_HOME_BACKUP_TARGET}'
-EXCLUDE_FOLDERS='${BACKUP_HOME_EXCLUDE_FOLDERS}'
-EOF
+# cat <<EOF > ~/.backup-home.env
+# MOUNT_SOURCE='${BACKUP_HOME_MOUNT_SOURCE}'
+# BACKUP_TARGET='${BACKUP_HOME_BACKUP_TARGET}'
+# EXCLUDE_FOLDERS='${BACKUP_HOME_EXCLUDE_FOLDERS}'
+# EOF
 
 cat <<EOF | sudo tee "/etc/cron.daily/backup-home-${USER}"
 #!/usr/bin/env sh
