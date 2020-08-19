@@ -8,12 +8,5 @@ readonly content_dir="$(realpath ~/.local/share)"
 readonly applications_dir="${content_dir}/applications"
 readonly icons_dir="${content_dir}/icons"
 
-# Install
-if [[ ! -d "${applications_dir}/webapps" ]]; then
-  infn 'Symbolic link created: '
-  ln --symbolic --verbose "${PKG_CONTENT}/applications/webapps" "${applications_dir}/webapps"
-else
-  inf "Directory: '${applications_dir}/webapps' already exists"
-fi
-
-cp -f "${PKG_CONTENT}"/icons/webapps/* "$icons_dir"
+ln --symbolic --force --verbose "${PKG_CONTENT}/applications/webapps" "${applications_dir}/webapps"
+cp --force "${PKG_CONTENT}"/icons/webapps/* "$icons_dir"
