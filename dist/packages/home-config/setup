@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-set -euEo pipefail
-
-links2home "$PKG_CONTENT"
