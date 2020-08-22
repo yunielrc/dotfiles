@@ -61,10 +61,3 @@ services:
       <<: *build
       target: brew
     entrypoint: "/bin/bash"
-
-  dotfiles:
-    <<: *base
-    build:
-      <<: *build
-      target: base
-    entrypoint: "./dist/dotfiles"
