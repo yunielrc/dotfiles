@@ -197,7 +197,7 @@ __install_package() {
   fi
 
   if [[ -d "$pkg_home_path" ]]; then
-    links2home "$pkg_home_path" &> /dev/null || {
+    links2home "$pkg_home_path" || {
       err "${msg}: ${pkg}, installing links2home"
       return 13
     }
@@ -255,7 +255,7 @@ dotf-i() {
 
   local out
   local -i ecode
-  out="$(__dotf_i_out 2>&1)"
+  out="$(__dotf_i_out 2>&1)" # TODO: change this, show progress in realtime
   ecode=$?
 
   echo -e "$out"
