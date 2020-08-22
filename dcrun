@@ -1,63 +1,24 @@
 #!/bin/bash
 
+set -euoE pipefail
+
 readonly SCRIPT="$(basename "$0")"
 
-case "$1" in
-  build-test)
-    shift
+set -o allexport
+. ./.env
+set +o allexport
+
+readonly service="$1"
+
+if [[ "$service" == build-* ]]; then
     docker-compose build
-    docker-compose run --rm test "$@"
-  ;;
-  test)
-    shift
-    docker-compose run --rm test "$@"
-  ;;
-  build-test-brew)
-    shift
-    docker-compose build
-    docker-compose run --rm test-brew "$@"
-  ;;
-  test-brew)
-    shift
-    docker-compose run --rm test-brew "$@"
-  ;;
-  build-play)
-    shift
-    docker-compose build
-    docker-compose run --rm play "$@"
-  ;;
-  play)
-    shift
-    docker-compose run --rm play "$@"
-  ;;
-  build-play-brew)
-    shift
-    docker-compose build
-    docker-compose run --rm play-brew "$@"
-  ;;
-  play-brew)
-    shift
-    docker-compose run --rm play-brew "$@"
-  ;;
-  build-dotfiles)
-    shift
-    docker-compose build
-    docker-compose run --rm dotfiles "$@"
-  ;;
-  dotfiles)
-    shift
-    docker-compose run --rm dotfiles "$@"
-  ;;
-  host)
-    echo "hostname: $(hostname)"
-  ;;
-  *)
-    cat <<-EOF
-    $SCRIPT test
-    $SCRIPT test ./dist/packages/docker/test/setup.bats
-    $SCRIPT play
-    $SCRIPT build-test
-    $SCRIPT build-play
-EOF
-  ;;
-esac
+fi
+
+shift
+docker-compose run --rm \
+-v "$(readlink -f ./.env):${DOCKER_MOUNT}/.env" \
+-v "$(readlink -f ./.env.override.server):${DOCKER_MOUNT}/.env.override.server" \
+-v "$(readlink -f ./dist/.env):${DOCKER_MOUNT}/dist/.env" \
+-v "$(readlink -f ./dist/.env.override.server):${DOCKER_MOUNT}/dist/.env.override.server" \
+"$service" "$@"
+
