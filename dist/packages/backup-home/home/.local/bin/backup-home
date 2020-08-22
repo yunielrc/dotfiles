@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2153
-if [ "$FLOCKER" != "$0" ]; then
+
+if [[ "${NOLOCK:-}" != true && "${FLOCKER:-}" != "$0" ]]  ; then
   exec env FLOCKER="$0" flock -E 3 -en "$0" "$0" "$@" || :
 fi
 
@@ -143,22 +144,27 @@ main(){
 
   set -- "${positional[@]}" # restore positional params
 
+  [[ "$#" == 0 ]] && {
+    echo -e "Especify a COMMAND\n" >&2
+    return 14
+  }
+
   while [[ $# -gt 0 ]]; do
     case "${1:-}" in
       backup)
         [[ $no_mount_nfs ]] || mount_nfs_device "$MOUNT_SOURCE" "$BACKUP_TARGET"
         make_home_backup "$BACKUP_TARGET" "${EXCLUDE_FOLDERS:-}"
-        exit $?
+        return $?
       ;;
       restore)
         [[ $no_mount_nfs ]] || mount_nfs_device "$MOUNT_SOURCE" "$BACKUP_TARGET"
         restore_home_backup "$BACKUP_TARGET"
-        exit $?
+        return $?
       ;;
       *)
         echo -e "Invalid param: ${1}\n" >&2
         usage
-        exit 13
+        return 13
       ;;
     esac
   done
