@@ -1,5 +1,10 @@
 [alias]
+  # View abbreviated SHA, description, and commits history graph
   l = log --oneline --graph
+	# View the current working tree status using the short format.
+	s = status -s
+  # Amend the currently staged files to the latest commit.
+	a = commit --amend --reuse-message=HEAD
 [user]
 	email = yuniel.work@gmail.com
 	name = yuniel
