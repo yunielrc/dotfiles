@@ -3,7 +3,7 @@
   "shellcheck.ignoreFileSchemes": ["git", "gitfs"],
   "files.associations": {
     "Vagrantfile.vbox": "ruby",
-    ".env*": "ini",
-    "*.env": "ini"
+    ".env*": "shellscript",
+    "*.env": "shellscript"
   }
 }
