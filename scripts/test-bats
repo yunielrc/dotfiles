@@ -23,9 +23,9 @@ readonly LIGHTPURPLE='\033[1;35m'
 readonly LIGHTCYAN='\033[1;36m'
 readonly WHITE='\033[1;37m'
 
-
 set -o allexport
 . ./.env
+. ./dist/.env
 set +o allexport
 
 # shellcheck disable=SC2155
