@@ -250,27 +250,25 @@ dotf-i() {
         echo -e "${WHITE}>${NOCOLOR}${LIGHTRED} FAIL.${msg}${NOCOLOR}"
       fi
     fi
-    return $ecode
+    return "$ecode"
   }
 
-  local out
   local -i ecode
-  out="$(__dotf_i_out 2>&1)" # TODO: change this, show progress in realtime
-  ecode=$?
+  local -r out_file="$(mktemp)"
+  __dotf_i_out 2>&1 | tee "$out_file"
+  ecode="${PIPESTATUS[0]}"
 
-  echo -e "$out"
-
-  if [[ $DOTF_LOG_ERRORS == true && $ecode -ne 0 ]]; then
+  if [[ $DOTF_LOG_ERRORS == true && "$ecode" -ne 0 ]]; then
 cat <<EOF >> ~/.dotfiles.err.log
 
 --------------------------------------------------------------
 $(date +%Y%m%d-%H%M%S)
 --------------------------------------------------------------
-$out
+$(cat "$out_file")
 EOF
   fi
-
-  return $ecode
+  rm -f "$out_file"
+  return "$ecode"
 }
 export -f dotf-i
 
