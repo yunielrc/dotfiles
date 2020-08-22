@@ -2,34 +2,42 @@
 
 ## About
 
-Personal dotfiles. Install apps with custom configurations
+Install dotfiles and apps
 
 ### Prerequisites
 
-What things you need to install the software and how to install them.
+Install
 
 ```sh
- Give examples
+$ sudo apt update -y
+$ sudo apt install -y git
 ```
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running.
-
-Say what the step will be
+Clone the repo
 
 ```sh
-Give the example
+$ git clone git@github.com:yunielrc/dotfiles.git ~/.dotfiles
 ```
 
-And repeat
+Edit `.env` file located in `dist` folder
 
 ```sh
-until finished
+$ cd ~/.dotfiles/dist
+$ cp .env.template .env
+$ vim .env
 ```
 
-End with an example of getting some data out of the system or using it for a little demo.
+Install the dotfiles
 
-## Usage
+```sh
+$ cd ~/.dotfiles/dist
+$ ./dotfiles desktop # `desktop` from `cm` (configuration management) folder
+```
 
-Add notes about how to use the system.
+You can see installation errors log:
+
+```sh
+$ tail -fn 20 ~/.dotfiles.err.log
+```
