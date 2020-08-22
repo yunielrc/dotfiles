@@ -8,3 +8,4 @@ passwd
 **/.env
 **/.env.override.server
 .vagrant
+**/*~
