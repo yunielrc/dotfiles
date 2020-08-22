@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2153
 
-if [[ "${NOLOCK:-}" != true && "${FLOCKER:-}" != "$0" ]]  ; then
+if [[ "${NOLOCK:-}" != true && "${FLOCKER:-}" != "$0" ]]; then
   exec env FLOCKER="$0" flock -E 3 -en "$0" "$0" "$@" || :
 fi
 
