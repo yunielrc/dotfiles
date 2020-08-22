@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Zoom Earth
+Comment=View LIVE satellite images for free. Track new hurricanes and storms.
+Categories=Maps;Education;Science;Utility;
+Keywords=mapa;pronóstico;forecast;tiempo;clima;satélite;satelite;ciclon;tormenta;ciclón;ciclones;meteorología;parte;webapp;
+Exec=/opt/google/chrome/google-chrome --app=https://zoom.earth/
+Icon=zoom-earth
+Terminal=false
+Type=Application
+StartupWMClass=zoom.earth
