@@ -1,11 +1,9 @@
 # base
-dotf-i brew # brew must be before bashc
+dotf-i brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" # brew must be before bashc
 dotf-i bashc
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-dotf-i rust
-PATH="${PATH}:${HOME}/.cargo/bin"
+dotf-i rust && PATH="${PATH}:${HOME}/.cargo/bin"
 apt-i ruby-full
-dotf-i apt --force
+# dotf-i apt --force
 # :base
 
 dotf-i backup-home
@@ -14,8 +12,8 @@ echoc '>> APT packages'
 
 apt-i nfs-common
 apt-i default-jre
-apt-i ubuntu-restricted-extras
-# apt-i ttf-mscorefonts-installer
+# apt-i ubuntu-restricted-extras # caution: this pkg shows interactive dialog
+# apt-i ttf-mscorefonts-installer # caution: this pkg shows interactive dialog
 apt-i lm-sensors
 apt-i dconf-editor
 apt-i vlc
@@ -28,6 +26,8 @@ apt-i virtualbox virtualbox-guest-additions-iso
 apt-i pinta
 apt-i assaultcube
 apt-i tldr
+apt-i most
+apt-i gpg
 # apt-i gimp gimp-help-en gimp-help-es
 
 echoc '>> BREW packages'
