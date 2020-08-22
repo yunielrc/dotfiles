@@ -1,3 +1,3 @@
 . "${DIST_PATH}/test/test_helper_base.bash"
-cd ../home/.local/bin
+cd ../home/.usr/bin
 export NOLOCK=true
