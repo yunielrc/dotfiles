@@ -1,7 +1,7 @@
 load test_helper
 
 setup() {
-  [[ -f ~/.bashc ]] && rm ~/.bashc
+  [[ -d ~/.bashc ]] && rm -r ~/.bashc
   [[ -f ~/.bashrc ]] && rm ~/.bashrc
 }
 

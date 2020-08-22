@@ -29,3 +29,11 @@ type -P bat &> /dev/null && {
   export MANPAGER="sh -c 'col -bx | bat -l man -p'"
   export MANROFFOPT="-c"
 }
+
+PATH="${PATH}:${HOME}/.local/bin"
+LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${HOME}/.local/lib"
+
+# I use .usr because .local will get polluted by other software installs
+export PATH="${PATH}:${HOME}/.usr/bin"
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${HOME}/.usr/lib"
+export PREFIX="${HOME}/.usr"
