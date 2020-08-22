@@ -8,5 +8,5 @@ readonly content_dir="$(realpath ~/.local/share)"
 readonly applications_dir="${content_dir}/applications"
 readonly icons_dir="${content_dir}/icons"
 
-ln --symbolic --force --verbose "${PKG_CONTENT}/applications/webapps" "${applications_dir}/webapps"
+ln --symbolic --force --verbose "${PKG_CONTENT}/applications/webapps" "$applications_dir"
 cp --force "${PKG_CONTENT}"/icons/webapps/* "$icons_dir"
