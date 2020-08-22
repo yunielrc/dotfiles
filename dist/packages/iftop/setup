@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+# Install
+apt-i iftop
+
+# Configure
+# https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos
+echo "${USER} ALL=NOPASSWD:$(type -P iftop)" | sudo tee /etc/sudoers.d/iftop
