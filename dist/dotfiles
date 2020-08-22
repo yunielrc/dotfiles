@@ -22,14 +22,14 @@ usage(){
   Usage:
   ${SCRIPT_NAME} <cm>
 
-  Bootstrap a configuration management available in cm folder
+  Install dotfiles and apps
 
   Options:
     -h, --help          Show this help
 
   Examples:
   ${SCRIPT_NAME} desktop
-~
+
 HELPMSG
 }
 
@@ -38,16 +38,18 @@ on_exit() {
 }
 
 setup_cm() {
-  local -r cm="${CM_PATH}/${1:-}.bash"
+  for cm in "$@"; do
+    local cm_path="${CM_PATH}/${cm}.bash"
 
-  if [[ ! -f "$cm" ]]; then
-     err "Configuration management '${cm}' doesn't exists"
-     usage
-     return 1
-  fi
-  echo -e "${WHITE}# Setting cm ${NOCOLOR}${LIGHTPURPLE}${1}${NOCOLOR}\n"
-  bash "$cm"
-  echo
+    if [[ ! -f "$cm_path" ]]; then
+      err "Configuration management '${cm}' doesn't exists"
+      usage
+      return 1
+    fi
+    echo -e "${WHITE}# Setting cm ${NOCOLOR}${LIGHTPURPLE}${cm}${NOCOLOR}\n"
+    bash "$cm_path"
+    echo
+  done
 }
 
 load_base_cm(){
@@ -59,8 +61,7 @@ load_base_cm(){
 }
 
 main() {
-  if [[ "$#" == 0 ]]; then
-    set -- '-h'
+  if [[ $# == 0 ]]; then
     usage
     return 1
   fi

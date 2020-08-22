@@ -1,5 +1,6 @@
-TODO: save ssh keys, .env*,*.local files in private repo
+TODO: write script for previus pc installation: backup gpg, data, etc
+TODO: write scripts for full pc installation: restore gpg backup, install dotfiles, private dotfiles, etc
+TODO: add iotop to sudoerr and bash plugin for sudo
+TODO: add anacron for push the repo when change
+TODO: install apt-cacher
 TODO: Migrate server services to PC
-DONE: save dotf-i installation errors on error.log
-TODO: bashc: put into independent project
-TODO: bashc: put user specific files such as: aliases, functions, environment, etc into independent project to allow reuse
