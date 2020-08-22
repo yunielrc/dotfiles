@@ -2,15 +2,18 @@
 
 set -euoE pipefail
 
-readonly SCRIPT="$(basename "$0")"
+readonly BASE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly WORK_DIR="${WORK_DIR:-"$BASE_PATH"}"
+
+cd "$WORK_DIR"
 
 set -o allexport
 . ./.env
 set +o allexport
 
-readonly service="$1"
+readonly SERVICE="$1"
 
-if [[ "$service" == build-* ]]; then
+if [[ "$SERVICE" == build-* ]]; then
     docker-compose build
 fi
 
@@ -20,5 +23,5 @@ docker-compose run --rm \
 -v "$(readlink -f ./.env.override.server):${DOCKER_MOUNT}/.env.override.server" \
 -v "$(readlink -f ./dist/.env):${DOCKER_MOUNT}/dist/.env" \
 -v "$(readlink -f ./dist/.env.override.server):${DOCKER_MOUNT}/dist/.env.override.server" \
-"$service" "$@"
+"$SERVICE" "$@"
 
