@@ -1,21 +1,25 @@
 [alias]
   # View abbreviated SHA, description, and commits history graph
   l = log --oneline --graph
-	# View the current working tree status using the short format.
-	s = status -s
-  # Amend the currently staged files to the latest commit.
+	# View the current working tree status using the short format
+	s = status --short
+  # Amend the currently staged files to the latest commit
 	a = commit --amend --reuse-message=HEAD
+  # Commit all changes
+	ca = !git add --all && git commit --all --verbose
+
 [user]
 	email = yuniel.work@gmail.com
 	name = yuniel
+
 [gc]
 	autoDetach = false
 	writeCommitGraph = true
+
 [core]
 	quotepath = false
 	commitGraph = true
 	editor = vim
+
 [color]
 	ui = auto
-[cola]
-	spellcheck = false
