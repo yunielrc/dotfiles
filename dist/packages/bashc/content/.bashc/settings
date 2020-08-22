@@ -6,3 +6,5 @@ HISTFILESIZE=1000000
 
 BASHC_THEME=default
 # BASHC_PLUGINS+=()
+
+PATH="${PATH}:${HOME}/.local/bin"
