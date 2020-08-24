@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euE
+set -euEo pipefail
 
 # Idempotent
 type -P typora &> /dev/null && {
