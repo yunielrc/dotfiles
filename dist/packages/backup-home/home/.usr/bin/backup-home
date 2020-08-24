@@ -83,21 +83,13 @@ make_home_backup() {
 usage(){
 
 cat <<HELPMSG
+Usage:
+${SCRIPT_NAME} [OPTIONS] COMMAND
+
 Make/restore a backup of user home directories to/from a nfs unit.
 
 Environment variables are loaded from ${ENV_FILE}
 Logs are saved to ${LOG_FILE}
-
-Usage:
-${SCRIPT_NAME} [OPTIONS] COMMAND
-
-Environment:
-  MOUNT_SOURCE        Define the mount source
-                      example: '192.168.1.4:/nfs/PCBackup'
-  BACKUP_TARGET       Define the mount target, this is the backup dest
-                      example: ~/Backup
-  EXCLUDE_FOLDERS     Command separated list of excluded folders from backup
-                      example: 'snap, VirtualBox VMs, vboxshare'
 
 Options:
   -h, --help          Show this help
@@ -110,6 +102,14 @@ Commands:
 Examples:
 \$ ${SCRIPT_NAME} backup
 \$ ${SCRIPT_NAME} restore
+
+Environment:
+  MOUNT_SOURCE        Define the mount source
+                      example: '192.168.1.4:/nfs/PCBackup'
+  BACKUP_TARGET       Define the mount target, this is the backup dest
+                      example: ~/Backup
+  EXCLUDE_FOLDERS     Command separated list of excluded folders from backup
+                      example: 'snap, VirtualBox VMs, vboxshare'
 
 Exit status:
 0: Ok
