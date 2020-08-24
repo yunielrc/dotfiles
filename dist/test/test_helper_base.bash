@@ -6,8 +6,12 @@
 test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
 test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+export ENV=testing
+readonly ENV
 export DEBUG=true
 export PATH="${PATH}:${HOME_BIN}"
+# export PATH="${PATH}:../home/.usr/bin"
+
 
 [[ ! -d ~/.bashc ]] && {
   mkdir -p ~/.bashc/{gen,plugins/local}

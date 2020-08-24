@@ -1,8 +1,5 @@
 #!/bin/bash
 set -e
 
-export ENV=testing
-readonly ENV
-
 bash ./scripts/lint-shellcheck
 bash ./scripts/test-bats "$@"
