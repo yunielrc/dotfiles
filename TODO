@@ -1,3 +1,4 @@
+DOING: script for backup/restore gpg keys with symmetric encrypted
 TODO: add anacron for push the repo when change
 TODO: install apt-cacher
 TODO: Migrate server services to PC

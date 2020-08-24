@@ -1,0 +1,184 @@
+#!/usr/bin/env bash
+#
+# GPG Secure Key Backup
+#
+# Export/Restore private key, public key and ownertrust to/from a file with symmetric encryption.
+#
+
+set -euEo pipefail
+
+# Constants
+readonly SCRIPT_NAME="$(basename "${0}")"
+readonly PREFIX_DIR="${PREFIX_DIR:-"$(realpath ~/)"}"
+readonly ENV_FILE="${PREFIX_DIR}/.${SCRIPT_NAME}.env"
+readonly WORK_DIR="${WORK_DIR:-"$PWD"}"
+
+readonly MEM_DIR="/dev/shm/$(uuidgen)"
+mkdir "$MEM_DIR"
+
+readonly PUBLIC_KEY=public_key.asc
+readonly PRIVATE_KEY=private_key.asc
+readonly OWNERTRUST=ownertrust
+
+cd "$WORK_DIR"
+
+if [[ -f "$ENV_FILE" ]]; then
+  set -o allexport
+  . "$ENV_FILE"
+  set +o allexport
+fi
+
+[[ "${ENV:-}" == testing && "$(type -t gpgtar_symmetric_encrypt)" == function ]] || { # for mocking
+  gpgtar_symmetric_encrypt() {
+    local -r output="$1"
+    local -r from_directory="$2"
+
+    gpgtar --output "$output" --symmetric "$from_directory"
+  }
+}
+[[ "${ENV:-}" == testing && "$(type -t backup)" == function ]] || { # for mocking
+  backup() {
+    local -r recipient="$1"
+    local -r backup_name="$2"
+
+    (
+      cd "$MEM_DIR"
+      gpg --armor --export "$recipient" >"$PUBLIC_KEY"
+      gpg --armor --export-secret-keys "$recipient" >"$PRIVATE_KEY"
+      gpg --export-ownertrust >"$OWNERTRUST"
+
+      gpgtar_symmetric_encrypt gpg-backup.gpg .
+    )
+    mv "${MEM_DIR}/gpg-backup.gpg" "${WORK_DIR}/${backup_name}"
+  }
+}
+
+backup_parse_args() {
+
+  local recipient
+  local backup_name
+
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+    -h | --help)
+      usage_backup
+      return 0
+      ;;
+    -r | --recipient)
+      shift
+      recipient="$1"
+      shift
+      ;;
+    *)
+      backup_name="$1"
+      shift
+      ;;
+    esac
+  done
+
+  if [[ -z "${recipient:-}" ]]; then
+    recipient="$GPG_RECIPIENT"
+  fi
+
+  if [[ -z "${backup_name:-}" ]]; then
+    backup_name="gpg-backup-$(printf '%(%Y%m%d%H%M%S)T').gpg"
+  fi
+
+  backup "$recipient" "$backup_name"
+}
+
+usage_backup() {
+  cat <<-HELPMSG
+Usage:
+${SCRIPT_NAME} backup [OPTIONS] [backup_name]
+
+Export private key, public key and ownertrust to a file with symmetric encryption.
+
+Options:
+  -h, --help                  Show this help
+  -r user, --recipient user   Encrypt for user id user. For details see gpg
+
+Environment:
+  GPG_RECIPIENT               Id user. For details see gpg.
+
+Examples:
+\$ ${SCRIPT_NAME} backup -r user mybackup.gpg
+
+HELPMSG
+}
+
+restore() {
+  :
+  # TODO Implement restore
+}
+
+restore_parse_args() {
+  :
+}
+
+usage_restore() {
+  :
+
+}
+
+usage() {
+  cat <<-HELPMSG
+Usage:
+${SCRIPT_NAME} [OPTIONS] COMMAND
+
+Backup/Restore private key, public key and ownertrust to/from a file with symmetric encryption.
+Environment variables are loaded from '${ENV_FILE}'.
+
+Options:
+  -h, --help                Show this help
+
+Commands:
+  backup                    Make a backup of home directories 'BACKUP_TARGET'
+  restore                   Restore a backup from 'BACKUP_TARGET' to user home
+
+Run '${SCRIPT_NAME} COMMAND --help' for more information on a command.
+
+HELPMSG
+}
+
+on_exit() {
+  # shellcheck disable=SC2181
+  if [[ $? != 0 ]]; then
+    usage
+  fi
+  rm --recursive "$MEM_DIR"
+}
+trap on_exit INT TERM EXIT
+
+main() {
+  [[ $# == 0 ]] && set -- '-h'
+
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+    -h | --help)
+      usage
+      return 0
+      ;;
+    backup)
+      shift
+      backup_parse_args "$@"
+      return $?
+      ;;
+    restore)
+      shift
+      restore_parse_args "$@"
+      return $?
+      ;;
+    *)
+      echo -e "Invalid parameter: ${1}\n" >&2
+      usage
+      return 10
+      ;;
+    esac
+  done
+}
+
+if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
+  main "$@"
+  exit $?
+fi
