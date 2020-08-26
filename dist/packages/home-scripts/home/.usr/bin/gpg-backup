@@ -4,7 +4,7 @@
 #
 # Export/Restore private key, public key and ownertrust to/from a file with symmetric encryption.
 #
-
+# set -x
 set -euEo pipefail
 
 # Constants
@@ -12,6 +12,7 @@ readonly SCRIPT_NAME="$(basename "${0}")"
 readonly PREFIX_DIR="${PREFIX_DIR:-"$(realpath ~/)"}"
 readonly ENV_FILE="${PREFIX_DIR}/.${SCRIPT_NAME}.env"
 readonly WORK_DIR="${WORK_DIR:-"$PWD"}"
+cd "$WORK_DIR"
 
 readonly MEM_DIR="/dev/shm/$(uuidgen)"
 mkdir "$MEM_DIR"
@@ -20,7 +21,6 @@ readonly PUBLIC_KEY=public_key.asc
 readonly PRIVATE_KEY=private_key.asc
 readonly OWNERTRUST=ownertrust
 
-cd "$WORK_DIR"
 
 if [[ -f "$ENV_FILE" ]]; then
   set -o allexport
@@ -28,18 +28,21 @@ if [[ -f "$ENV_FILE" ]]; then
   set +o allexport
 fi
 
-[[ "${ENV:-}" == testing && "$(type -t gpgtar_symmetric_encrypt)" == function ]] || { # for mocking
-  gpgtar_symmetric_encrypt() {
-    local -r output="$1"
-    local -r from_directory="$2"
+gpgtar_symmetric_encrypt() {
+  local -r output="$1"
+  local -r directory="$2"
 
-    gpgtar --output "$output" --symmetric "$from_directory"
-  }
+  if [[ -z "${TEST_PASSPHRASE:-}" ]]; then
+    gpgtar --output "$output" --symmetric "$directory"
+  else
+    gpgtar --output "$output" --symmetric --gpg-args "--batch --passphrase ${TEST_PASSPHRASE}" "$directory"
+  fi
 }
+
 [[ "${ENV:-}" == testing && "$(type -t backup)" == function ]] || { # for mocking
   backup() {
     local -r recipient="$1"
-    local -r backup_name="$2"
+    local -r backup_file="$2"
 
     (
       cd "$MEM_DIR"
@@ -49,14 +52,14 @@ fi
 
       gpgtar_symmetric_encrypt gpg-backup.gpg .
     )
-    mv "${MEM_DIR}/gpg-backup.gpg" "${WORK_DIR}/${backup_name}"
+    mv "${MEM_DIR}/gpg-backup.gpg" "$backup_file"
   }
 }
 
 backup_parse_args() {
 
   local recipient
-  local backup_name
+  local backup_file
 
   while [[ $# -gt 0 ]]; do
     case "${1:-}" in
@@ -70,7 +73,7 @@ backup_parse_args() {
       shift
       ;;
     *)
-      backup_name="$1"
+      backup_file="$1"
       shift
       ;;
     esac
@@ -80,19 +83,19 @@ backup_parse_args() {
     recipient="$GPG_RECIPIENT"
   fi
 
-  if [[ -z "${backup_name:-}" ]]; then
-    backup_name="gpg-backup-$(printf '%(%Y%m%d%H%M%S)T').gpg"
+  if [[ -z "${backup_file:-}" ]]; then
+    backup_file="gpg-backup-$(printf '%(%Y%m%d%H%M%S)T').gpg"
   fi
 
-  backup "$recipient" "$backup_name"
+  backup "$recipient" "$backup_file"
 }
 
 usage_backup() {
   cat <<-HELPMSG
 Usage:
-${SCRIPT_NAME} backup [OPTIONS] [backup_name]
+${SCRIPT_NAME} backup [OPTIONS] [backup_file]
 
-Export private key, public key and ownertrust to a file with symmetric encryption.
+Make a backup, export private key, public key and ownertrust to a file with symmetric encryption.
 
 Options:
   -h, --help                  Show this help
@@ -107,18 +110,65 @@ Examples:
 HELPMSG
 }
 
-restore() {
-  :
-  # TODO Implement restore
+gpgtar_symmetric_decrypt() {
+  local -r encrypted_file="$1"
+
+  if [[ -z "${TEST_PASSPHRASE:-}" ]]; then
+    gpgtar --decrypt --directory . "$encrypted_file"
+  else
+    gpgtar --decrypt --directory . --gpg-args "--batch --passphrase ${TEST_PASSPHRASE}" "$encrypted_file"
+  fi
+}
+
+[[ "${ENV:-}" == testing && "$(type -t restore)" == function ]] || { # for mocking
+  restore() {
+    local -r backup_file="$(realpath "$1")"
+
+    (
+      cd "$MEM_DIR"
+      gpgtar_symmetric_decrypt "$backup_file"
+
+      gpg --import "$PUBLIC_KEY"
+      gpg --import "$PRIVATE_KEY"
+      gpg --import-ownertrust "$OWNERTRUST"
+    )
+  }
 }
 
 restore_parse_args() {
-  :
+
+  local backup_file
+
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+    -h | --help)
+      usage_restore
+      return 0
+      ;;
+    *)
+      backup_file="$1"
+      shift
+      ;;
+    esac
+  done
+
+  restore "$backup_file"
 }
 
 usage_restore() {
-  :
+  cat <<-HELPMSG
+Usage:
+${SCRIPT_NAME} restore [OPTIONS] [backup_file]
 
+Restore backup, import private key, public key and ownertrust from a file with symmetric encryption.
+
+Options:
+  -h, --help                  Show this help
+
+Examples:
+\$ ${SCRIPT_NAME} restore mybackup.gpg
+
+HELPMSG
 }
 
 usage() {
@@ -144,6 +194,7 @@ HELPMSG
 on_exit() {
   # shellcheck disable=SC2181
   if [[ $? != 0 ]]; then
+    echo
     usage
   fi
   rm --recursive "$MEM_DIR"

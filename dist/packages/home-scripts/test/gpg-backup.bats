@@ -19,7 +19,7 @@ load test_helper
 @test 'backup_parse_args: should show usage_backup' {
   run "${REL_BIN}/gpg-backup" backup -h
   assert_success
-  assert_line --index 1 'gpg-backup backup [OPTIONS] [backup_name]'
+  assert_line --index 1 'gpg-backup backup [OPTIONS] [backup_file]'
 }
 
 @test 'backup_parse_args: recipient parameter unset' {
@@ -86,22 +86,69 @@ mybackup.gpg'
   assert_line --index 1 --regexp '^gpg-backup-.+.gpg$'
 }
 
-@test 'backup_parse_args: should create a backup' {
-  # mock function
-  gpgtar_symmetric_encrypt() {
-    local -r output="$1"
-    local -r from_directory="$2"
-    echo "$output"
-    echo "$from_directory"
-    touch "$output"
-  }
-  export -f gpgtar_symmetric_encrypt
-  export WORK_DIR="$BATS_TMPDIR"
+@test 'backup: should create a backup' {
+  export WORK_DIR="$(mktemp -d)"
   run "${REL_BIN}/gpg-backup" backup -r gpgid mybackup.gpg
+  assert_success
+  assert_output ''
+
+  file "${WORK_DIR}/mybackup.gpg" | grep -q 'GPG symmetrically encrypted data'
+
+  run gpgtar --list-archive --gpg-args "--batch --passphrase ${TEST_PASSPHRASE}" "${WORK_DIR}/mybackup.gpg"
+
+  assert_line --index 3 --partial ./ownertrust
+  assert_line --index 4 --partial ./private_key.asc
+  assert_line --index 5 --partial ./public_key.asc
+}
+
+@test 'restore_parse_args: should show usage_restore' {
+  run "${REL_BIN}/gpg-backup" restore -h
+  assert_success
+  assert_line --index 1 'gpg-backup restore [OPTIONS] [backup_file]'
+}
+
+@test 'restore_parse_args: should parse args' {\
+  # mock function
+  restore() {
+    echo "$1"
+  }
+  export -f restore
+
+  run "${REL_BIN}/gpg-backup" restore mybackup.gpg
 
   assert_success
-  assert_output 'gpg-backup.gpg
-./gpg-backup'
-  [[ -f "${WORK_DIR}/mybackup.gpg" ]]
+  assert_output mybackup.gpg
+}
+
+@test 'restore_parse_args: error, backup_file unset' {
+  # mock function
+  restore() {
+    echo "$1"
+  }
+  export -f restore
+
+  run "${REL_BIN}/gpg-backup" restore
+
+  assert_failure
+  assert_line --index 0 --partial 'backup_file: unbound variable'
+}
+
+@test 'backup: should restore a backup' {
+  export WORK_DIR="$(mktemp -d)"
+  "${REL_BIN}/gpg-backup" backup -r gpgid mybackup.gpg
+
+  run "${REL_BIN}/gpg-backup" restore mybackup.gpg
+  assert_success
+  assert_output --regexp 'gpgtar: gpg: AES256 encrypted data
+gpgtar: gpg: encrypted with 1 passphrase
+gpg: key (\d|\w)+: "gpgid" not changed
+gpg: Total number processed: 1
+gpg:              unchanged: 1
+gpg: key (\d|\w)+: "gpgid" not changed
+gpg: key (\d|\w)+: secret key imported
+gpg: Total number processed: 1
+gpg:              unchanged: 1
+gpg:       secret keys read: 1
+gpg:  secret keys unchanged: 1'
 }
 
