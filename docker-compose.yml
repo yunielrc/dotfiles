@@ -17,7 +17,6 @@ x-base: &base
   user: "${DOCKER_USER}"
   volumes:
     - "./:${DOCKER_MOUNT}:ro"
-    - "/etc/apt/apt.conf.d/00proxy:/etc/apt/apt.conf.d/00proxy"
   tmpfs:
     - "${DOCKER_MOUNT}/dist/packages/bashc/content/.bashc/plugins/local:uid=1000,gid=1000"
     - "${DOCKER_MOUNT}/dist/packages/bashc/content/.bashc/gen:uid=1000,gid=1000"

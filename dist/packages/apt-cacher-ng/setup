@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+# Install
+export DEBIAN_FRONTEND=noninteractive
+sudo apt-get update -y
+sudo debconf-set-selections <<< 'apt-cacher-ng apt-cacher-ng/tunnelenable select yes'
+sudo apt-get install -y apt-cacher-ng
+
+# Configure
+if [[ -n "${PROXY_URL:-}" ]] && ! grep -q "Proxy: ${PROXY_URL}" /etc/apt-cacher-ng/acng.conf; then
+  echo "Proxy: ${PROXY_URL}" | sudo tee -a /etc/apt-cacher-ng/acng.conf
+fi
+
+readonly APT_PROXY_URL='http://localhost:3142'
+echo "Acquire::http::Proxy \"${APT_PROXY_URL}\";" | sudo tee /etc/apt/apt.conf.d/00proxy

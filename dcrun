@@ -17,11 +17,19 @@ if [[ "$SERVICE" == build-* ]]; then
     docker-compose build "${SERVICE#build-}"
 fi
 
+readonly APT_PROXY_FILE="$(mktemp)"
+
+if [[ "$HOST_AS_APT_PROXY" == true ]]; then
+  readonly APT_PROXY_IP="$(ifconfig docker0 | awk 'NR==2 {print $2}')"
+  echo "Acquire::http::Proxy \"http://${APT_PROXY_IP}:3142\";" > "$APT_PROXY_FILE"
+fi
+
 shift
 docker-compose run --rm \
 -v "$(readlink -f ./.env):${DOCKER_MOUNT}/.env" \
 -v "$(readlink -f ./.env.override.server):${DOCKER_MOUNT}/.env.override.server" \
 -v "$(readlink -f ./dist/.env):${DOCKER_MOUNT}/dist/.env" \
 -v "$(readlink -f ./dist/.env.override.server):${DOCKER_MOUNT}/dist/.env.override.server" \
+-v "${APT_PROXY_FILE}:/etc/apt/apt.conf.d/01proxy" \
 "${SERVICE#build-}" "$@"
 

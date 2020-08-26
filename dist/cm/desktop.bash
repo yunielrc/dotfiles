@@ -3,7 +3,6 @@ dotf-i brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" # brew mus
 dotf-i bashc
 dotf-i rust && PATH="${PATH}:${HOME}/.cargo/bin"
 apt-i ruby-full
-# dotf-i apt --force
 # :base
 
 dotf-i backup-home
@@ -100,3 +99,7 @@ dotf-i staruml
 
 echoc 'Home Config'
 dotf-i home-config
+dotf-i home-scripts
+
+echoc 'Hosted Network services'
+dotf-i apt-cacher-ng
