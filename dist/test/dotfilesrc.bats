@@ -150,13 +150,3 @@ StartupWMClass=coronavirus.app"
 
   gnome_add_custom_keybinding 'Terminal' 'gtk-launch org.gnome.Terminal' 'F12'
 }
-
-@test 'should links2home' {
-  run links2home "$(realpath ./fixtures/links2home)"
-
-  assert_success
-  assert_line --index 0 --regexp "mkdir: created directory '/home/\w+/.ssh'"
-  assert_line --index 1 --regexp "'/home/\w+/.ssh/config' -> '/home/\w+/dotfiles/dist/test/fixtures/links2home/.ssh/config'"
-  assert_line --index 2 --regexp "'/home/\w+/.inputrc' -> '/home/\w+/dotfiles/dist/test/fixtures/links2home/.inputrc'"
-  assert_line --index 3 --regexp "'/home/\w+/.gitconfig' -> '/home/\w+/dotfiles/dist/test/fixtures/links2home/.gitconfig'"
-}

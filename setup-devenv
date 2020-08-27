@@ -38,7 +38,7 @@ echo "$vnc_pass" | vncpasswd -f > passwd
 echo "VNC_PASSWORD=${vnc_pass}" >> ./.env
 
 # Add git submodules
-git submodule update --init
+git submodule update --init --recursive
 
 # Config
 readonly apt_proxy_ip="$(ifconfig docker0 | awk 'NR==2 {print $2}')"

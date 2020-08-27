@@ -6,33 +6,6 @@ set -euEo pipefail
 
 export DEBIAN_FRONTEND=noninteractive
 
-## Colors
-
-export NOCOLOR='\033[0m'
-export RED='\033[0;31m'
-export GREEN='\033[0;32m'
-# shellcheck disable=SC2034
-export ORANGE='\033[0;33m'
-export BLUE='\033[0;34m'
-# shellcheck disable=SC2034
-export PURPLE='\033[0;35m'
-# shellcheck disable=SC2034
-export CYAN='\033[0;36m'
-# shellcheck disable=SC2034
-export LIGHTGRAY='\033[0;37m'
-# shellcheck disable=SC2034
-export DARKGRAY='\033[1;30m'
-# shellcheck disable=SC2034
-export LIGHTRED='\033[1;31m'
-export LIGHTGREEN='\033[1;32m'
-export YELLOW='\033[1;33m'
-export LIGHTBLUE='\033[1;34m'
-# shellcheck disable=SC2034
-export LIGHTPURPLE='\033[1;35m'
-# shellcheck disable=SC2034
-export LIGHTCYAN='\033[1;36m'
-export WHITE='\033[1;37m'
-
 ## :Colors
 
 if [[ -z "${BASE_PATH:-}" ]]; then
@@ -45,6 +18,9 @@ fi
 export PKGS_PATH="${WORK_DIR}/packages"
 readonly PKGS_PATH
 # export PKGS_PATH="${WORK_DIR}/packages"
+
+. "${BASE_PATH}/lib/bash-libs/dist/bl.bash"
+export -f bl::recursive_slink
 
 set -o allexport
 . "${WORK_DIR}/.env"
@@ -168,6 +144,7 @@ __install_package() {
   local -r plugin_file_path="${pkg_dir}/${pkg}.plugin.bash"
   local -r plugin_file_path2="${pkg_dir}/content/${pkg}.plugin.bash"
   local -r pkg_home_path="${pkg_dir}/home"
+  local -r pkg_root_path="${pkg_dir}/root"
 
   local -r msg='Installing package'
 
@@ -197,8 +174,15 @@ __install_package() {
   fi
 
   if [[ -d "$pkg_home_path" ]]; then
-    links2home "$pkg_home_path" || {
-      err "${msg}: ${pkg}, installing links2home"
+    bl::recursive_slink "$pkg_home_path" || {
+      err "${msg}: ${pkg}, installing recursive slinks to home"
+      return 13
+    }
+  fi
+
+  if [[ -d "$pkg_root_path" ]]; then
+    bl::recursive_slink "$pkg_root_path" / || {
+      err "${msg}: ${pkg}, installing recursive slinks to root"
       return 13
     }
   fi
@@ -404,25 +388,3 @@ gnome_add_custom_keybinding() {
 }
 export -f gnome_add_custom_keybinding
 
-links2home() {
-  local -r directory="$1"
-
-  (
-    shopt -s dotglob
-
-    cd "$directory"
-    # I don't use stow because it create symlinks to folders, I don't want this
-    while read -r file; do
-      local rel_file_path="${file#./}"
-      local file="${rel_file_path##*/}"
-      local rel_base_path="${rel_file_path%/*}"
-
-      if [[ "$rel_file_path" != "$file" && ! -d ~/"$rel_base_path" ]]; then
-        mkdir --parents --verbose ~/"$rel_base_path"
-      fi
-      ln --symbolic --force --verbose "${directory}/${rel_file_path}" ~/"${rel_base_path}"
-    done < <(find . -type f)
-  )
-}
-
-export -f links2home

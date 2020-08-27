@@ -66,6 +66,10 @@ cd './dist/packages'
 
 echo -e "\n${LIGHTPURPLE}Testing Packages Units${NOCOLOR}\n"
 
+echo -e "\n${LIGHTPURPLE}Testing Units${NOCOLOR}\n"
+
+ __test_dir "./dist/test"
+
 for pkg in *; do
   echo -e "\n> package: ${YELLOW}${pkg}${NOCOLOR}\n"
 
@@ -76,10 +80,6 @@ for pkg in *; do
   __test_dir "${pkg}/test"
 done
 cd - > /dev/null
-
-echo -e "\n${LIGHTPURPLE}Testing Units${NOCOLOR}\n"
-
- __test_dir "./dist/test"
 
 # echo -e "\n${LIGHTPURPLE}Testing e2e${NOCOLOR}\n"
 
