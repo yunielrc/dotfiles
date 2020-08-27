@@ -18,7 +18,7 @@ $ sudo apt install -y git
 Clone the repo
 
 ```sh
-$ git clone git@github.com:yunielrc/dotfiles.git ~/.dotfiles
+$ git clone --recurse-submodules git@github.com:yunielrc/dotfiles.git ~/.dotfiles
 ```
 
 Edit `.env` file located in `dist` folder

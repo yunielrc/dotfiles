@@ -1,4 +1,3 @@
-TODO: add anacron for push the repo when change
 TODO: Migrate server services to PC
 TODO: write script before pc disposing: backup gpg, data, etc
 TODO: write scripts for full pc installation: restore gpg backup, install dotfiles, private dotfiles, data, etc

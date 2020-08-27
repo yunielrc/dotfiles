@@ -1,0 +1,3 @@
+[submodule "dist/lib/bash-libs"]
+	path = dist/lib/bash-libs
+	url = git@github.com:yunielrc/bash-libs.git
