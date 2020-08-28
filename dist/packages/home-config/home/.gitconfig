@@ -14,6 +14,8 @@
 	p = pull --recurse-submodules
 	# Clone a repository including all submodules.
 	c = clone --recurse-submodules
+  # Update submodules
+  us = submodule update --remote
 
 [user]
 	email = yuniel.work@gmail.com
