@@ -1,4 +1,5 @@
-TODO:
+TODO: install dotfile from command
+TODO: install dotfile from specific file outside de project
 TODO: Migrate server services to PC: dns
 TODO: write script before pc disposing: backup gpg, data, etc
 TODO: write scripts for full pc installation: restore gpg backup, install dotfiles, private dotfiles, data, etc

@@ -28,72 +28,6 @@ set +o allexport
 
 # Functions
 
-## echo functions
-
-echoec() {
-  local -r color="${2-$BLUE}"
-
-  if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
-    echo -e "$*"
-  else
-    echo -e "${color}$*${NOCOLOR}" >&2
-  fi
-}
-export -f echoec
-
-echoc() {
-  local -r color="${2-$BLUE}"
-
-  if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
-    echo -e "$*"
-  else
-    echo -e "${color}$*${NOCOLOR}"
-  fi
-}
-export -f echoc
-
-err() {
-  local -r color="${2-$RED}"
-
-  if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
-    echo -e "ERROR> $*" >&2
-  else
-    echo -e "${color}ERROR> $*${NOCOLOR}" >&2
-  fi
-}
-export -f err
-
-inf() {
-  local -r color="${2-$LIGHTBLUE}"
-
-  if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
-    echo -e "INFO> $*"
-  else
-    echo -e "${color}INFO> $*${NOCOLOR}"
-  fi
-}
-export -f inf
-
-infn() {
-  local -r color="${2-$LIGHTBLUE}"
-
-  if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
-    echo -e -n "INFO> $*"
-  else
-    echo -e -n "${color}INFO> $*${NOCOLOR}"
-  fi
-}
-export -f infn
-
-debug() {
-  if [[ -z "${ENV:-}" || "${ENV,,}" != 'production' ]]; then
-    echo "DEBUG> $*"
-  fi
-}
-export -f debug
-
-## :echo functions
-
 ## dotfiles functions
 
 __install_plugin() {
@@ -258,51 +192,6 @@ export -f dotf-i
 
 ## :dotfiles functions
 
-create_desktop_file() {
-  local -r name="$1"
-  local -r comment="$2"
-  local -r categories="$3"
-  local -r keywords="$4"
-  local -r exec="$5"
-  local -r icon="$6"
-  local -r startupWMClass=${7:-}
-  local -r fileName="${8:-$name}"
-  local -r appDir=${9:-'/usr/share/applications'}
-
-  local startupWMClassEntry=''
-  if [[ -n "$startupWMClass" ]]; then
-    startupWMClassEntry="StartupWMClass=${startupWMClass}"
-  fi
-  # https://developer.gnome.org/menu-spec/
-  local -r desktop_path="${appDir}/${fileName}.desktop"
-
-  [[ ! -d "$appDir" ]] && {
-    mkdir -p "$appDir" 2>/dev/null || sudo mkdir -p "$appDir"
-  }
-
-  local tee='tee'
-
-  [[ "$(realpath "$appDir")" != '/home/'* ]] && {
-    tee='sudo tee'
-  }
-
-  cat <<EOF | eval "$tee" "$desktop_path" >/dev/null
-#!/usr/bin/env xdg-open
-[Desktop Entry]
-Name=${name}
-Comment=${comment}
-Categories=${categories}
-Keywords=${keywords}
-Exec=${exec}
-Icon=${icon}
-Terminal=false
-Type=Application
-${startupWMClassEntry}
-EOF
-  echo "Created desktop file: ${desktop_path}"
-}
-export -f create_desktop_file
-
 apt-u() { sudo apt update -y; }
 export -f apt-u
 
@@ -317,48 +206,6 @@ add_apt_key() {
   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "$apt_key"
 }
 export -f add_apt_key
-
-util_html_query_selector() {
-  local -r url="$1"
-  local -r selector="$2"
-  local -r property="$3"
-
-  dotf-i node &>/dev/null
-  # TODO instalar jsdom minimist en directorio temporal y después eliminar al final de esta función
-  sudo npm install -g jsdom minimist &>/dev/null
-  # poner a directorio temporal creado
-  export NODE_PATH="$(npm root --quiet -g)"
-
-  cat <<EOF | node - --url "$url" --selector "$selector" --property "$property"
-// javascript
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
-const argv = require('minimist')(process.argv.slice(2));
-
-const { url, selector, property } = argv;
-
-const resourceLoader = new jsdom.ResourceLoader({
-  userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36',
-});
-const options = {
-  resources: resourceLoader
-};
-
-(async () => {
-  try {
-    const dom = await JSDOM.fromURL(url, options);
-    const document = dom.window.document;
-    const value = document.querySelector(selector)[property];
-    console.log(value);
-  } catch (error) {
-    console.log(error.message);
-    process.exit(1);
-  }
-})();
-EOF
-}
-
-export -f util_html_query_selector
 
 ## Add custom keybinding
 gnome_add_custom_keybinding() {
