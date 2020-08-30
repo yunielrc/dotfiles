@@ -20,7 +20,6 @@ readonly PKGS_PATH
 # export PKGS_PATH="${WORK_DIR}/packages"
 
 . "${BASE_PATH}/lib/bash-libs/dist/bl.bash"
-export -f bl::recursive_slink
 
 set -o allexport
 . "${WORK_DIR}/.env"
@@ -77,8 +76,11 @@ __install_package() {
   local -r setup_file_path="${pkg_dir}/setup"
   local -r plugin_file_path="${pkg_dir}/${pkg}.plugin.bash"
   local -r plugin_file_path2="${pkg_dir}/content/${pkg}.plugin.bash"
+  # TODO: add support to concat files
   local -r pkg_home_path="${pkg_dir}/home"
   local -r pkg_root_path="${pkg_dir}/root"
+  local -r pkg_homecat_path="${pkg_dir}/homecat"
+  local -r pkg_rootcat_path="${pkg_dir}/rootcat"
 
   local -r msg='Installing package'
 
@@ -108,7 +110,7 @@ __install_package() {
   fi
 
   if [[ -d "$pkg_home_path" ]]; then
-    bl::recursive_slink "$pkg_home_path" || {
+    bl::recursive_slink "$pkg_home_path" ~ || {
       err "${msg}: ${pkg}, installing recursive slinks to home"
       return 13
     }
@@ -116,8 +118,22 @@ __install_package() {
 
   if [[ -d "$pkg_root_path" ]]; then
     bl::recursive_slink "$pkg_root_path" / || {
-      err "${msg}: ${pkg}, installing recursive slinks to root"
-      return 13
+      err "${msg}: ${pkg}, installing recursive slinks to root directory"
+      return 14
+    }
+  fi
+
+  if [[ -d "$pkg_homecat_path" ]]; then
+    bl::recursive_concat "$pkg_homecat_path" ~ || {
+      err "${msg}: ${pkg}, recursive concat files to home"
+      return 15
+    }
+  fi
+
+  if [[ -d "$pkg_rootcat_path" ]]; then
+    bl::recursive_concat "$pkg_rootcat_path" / || {
+      err "${msg}: ${pkg}, recursive concat files to root directory"
+      return 16
     }
   fi
 

@@ -7,7 +7,6 @@ x-build: &build
     VERSION: '20.04'
     APT_PROXY: "${APT_PROXY}"
     USER: "${DOCKER_USER}"
-    WORKDIR: "${DOCKER_WORKDIR}"
   target: dev
 
 x-base: &base

@@ -1,0 +1,243 @@
+# @CAT_SECTION
+#******************
+#
+# LOCAL NETWORK INFO
+#
+#******************
+
+# Address:   192.168.1.0                11000000.10101000.00000001. 00000000
+# Netmask:   255.255.255.0 = 24         11111111.11111111.11111111. 00000000
+# Wildcard:  0.0.0.255                  00000000.00000000.00000000. 11111111
+# =>
+# Network:   192.168.1.0/24             11000000.10101000.00000001. 00000000
+# HostMin:   192.168.1.1                11000000.10101000.00000001. 00000001
+# HostMax:   192.168.1.254              11000000.10101000.00000001. 11111110
+# Broadcast: 192.168.1.255              11000000.10101000.00000001. 11111111
+# Hosts/Net: 254                              Class C, Private Internet
+
+#******************************************
+#
+#  PHYSICAL LOCAL NETWORK INFRAESTRUCTURE
+#
+#******************************************
+
+# - Outdoor Router CPE
+# - Router
+# - NAS
+# - Server Virtualization Management Platform
+# - Client Devices
+
+
+#**************
+#
+# DNS RECORDS
+#
+#**************
+
+# (M) = (MANAGEMENT)
+
+#################################################
+# Main Network Services - 192.168.1.1-20
+#################################################
+
+#######################################
+# Routers
+#######################################
+
+# Outdoor Router
+192.168.0.1 orouter.$loc # http 3500 & ssh (M), gateway
+
+# Router
+# 192.168.1.1 router.$loc dns1.$loc # :http 80 (M), :domain, :dhcp, gateway
+
+# Router VPN
+# 192.168.1.3 router-vpn.$loc # :ssh (M), gateway
+
+#######################################
+# >>> Routers
+#######################################
+
+# Storage - NAS
+192.168.1.4 drive.$loc storage.$loc mycloud.$loc # :http 80 (M), :ftp, :smb, :nfs, :afp
+
+# Virtualization Management Platform
+192.168.1.5 proxmox.$loc compute.$loc # :http 80 & ssh (M), lxc, vm
+
+# DNS
+# 192.168.1.8 dns2.$loc dnsmasq.$loc # :ssh (M), domain
+
+# Apt Proxy Cache
+# 192.168.1.10 apt-cacher # :ssh (M), :3142 (apt proxy service)
+127.0.0.1 apt-cacher.$loc # :ssh (M), :3142 (apt proxy service)
+
+# Mail
+# 192.168.1.11 mail.$loc mail-iredmail.$loc # :ssh (M), :smtp, :pop3, :imap, :imaps, :pop3s
+
+# Media Servers UPnP/DLNA
+# 192.168.1.15 ums.$loc  # :ssh (M)
+# 192.168.1.16 emby.$loc # :http 8096 & :ssh (M)
+
+# Lan Bot - Automates Tasks on the Network
+192.168.1.18 lan-bot.$loc lanbot.$loc # :ssh (M)
+
+#################################################
+# >>> Main Network Services - 192.168.1.1-20
+#################################################
+
+
+#################################################
+# BS - 192.168.1.21-40
+#################################################
+
+#################################################
+# >>> BS - 192.168.1.21-40
+#################################################
+
+
+
+#################################################
+# Development Services - 192.168.1.41-80
+#################################################
+
+# Docker Registry & Cache
+# 192.168.1.45 registry.$loc           # :http 5000
+# 192.168.1.45 registry-cache.$loc     # :http 5001
+# 192.168.1.45 registry-ui.$loc        # :http 80
+# 192.168.1.45 registry-cache-ui.$loc  # :http 81
+
+# Docker Container Management System (Portainer)
+# 192.168.1.46 docker-apps.$loc dapps.$loc portainer.$loc manage-dapps.$loc # :http 9000
+
+# Docker Docs
+# 192.168.1.46 docker-doc.$loc  # [dapp] :http 4000
+
+#######################################
+# DevOps
+#######################################
+
+
+#############################
+# Version Control
+#############################
+
+# Gitea - Git Repo
+192.168.1.41 gitea.$loc # :http 80
+
+#############################
+# >>> Version Control
+#############################
+
+
+#############################
+# Plan
+#############################
+
+# OpenProject
+# 192.168.1.47.$loc openproject
+
+# kanboard
+# 192.168.1.48.$loc kanboard
+
+# wekan
+# 192.168.1.49.$loc wekan
+
+# Jira - Agile PM tool
+# 192.168.1.51.$loc jira
+
+#############################
+# >>> Plan
+#############################
+
+
+#############################
+# Development
+#############################
+
+# Swagger Editor - OpenAPI Editor
+# 127.0.0.1 swagger-editor.$loc # [dapp] :82
+
+# Apicurio - OpenAPI Editor
+# 192.168.1.?? apicurio.$loc
+
+#############################
+# >>> Development
+#############################
+
+
+#############################
+# Configuration Management
+#############################
+#############################
+# >>> Configuration Management
+#############################
+
+
+#############################
+# CI/CD - Build, Test, Package, Deliver, Deploy
+#############################
+
+# Gitlab - Git Repo, CI/CD
+# 192.168.1.42 gitlab.$loc # :http 80
+
+# Jenkins - CI/CD
+# 192.168.1.43 jenkins.$loc # :http
+
+#############################
+# >>> CI/CD
+#############################
+
+
+#############################
+# Binary Repositories
+#############################
+
+# 192.168.1.46 npm-registry.$loc # :http 4873
+
+#############################
+# >>> Binary Repositories
+#############################
+
+
+#############################
+# Monitoring
+#############################
+#############################
+# >>> Monitoring
+#############################
+
+
+#######################################
+# >>> DevOps
+#######################################
+
+#################################################
+# >>> Development Services - 192.168.1.41-80
+#################################################
+
+
+#######################################
+# Systems under Development - 192.168.1.100-150
+#######################################
+#######################################
+# >>> Systems under Development
+#######################################
+
+
+#################################################
+# Other Services
+#################################################
+# 192.168.1.46 storage-web.$loc # http :8080
+#################################################
+# >>> Others Services
+#################################################
+
+
+#################################################
+# External Services
+#################################################
+$EXTERNAL_SERVER_IP proxy-externo.$loc internet-proxy.$loc external-proxy.$loc external-server.$loc
+$EXTERNAL_SERVER_IP eserver.$loc aws-server.$loc eproxy.$loc evpn.$loc
+#################################################
+# >>> External Services
+#################################################
+# :@CAT_SECTION
