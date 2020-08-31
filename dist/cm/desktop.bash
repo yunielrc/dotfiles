@@ -1,14 +1,26 @@
+apt-u
+dotf-i apt-cacher-ng # must be before apt-ug
+apt-ug
 # base
 dotf-i brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" # brew must be before bashc
 dotf-i bashc
 dotf-i rust && PATH="${PATH}:${HOME}/.cargo/bin"
 apt-i ruby-full
+dotf-i root-config
+dotf-i home-config
+dotf-i home-scripts
+dotf-i docker
 # :base
-
-dotf-i backup-home
 
 echoc '>> APT packages'
 
+apt-i wget
+apt-i curl
+apt-i zip unzip
+apt-i git
+apt-i htop
+apt-i bmon
+dotf-i vim --force
 apt-i nfs-common
 apt-i default-jre
 # apt-i ubuntu-restricted-extras # caution: this pkg shows interactive dialog
@@ -58,6 +70,8 @@ cargo install dutree
 
 echoc '>> DOTFILES packages'
 
+dotf-i backup-home
+
 echoc 'Tools'
 dotf-i fzf
 dotf-i bandwhich
@@ -94,12 +108,4 @@ dotf-i vscode
 dotf-i postman
 dotf-i insomnia
 dotf-i aws-cli
-dotf-i docker
 dotf-i staruml
-
-echoc 'Home Config'
-dotf-i home-config
-dotf-i home-scripts
-
-echoc 'Hosted Network services'
-dotf-i apt-cacher-ng
