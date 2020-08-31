@@ -85,6 +85,8 @@ __install_package() {
   local -r pkg_rootcp_path="${pkg_dir}/rootcp"
   local -r pkg_homeln_path="${pkg_dir}/homeln"
   local -r pkg_rootln_path="${pkg_dir}/rootln"
+  local -r pkg_homecps_path="${pkg_dir}/homecps"
+  local -r pkg_rootcps_path="${pkg_dir}/rootcps"
 
   local -r msg='Installing package'
 
@@ -137,6 +139,20 @@ __install_package() {
   if [[ -d "$pkg_rootcat_path" ]]; then
     bl::recursive_concat "$pkg_rootcat_path" / || {
       err "${msg}: ${pkg}, recursive concat files to root directory"
+      return 16
+    }
+  fi
+
+  if [[ -d "$pkg_homecps_path" ]]; then
+    bl::recursive_copy_envsub "$pkg_homecps_path" ~/ || {
+      err "${msg}: ${pkg}, recursive copy files with env substitution to home directory"
+      return 16
+    }
+  fi
+
+  if [[ -d "$pkg_rootcps_path" ]]; then
+    bl::recursive_copy_envsub "$pkg_rootcps_path" / || {
+      err "${msg}: ${pkg}, recursive copy files with env substitution to root directory"
       return 16
     }
   fi
