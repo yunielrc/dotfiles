@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+# Install
+mkdir --parent --verbose "${HOME_USR}/"{bin,opt} || :
+cd "${HOME_USR}/opt"
+git clone https://github.com/yunielrc/lan-bot.git
+
+cat <<EOF > "${HOME_BIN}/airos-random-mac-name"
+#!/usr/bin/env bash
+
+"${HOME_USR}/opt/lan-bot/lan-bot" airos-random-mac-name --user $LAN_BOT_AIROS_USER --ip $LAN_BOT_AIROS_IP --reboot
+EOF
+
+cat <<EOF > "${HOME_BIN}/airos-random-mac-name-log"
+#!/usr/bin/env bash
+
+"${HOME_USR}/opt/lan-bot/lan-bot" airos-random-mac-name --user $LAN_BOT_AIROS_USER --ip $LAN_BOT_AIROS_IP --reboot | "${HOME_USR}/opt/lan-bot/lb-logger" ~/lan-bot.log
+EOF
+
+chmod +x --verbose "${HOME_USR}/opt/lan-bot/lan-bot" \
+                   "${HOME_USR}/opt/lan-bot/lb-logger" \
+                   "${HOME_BIN}/airos-random-mac-name" \
+                   "${HOME_BIN}/airos-random-mac-name-log"

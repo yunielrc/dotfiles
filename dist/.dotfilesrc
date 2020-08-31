@@ -81,6 +81,10 @@ __install_package() {
   local -r pkg_root_path="${pkg_dir}/root"
   local -r pkg_homecat_path="${pkg_dir}/homecat"
   local -r pkg_rootcat_path="${pkg_dir}/rootcat"
+  local -r pkg_homecp_path="${pkg_dir}/homecp"
+  local -r pkg_rootcp_path="${pkg_dir}/rootcp"
+  local -r pkg_homeln_path="${pkg_dir}/homeln"
+  local -r pkg_rootln_path="${pkg_dir}/rootln"
 
   local -r msg='Installing package'
 
@@ -110,7 +114,7 @@ __install_package() {
   fi
 
   if [[ -d "$pkg_home_path" ]]; then
-    bl::recursive_slink "$pkg_home_path" ~ || {
+    bl::recursive_slink "$pkg_home_path" ~/ || {
       err "${msg}: ${pkg}, installing recursive slinks to home"
       return 13
     }
@@ -124,8 +128,8 @@ __install_package() {
   fi
 
   if [[ -d "$pkg_homecat_path" ]]; then
-    bl::recursive_concat "$pkg_homecat_path" ~ || {
-      err "${msg}: ${pkg}, recursive concat files to home"
+    bl::recursive_concat "$pkg_homecat_path" ~/ || {
+      err "${msg}: ${pkg}, recursive concat files to home directory"
       return 15
     }
   fi
@@ -137,6 +141,35 @@ __install_package() {
     }
   fi
 
+  shopt -s dotglob
+  if [[ -d "$pkg_rootcp_path" ]]; then
+    cp --recursive --force --verbose "$pkg_rootcp_path"/* / || {
+      err "${msg}: ${pkg}, recursive copy files to root directory"
+      return 16
+    }
+  fi
+
+  if [[ -d "$pkg_homecp_path" ]]; then
+    cp --recursive --force --verbose "$pkg_homecp_path"/* ~/ || {
+      err "${msg}: ${pkg}, recursive copy files to home directory"
+      return 16
+    }
+  fi
+
+  if [[ -d "$pkg_rootln_path" ]]; then
+    ln --symbolic --force --verbose "$pkg_rootln_path"/* / || {
+      err "${msg}: ${pkg}, recursive link top files to root directory"
+      return 16
+    }
+  fi
+
+  if [[ -d "$pkg_homeln_path" ]]; then
+    ln --symbolic --force --verbose "$pkg_homeln_path"/* ~/ || {
+      err "${msg}: ${pkg}, recursive link top files to home directory"
+      return 16
+    }
+  fi
+  shopt +s dotglob
   return 0
 }
 export -f __install_package

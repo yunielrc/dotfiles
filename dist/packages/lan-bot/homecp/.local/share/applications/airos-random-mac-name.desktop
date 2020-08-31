@@ -1,0 +1,10 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=AirOS Random mac & name
+Comment=Reinicia el dispositivo airos con nombre y mac nueva
+Categories=Network;Utility;
+Keywords=router;externo;wan;ubiquiti;LAN;NET;ADMIN;NETWORK;settings;administrar;red;ajustes;webapp;
+Exec=airos-random-mac-name
+Icon=airos-random-mac-name
+Terminal=true
+Type=Application
