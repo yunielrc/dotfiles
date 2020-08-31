@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+# Dependencies
+dotf-i docker
+dotf-i google-chrome
+
+# Install
+[[ -n "$(sudo docker ps --all --filter name=swagger-editor --format "{{.ID}}")" ]] && exit 0
+
+sudo docker run \
+                --name swagger-editor \
+                --detach \
+                --restart always \
+                --publish "${DAPP_SWAGGER_EDITOR_PORT}:8080" \
+                swaggerapi/swagger-editor
+
+# Configure
