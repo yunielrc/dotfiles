@@ -169,7 +169,7 @@ __install_package() {
       return 16
     }
   fi
-  shopt +s dotglob
+  shopt -u dotglob
   return 0
 }
 export -f __install_package

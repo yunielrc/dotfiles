@@ -5,6 +5,8 @@ set -euEo pipefail
 # Install
 mkdir --parent --verbose "${HOME_USR}/"{bin,opt} || :
 cd "${HOME_USR}/opt"
+
+[[ -d ./lan-bot ]] && rm --recursive --force --verbose ./lan-bot
 git clone https://github.com/yunielrc/lan-bot.git
 
 cat <<EOF > "${HOME_BIN}/airos-random-mac-name"

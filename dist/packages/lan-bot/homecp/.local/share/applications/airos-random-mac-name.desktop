@@ -1,10 +1,10 @@
 #!/usr/bin/env xdg-open
 [Desktop Entry]
-Name=AirOS Random mac & name
+Name=Reboot M5
 Comment=Reinicia el dispositivo airos con nombre y mac nueva
 Categories=Network;Utility;
-Keywords=router;externo;wan;ubiquiti;LAN;NET;ADMIN;NETWORK;settings;administrar;red;ajustes;webapp;
-Exec=airos-random-mac-name
+Keywords=m5,nano,router;externo;wan;ubiquiti;LAN;NET;ADMIN;NETWORK;settings;administrar;red;ajustes;webapp;
+Exec=bash -c '~/.usr/bin/airos-random-mac-name; echo $?; sleep 2'
 Icon=airos-random-mac-name
 Terminal=true
 Type=Application
