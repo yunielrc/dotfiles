@@ -7,5 +7,5 @@ load test_helper
   grep -q "http://${DAPP_SWAGGER_EDITOR_FQN}:${DAPP_SWAGGER_EDITOR_PORT}" \
           ~/.local/share/applications/swagger-editor.desktop
   [[ -f ~/.local/share/icons/swagger-editor.png ]]
-  [[ -n "$(sudo docker ps --filter status=running --filter name=swagger-editor --format "{{.ID}}")" ]]
+  [[ -n "$(sudo docker ps --all --quiet --filter name=swagger-editor)" ]]
 }

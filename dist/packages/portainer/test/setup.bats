@@ -7,5 +7,5 @@ load test_helper
   grep -q "http://${DAPP_PORTAINER_FQN}:${DAPP_PORTAINER_PORT}" \
           ~/.local/share/applications/portainer.desktop
   [[ -f ~/.local/share/icons/portainer.png ]]
-  [[ -n "$(sudo docker ps --filter status=running --filter name=portainer --format "{{.ID}}")" ]]
+  [[ -n "$(sudo docker ps --all --quiet --filter name=portainer)" ]]
 }
