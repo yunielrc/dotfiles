@@ -1,4 +1,4 @@
-# @CAT_SECTION
+# @CAT_SECTION_HOSTS_ROOT_CONFIG
 #******************
 #
 # LOCAL NETWORK INFO
@@ -78,7 +78,7 @@
 # 192.168.1.16 emby.$loc # :http 8096 & :ssh (M)
 
 # Lan Bot - Automates Tasks on the Network
-192.168.1.18 lan-bot.$loc lanbot.$loc # :ssh (M)
+# 192.168.1.18 lan-bot.$loc lanbot.$loc # :ssh (M)
 
 #################################################
 # >>> Main Network Services - 192.168.1.1-20
@@ -240,4 +240,4 @@ $EXTERNAL_SERVER_IP eserver.$loc aws-server.$loc eproxy.$loc evpn.$loc
 #################################################
 # >>> External Services
 #################################################
-# :@CAT_SECTION
+# :@CAT_SECTION_HOSTS_ROOT_CONFIG
