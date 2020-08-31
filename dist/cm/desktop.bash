@@ -109,3 +109,5 @@ dotf-i postman
 dotf-i insomnia
 dotf-i aws-cli
 dotf-i staruml
+dotf-i portainer
+dotf-i swagger-editor
