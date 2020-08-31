@@ -4,8 +4,8 @@ Name=Portainer - Docker Apps
 Comment=Docker Management User Interface
 Categories=Development;Network;Utility;
 Keywords=docker;contenedores;LAN;NET;ADMIN;NETWORK;settings;administrar;red;ajustes;DEV;development;desarrollo;webapp;
-Exec=/opt/google/chrome/google-chrome --app=http://docker-apps.casa.dylgran.com:9000
+Exec=/opt/google/chrome/google-chrome --app=http://${DAPP_PORTAINER_FQN}:${DAPP_PORTAINER_PORT}
 Icon=portainer
 Terminal=false
 Type=Application
-StartupWMClass=docker-apps.casa.dylgran.com
+StartupWMClass=${DAPP_PORTAINER_FQN}
