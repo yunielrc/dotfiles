@@ -16,13 +16,18 @@ EOF
 
   cat <<EOF | sudo tee '/etc/docker/daemon.json'
 {
-"max-concurrent-downloads": 2,
-"insecure-registries" : [
-  "registry.${LOCAL_DOMAIN}:5000"
-],
-"registry-mirrors": ["http://registry-cache.${LOCAL_DOMAIN}:5001"]
+  "max-concurrent-downloads": 2
 }
 EOF
+#   cat <<EOF | sudo tee '/etc/docker/daemon.json'
+# {
+# "max-concurrent-downloads": 2,
+# "insecure-registries" : [
+#   "registry.${LOCAL_DOMAIN}:5000"
+# ],
+# "registry-mirrors": ["http://registry-cache.${LOCAL_DOMAIN}:5001"]
+# }
+# EOF
 
   sudo systemctl daemon-reload
   sudo systemctl restart docker.service
