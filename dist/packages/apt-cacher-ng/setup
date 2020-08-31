@@ -9,9 +9,15 @@ sudo debconf-set-selections <<< 'apt-cacher-ng apt-cacher-ng/tunnelenable select
 sudo apt-get install -y apt-cacher-ng
 
 # Configure
-if [[ -n "${PROXY_URL:-}" ]] && ! grep -q "Proxy: ${PROXY_URL}" /etc/apt-cacher-ng/acng.conf; then
+if [[ -n "${PROXY_URL:-}" ]] && ! grep --quiet "Proxy: ${PROXY_URL}" /etc/apt-cacher-ng/acng.conf; then
   echo "Proxy: ${PROXY_URL}" | sudo tee -a /etc/apt-cacher-ng/acng.conf
 fi
 
-readonly APT_PROXY_URL='http://localhost:3142'
-echo "Acquire::http::Proxy \"${APT_PROXY_URL}\";" | sudo tee /etc/apt/apt.conf.d/00proxy
+echo 'Acquire::http::Proxy "http://localhost:3142";' | sudo tee /etc/apt/apt.conf.d/00proxy
+
+sudo systemctl stop apt-cacher-ng.service
+sudo rm --recursive --force /var/cache/apt-cacher-ng
+[[ -d ~/apt-cacher-ng ]] || mkdir --parents ~/apt-cacher-ng
+sudo chown -R apt-cacher-ng:apt-cacher-ng ~/apt-cacher-ng
+sudo ln --symbolic ~/apt-cacher-ng /var/cache/
+sudo systemctl start apt-cacher-ng.service
