@@ -21,7 +21,7 @@ setup() {
 ERROR> Installing bash plugin: brew, plugins dir doesn't exist: 123456654321"
 }
 
-@test 'error creating link' {
+@test 'plugin: error creating link' {
   chmod 0550 "${DOTF_BASH_PLUGINS_DIR}"
 
   run __install_plugin 'brew'
@@ -51,6 +51,42 @@ ERROR> Installing bash plugin: brew, plugins dir doesn't exist: 123456654321"
 
   run grep "BASHC_PLUGINS+=($plugin)" "$DOTF_BASH_GEN_SETTINGS_FILE"
   assert_output "BASHC_PLUGINS+=($plugin)"
+}
+
+@test "theme doesn't exists" {
+    run __install_theme 'theme1'
+
+    assert_failure 10
+    assert_line --index 1 --regexp "ERROR> Installing bash theme: theme1, theme doesn't exist in: .*/dist/test/fixtures/packages/theme1/content/theme1.theme.bash"
+}
+
+@test "theme dir doesn't exists" {
+    DOTF_BASH_THEMES_DIR="123456654321"
+    run __install_theme 'brew'
+
+    assert_failure 11
+    assert_output "INFO> Installing bash theme: brew
+ERROR> Installing bash theme: brew, themes dir doesn't exist: 123456654321"
+}
+
+@test 'theme: error creating link' {
+  chmod 0550 "${DOTF_BASH_THEMES_DIR}"
+
+  run __install_theme 'brew'
+
+  assert_failure 12
+  assert_line --index 2 'ERROR> Installing bash theme: brew, creating link'
+}
+
+@test "should install theme" {
+  local -r theme='brew'
+
+  run __install_theme "$theme"
+
+  assert_success
+  assert_line --index 2 --regexp "INFO> DONE. Installing bash theme: brew"
+
+  [[ -L "${DOTF_BASH_THEMES_DIR}/${theme}.theme.bash" && -f "${DOTF_BASH_THEMES_DIR}/${theme}.theme.bash" ]]
 }
 
 @test "error package doesn't exist" {

@@ -29,6 +29,38 @@ set +o allexport
 
 ## dotfiles functions
 
+__install_theme() {
+  local -r theme="$1"
+
+  local -r pkg="$theme"
+  local theme_file_path="${PKGS_PATH}/${pkg}/${theme}.theme.bash"
+  [[ ! -f "$theme_file_path" ]] && theme_file_path="${PKGS_PATH}/${pkg}/content/${theme}.theme.bash"
+  local -r theme_file_dest_path="${DOTF_BASH_THEMES_DIR}/${theme}.theme.bash"
+
+  local -r msg="Installing bash theme"
+
+  inf "${msg}: ${theme}"
+
+  if [[ ! -f "$theme_file_path" ]]; then
+    err "${msg}: ${theme}, theme doesn't exist in: $theme_file_path"
+    return 10
+  fi
+
+  if [[ ! -d "$DOTF_BASH_THEMES_DIR" ]]; then
+    err "${msg}: ${theme}, themes dir doesn't exist: $DOTF_BASH_THEMES_DIR"
+    return 11
+  fi
+
+  ln --symbolic --verbose --force "$theme_file_path" "$theme_file_dest_path" || {
+    err "${msg}: ${theme}, creating link"
+    return 12
+  }
+
+  inf "DONE. ${msg}: ${theme}" "$GREEN"
+  return 0
+}
+export -f __install_theme
+
 __install_plugin() {
   local -r plugin="$1"
 
@@ -76,6 +108,8 @@ __install_package() {
   local -r setup_file_path="${pkg_dir}/setup"
   local -r plugin_file_path="${pkg_dir}/${pkg}.plugin.bash"
   local -r plugin_file_path2="${pkg_dir}/content/${pkg}.plugin.bash"
+  local -r theme_file_path="${pkg_dir}/${pkg}.theme.bash"
+  local -r theme_file_path2="${pkg_dir}/content/${pkg}.theme.bash"
   # TODO: add support to concat files
   local -r pkg_home_path="${pkg_dir}/home"
   local -r pkg_root_path="${pkg_dir}/root"
@@ -111,6 +145,13 @@ __install_package() {
   if [[ -f "$plugin_file_path" || -f "$plugin_file_path2" ]]; then
     __install_plugin "$pkg" || {
       err "${msg}: ${pkg}, installing bash plugin"
+      return 12
+    }
+  fi
+
+  if [[ -f "$theme_file_path" || -f "$theme_file_path2" ]]; then
+    __install_theme "$pkg" || {
+      err "${msg}: ${pkg}, installing bash theme"
       return 12
     }
   fi
