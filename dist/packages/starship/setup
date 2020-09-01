@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+brew install starship

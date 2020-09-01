@@ -43,8 +43,6 @@ apt-i gpg
 
 echoc '>> BREW packages'
 # so slow executin with starship prompt: $ time for i in $(seq 1 1000000); do [ 1 = 1 ]; done
-# brew install starship
-# echo -e '\neval "$(starship init bash)"' >> ~/.bashrc
 brew install fd
 brew install rg
 brew install bat
@@ -70,7 +68,10 @@ cargo install dutree
 
 echoc '>> DOTFILES packages'
 
+# dotf-i starship
 dotf-i backup-home
+dotf-i bash-git-prompt
+dotf-i sexy-bash-prompt
 
 echoc 'Tools'
 dotf-i fzf
