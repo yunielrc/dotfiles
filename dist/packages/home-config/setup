@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+# Dependencies
+apt-u
+apt-i fonts-firacode dconf-service dconf-cli
+
+# Install
+apt-i gpg
+
+# Config
+## gnome apps
+dconf load /org/gnome/ < "${PKG_PATH}/org.gnome.dconf"
+
