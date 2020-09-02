@@ -6,5 +6,5 @@ set background=dark
 
 " NERDTree
 " open NERDTree automatically when vim starts up
-autocmd vimenter * NERDTree
+" autocmd vimenter * NERDTree
 
