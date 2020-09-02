@@ -1,3 +1,6 @@
 [submodule "dist/lib/bash-libs"]
 	path = dist/lib/bash-libs
 	url = git@github.com:yunielrc/bash-libs.git
+[submodule "dist/packages/vim8+/homeln/.vim/pack/plugins/start/vim-toml"]
+	path = dist/packages/vim8+/homeln/.vim/pack/plugins/start/vim-toml
+	url = https://github.com/cespare/vim-toml.git
