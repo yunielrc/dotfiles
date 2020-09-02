@@ -23,8 +23,10 @@
 	# Clone a repository including all submodules.
 	c = clone --recurse-submodules
 
+  # Add submodule
+  sua = submodule add
   # Update submodules
-  us = submodule update --remote
+  suu = submodule update --remote
 
 	# Commit all changes.
 	ca = !git add --all && git commit --all --verbose
