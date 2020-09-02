@@ -7,3 +7,6 @@
 [submodule "dist/packages/vim8+/homeln/.vim/pack/tpope/start/surround"]
 	path = dist/packages/vim8+/homeln/.vim/pack/tpope/start/surround
 	url = https://tpope.io/vim/surround.git
+[submodule "dist/packages/vim8+/homeln/.vim/pack/vendor/start/nerdtree"]
+	path = dist/packages/vim8+/homeln/.vim/pack/vendor/start/nerdtree
+	url = https://github.com/preservim/nerdtree.git
