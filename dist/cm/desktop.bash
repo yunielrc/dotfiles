@@ -20,13 +20,11 @@ apt-i zip unzip
 apt-i git
 apt-i htop
 apt-i bmon
-dotf-i vim --force
 apt-i nfs-common
 apt-i default-jre
 # apt-i ubuntu-restricted-extras # caution: this pkg shows interactive dialog
 # apt-i ttf-mscorefonts-installer # caution: this pkg shows interactive dialog
 apt-i lm-sensors
-apt-i dconf-editor
 apt-i vlc
 apt-i mpv
 apt-i gpick
@@ -38,7 +36,6 @@ apt-i pinta
 apt-i assaultcube
 apt-i tldr
 apt-i most
-apt-i gpg
 # apt-i gimp gimp-help-en gimp-help-es
 
 echoc '>> BREW packages'
@@ -72,6 +69,9 @@ echoc '>> DOTFILES packages'
 dotf-i backup-home
 dotf-i bash-git-prompt
 dotf-i sexy-bash-prompt
+
+echoc 'Text Editors'
+dotf-i vim8+
 
 echoc 'Tools'
 dotf-i fzf

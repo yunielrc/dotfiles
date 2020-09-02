@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  config.vm.synced_folder ".", ENV['AWS_WORKDIR'], type: "rsync", rsync__exclude: ".git/", rsync__auto: true
+  config.vm.synced_folder ".", ENV['AWS_WORKDIR'], type: "rsync", rsync__exclude: ['*~','content/.bashc/plugins/local/*','content/.bashc/themes/local/*','content/.bashc/gen/*','.git'], rsync__auto: true
 
   script = <<-SCRIPT
   cat #{ENV['AWS_WORKDIR']}/.env.override.server >> #{ENV['AWS_WORKDIR']}/.env
