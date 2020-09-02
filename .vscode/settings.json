@@ -4,6 +4,15 @@
   "files.associations": {
     "Vagrantfile.vbox": "ruby",
     ".env*": "shellscript",
-    "*.env": "shellscript"
-  }
+    "*.env": "shellscript",
+    "*.dconf": "ini"
+  },
+  "spellright.language": [
+    "English"
+  ],
+  "spellright.documentTypes": [
+    "markdown",
+    "latex",
+    "plaintext"
+  ]
 }
