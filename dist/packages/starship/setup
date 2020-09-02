@@ -3,3 +3,5 @@
 set -euEo pipefail
 
 brew install starship
+
+# sudo ln --symbolic --force --backup "$(type -P starship)" /usr/local/bin/
