@@ -27,7 +27,7 @@ fi
 
 # Dependencies
 sudo apt-get update -y
-sudo apt-get install -y dconf*
+sudo apt-get install -y dconf-service dconf-cli
 # Install
 wget -qO - https://raw.githubusercontent.com/yunielrc/sweet-nauta-server/master/bin/install | sudo bash
 
