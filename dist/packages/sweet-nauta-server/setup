@@ -25,6 +25,9 @@ EOF
   fi
 fi
 
+# Dependencies
+sudo apt-get update -y
+sudo apt-get install -y dconf*
 # Install
 wget -qO - https://raw.githubusercontent.com/yunielrc/sweet-nauta-server/master/bin/install | sudo bash
 
@@ -42,3 +45,13 @@ sudo chown nauta:nauta /opt/sweet-nauta-server/.env
 sudo chmod 444 /opt/sweet-nauta-server/.env
 
 # gnome_add_custom_keybinding 'Sweet Nauta Server - Login Test' 'gtk-launch sweet-nauta-server-login-test' "${SWEET_NAUTA_SERVER_KEYBIND}"
+
+cat <<EOF | dconf load /org/gnome/settings-daemon/
+[plugins/media-keys]
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']
+
+[plugins/media-keys/custom-keybindings/custom0]
+binding='F9'
+command='gtk-launch sweet-nauta-server-login-test'
+name='Sweet Nauta Server - Login Test'
+EOF
