@@ -4,4 +4,4 @@ set -euEo pipefail
 
 # Install dependencies
 sudo apt-get update -y
-sudo apt-get install -y gpg || :
+sudo apt-get install -y gpg
