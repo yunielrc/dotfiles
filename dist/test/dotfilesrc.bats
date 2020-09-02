@@ -130,9 +130,3 @@ ERROR> Installing package: pkgfail, executing package setup"
   run grep "BASHC_PLUGINS+=($plugin)" "$DOTF_BASH_GEN_SETTINGS_FILE"
   assert_output "BASHC_PLUGINS+=($plugin)"
 }
-
-@test 'should add custom keybindings' {
-  type -P gsettings
-
-  gnome_add_custom_keybinding 'Terminal' 'gtk-launch org.gnome.Terminal' 'F12'
-}
