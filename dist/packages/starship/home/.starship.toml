@@ -1,5 +1,12 @@
 # add_newline = false
 
+[docker_context]
+disabled = false
+# only_with_files = true
+
+[directory]
+truncation_length = 8
+
 [aws]
 disabled = true
 
