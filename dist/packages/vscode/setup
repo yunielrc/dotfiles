@@ -6,6 +6,9 @@ set -euEo pipefail
 wget -qO - https://raw.githubusercontent.com/yunielrc/install-scripts/master/dist/packages/vscode/vscode-ubuntu | bash
 
 # Configure
+# font
+sudo apt update -y
+sudo apt install -y fonts-firacode
 # extensions dependencies
 apt-i bats shellcheck
 type -P gem && gem install --user-install solargraph
