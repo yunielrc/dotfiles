@@ -4,3 +4,6 @@
 [submodule "dist/packages/vim8+/homeln/.vim/pack/plugins/start/vim-toml"]
 	path = dist/packages/vim8+/homeln/.vim/pack/plugins/start/vim-toml
 	url = https://github.com/cespare/vim-toml.git
+[submodule "dist/packages/vim8+/homeln/.vim/pack/tpope/start/surround"]
+	path = dist/packages/vim8+/homeln/.vim/pack/tpope/start/surround
+	url = https://tpope.io/vim/surround.git
