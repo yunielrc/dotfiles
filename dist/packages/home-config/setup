@@ -8,6 +8,7 @@ apt-i fonts-firacode dconf-service dconf-cli
 
 # Install
 apt-i gpg
+brew install neofetch
 
 # Config
 ## gnome apps
