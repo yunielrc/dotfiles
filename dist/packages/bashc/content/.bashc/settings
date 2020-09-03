@@ -8,4 +8,5 @@ HISTFILESIZE=1000000
 BASHC_THEME=starship
 # BASHC_THEME=bash-git-prompt
 # BASHC_THEME=sexy-bash-prompt
+
 # BASHC_PLUGINS+=()

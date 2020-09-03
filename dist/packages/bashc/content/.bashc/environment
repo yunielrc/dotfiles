@@ -25,9 +25,13 @@ export LC_ALL='en_US.UTF-8';
 #   export MANPAGER='most'
 # }
 
-type -P bat &> /dev/null && {
-  export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-  export MANROFFOPT="-c"
+# type -P bat &> /dev/null && {
+#   export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+#   export MANROFFOPT="-c"
+# }
+
+type -P vim &> /dev/null && {
+  export MANPAGER="vim -c 'set nonumber' -M +MANPAGER - --not-a-term"
 }
 
 PATH="${PATH}:${HOME}/.local/bin"
