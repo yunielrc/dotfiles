@@ -15,6 +15,7 @@ dotf-i node
 
 echoc '>> APT packages'
 
+apt-i glances
 apt-i asciinema
 apt-i wget
 apt-i curl
