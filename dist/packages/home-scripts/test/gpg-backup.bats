@@ -78,7 +78,7 @@ mybackup.gpg'
   }
   export -f backup
 
-  export PREFIX_DIR="$(realpath ./fixtures/gpg-backup/)"
+  export ETC_DIR="$(realpath ./fixtures/gpg-backup/)"
   run "${REL_BIN}/gpg-backup" backup
 
   assert_success

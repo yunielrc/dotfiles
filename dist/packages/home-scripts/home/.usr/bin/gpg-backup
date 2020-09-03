@@ -9,13 +9,10 @@ set -euEo pipefail
 
 # Constants
 readonly SCRIPT_NAME="$(basename "${0}")"
-readonly PREFIX_DIR="${PREFIX_DIR:-"$(realpath ~/)"}"
-readonly ENV_FILE="${PREFIX_DIR}/.${SCRIPT_NAME}.env"
-readonly WORK_DIR="${WORK_DIR:-"$PWD"}"
-cd "$WORK_DIR"
-
-readonly MEM_DIR="/dev/shm/$(uuidgen)"
-mkdir "$MEM_DIR"
+readonly ETC_DIR="${ETC_DIR:-"$(realpath ~/)"}"
+readonly ENV_FILE="${ETC_DIR}/.${SCRIPT_NAME}.env"
+readonly WORK_DIR="${WORK_DIR:-"$PWD"}" && cd "$WORK_DIR"
+readonly TMP_DIR="/dev/shm/$(uuidgen)" && mkdir "$TMP_DIR"
 
 readonly PUBLIC_KEY=public_key.asc
 readonly PRIVATE_KEY=private_key.asc
@@ -45,14 +42,14 @@ gpgtar_symmetric_encrypt() {
     local -r backup_file="$2"
 
     (
-      cd "$MEM_DIR"
+      cd "$TMP_DIR"
       gpg --armor --export "$recipient" >"$PUBLIC_KEY"
       gpg --armor --export-secret-keys "$recipient" >"$PRIVATE_KEY"
       gpg --export-ownertrust >"$OWNERTRUST"
 
       gpgtar_symmetric_encrypt gpg-backup.gpg .
     )
-    mv "${MEM_DIR}/gpg-backup.gpg" "$backup_file"
+    mv "${TMP_DIR}/gpg-backup.gpg" "$backup_file"
   }
 }
 
@@ -62,7 +59,7 @@ backup_parse_args() {
   local backup_file
 
   while [[ $# -gt 0 ]]; do
-    case "${1:-}" in
+    case "$1" in
     -h | --help)
       usage_backup
       return 0
@@ -79,13 +76,8 @@ backup_parse_args() {
     esac
   done
 
-  if [[ -z "${recipient:-}" ]]; then
-    recipient="$GPG_RECIPIENT"
-  fi
-
-  if [[ -z "${backup_file:-}" ]]; then
-    backup_file="gpg-backup-$(printf '%(%Y%m%d%H%M%S)T').gpg"
-  fi
+  : "${recipient:="$GPG_RECIPIENT"}"
+  : "${backup_file:="gpg-backup-$(printf '%(%Y%m%d%H%M%S)T').gpg"}"
 
   backup "$recipient" "$backup_file"
 }
@@ -125,7 +117,7 @@ gpgtar_symmetric_decrypt() {
     local -r backup_file="$(realpath "$1")"
 
     (
-      cd "$MEM_DIR"
+      cd "$TMP_DIR"
       gpgtar_symmetric_decrypt "$backup_file"
 
       gpg --import "$PUBLIC_KEY"
@@ -140,7 +132,7 @@ restore_parse_args() {
   local backup_file
 
   while [[ $# -gt 0 ]]; do
-    case "${1:-}" in
+    case "$1" in
     -h | --help)
       usage_restore
       return 0
@@ -197,7 +189,7 @@ on_exit() {
     echo
     usage
   fi
-  rm --recursive "$MEM_DIR"
+  rm --recursive "$TMP_DIR"
 }
 trap on_exit INT TERM EXIT
 
@@ -205,7 +197,7 @@ main() {
   [[ $# == 0 ]] && set -- '-h'
 
   while [[ $# -gt 0 ]]; do
-    case "${1:-}" in
+    case "$1" in
     -h | --help)
       usage
       return 0
