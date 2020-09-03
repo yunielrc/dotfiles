@@ -109,6 +109,7 @@ echoc 'Text editors'
 dotf-i typora
 
 echoc 'Development'
+dotf-i git --force
 dotf-i vscode
 dotf-i postman
 dotf-i insomnia

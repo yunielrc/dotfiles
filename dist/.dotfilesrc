@@ -298,13 +298,13 @@ export -f dotf-i
 
 ## :dotfiles functions
 
-apt-u() { sudo apt update -y; }
+apt-u() { sudo apt-get update -y; }
 export -f apt-u
 
-apt-ug() { sudo apt upgrade -y; }
+apt-ug() { sudo apt-get upgrade -y; }
 export -f apt-ug
 
-apt-i() { sudo apt install -y "$@"; }
+apt-i() { sudo apt-get install -y "$@"; }
 export -f apt-i
 
 add_apt_key() {

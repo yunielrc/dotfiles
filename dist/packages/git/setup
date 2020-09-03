@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+# Install
+apt-u
+apt-i git

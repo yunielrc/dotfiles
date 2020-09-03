@@ -10,6 +10,9 @@
   # Commit
   c = commit
 
+	# Commit all changes.
+	ca = !git add --all && git commit --all --verbose
+
   # Add
   a = add
 
@@ -34,8 +37,6 @@
   # Update submodules
   suu = submodule update --remote
 
-	# Commit all changes.
-	ca = !git add --all && git commit --all --verbose
 
 	# Switch to a branch, creating it if necessary.
 	go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
