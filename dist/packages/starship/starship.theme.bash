@@ -1,3 +1,4 @@
+export STATUS
 eval "$(starship init bash)"
 export STARSHIP_CONFIG=~/.starship.toml
 
@@ -11,6 +12,6 @@ export STARSHIP_CONFIG=~/.starship.toml
 # $ trap -- 'starship_preexec "$_"' DEBUG
 # ------------------------------------------------
 # the solution:
-trap - DEBUG
+# trap - DEBUG
 # $ trap -p DEBUG
 # $ # no DEBUG signal handlers now
