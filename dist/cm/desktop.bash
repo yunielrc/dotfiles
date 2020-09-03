@@ -10,10 +10,12 @@ dotf-i root-config
 dotf-i home-config
 dotf-i home-scripts
 dotf-i docker
+dotf-i node
 # :base
 
 echoc '>> APT packages'
 
+apt-i asciinema
 apt-i wget
 apt-i curl
 apt-i zip unzip
@@ -36,6 +38,7 @@ apt-i pinta
 apt-i assaultcube
 apt-i tldr
 apt-i most
+apt-i fortune cowsay
 # apt-i gimp gimp-help-en gimp-help-es
 
 echoc '>> BREW packages'
@@ -54,6 +57,8 @@ brew install ytop
 brew install tealdeer
 brew install grex
 brew install cointop
+brew install neofetch
+brew install lolcat
 
 echoc '>> CARGO packages'
 
@@ -104,7 +109,6 @@ echoc 'Text editors'
 dotf-i typora
 
 echoc 'Development'
-dotf-i node
 dotf-i vscode
 dotf-i postman
 dotf-i insomnia
