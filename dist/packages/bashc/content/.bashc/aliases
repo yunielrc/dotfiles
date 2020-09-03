@@ -26,6 +26,6 @@ alias proxmox-wakeup="wakeonlan ${PROXMOX_MAC}"
 # storage server
 alias storage-wakeup="wakeonlan ${STORAGE_MAC}"
 
-# outdoor router
-alias orouter-reboot='ssh orouter reboot'
-alias orouter-newid="ssh lanbot.${lan} cron/airos-random-mac-name; echo $?"
+# tools
+alias fd="fd --exclude 'apt-cacher-ng/'"
+alias rg="rg --glob '!apt-cacher-ng/' --glob '!.portainer/data'"

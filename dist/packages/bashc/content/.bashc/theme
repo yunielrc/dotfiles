@@ -1,9 +1,15 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2154
+
 # Command Prompt
 PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\n\$ '
 
 # Terminal Message
-echo
+# echo
 # fortune | cowsay | lolcat
-neofetch --disk_show '/' '/home'
+# echo
+# neofetch -L
 # pfetch
 # fortune | figlet | lolcat
+echo
+cat "${BASHC_PATH}/themes/user/ascii-art/ubuntu.ascii"
