@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+# Config
+# in postsetup '~/.vim' symlink exists
+wget https://raw.githubusercontent.com/amix/vimrc/master/vimrcs/basic.vim -O ~/.vim/local/basic.vim
