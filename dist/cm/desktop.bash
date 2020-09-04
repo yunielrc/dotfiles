@@ -75,10 +75,8 @@ echoc '>> DOTFILES packages'
 dotf-i backup-home
 dotf-i bash-git-prompt
 dotf-i sexy-bash-prompt
-
 echoc 'Text Editors'
 dotf-i vim8+
-
 echoc 'Tools'
 dotf-i fzf
 dotf-i bandwhich
