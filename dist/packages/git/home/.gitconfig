@@ -35,11 +35,14 @@
 	# Clone a repository including all submodules.
 	cl = clone --recurse-submodules
 
-  # Add submodule
+  # Add the given repository as a submodule at the given path
   sua = submodule add
-  # Update submodules
+
+  # Update the registered submodules
   suu = submodule update --remote
 
+  # Unregister the given submodules
+  sud = git submodule deinit --force
 
 	# Switch to a branch, creating it if necessary.
 	go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
