@@ -13,5 +13,11 @@
   "spellright.documentTypes": [
     "markdown",
     "latex"
-  ]
+  ],
+  "search.exclude": {
+    ".vagrant/": true
+  },
+  "files.exclude": {
+    ".vagrant/": true
+  }
 }

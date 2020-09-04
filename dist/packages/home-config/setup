@@ -4,7 +4,7 @@ set -euEo pipefail
 
 # Dependencies
 apt-u
-apt-i fonts-firacode dconf-service dconf-cli
+apt-i fonts-firacode dconf-service dconf-cli network-manager
 
 # Install
 apt-i gpg
@@ -14,3 +14,8 @@ brew install neofetch
 ## gnome apps
 dconf load /org/gnome/ < "${PKG_PATH}/org.gnome.dconf"
 
+## import open vpn profiles
+for vpn in "${PKG_PATH}/ovpn-profiles"/*.ovpn; do
+  [[ -f "$vpn" ]] || continue
+  nmcli connection import type openvpn file "$vpn" || :
+done
