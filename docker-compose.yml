@@ -17,9 +17,9 @@ x-base: &base
   volumes:
     - "./:${DOCKER_MOUNT}:ro"
   tmpfs:
-    - "${DOCKER_MOUNT}/dist/packages/bashc/content/.bashc/plugins/local:uid=1000,gid=1000"
-    - "${DOCKER_MOUNT}/dist/packages/bashc/content/.bashc/themes/local:uid=1000,gid=1000"
-    - "${DOCKER_MOUNT}/dist/packages/bashc/content/.bashc/gen:uid=1000,gid=1000"
+    - "${DOCKER_MOUNT}/dist/packages/bashc/homeln/.bashc/plugins/local:uid=1000,gid=1000"
+    - "${DOCKER_MOUNT}/dist/packages/bashc/homeln/.bashc/themes/local:uid=1000,gid=1000"
+    - "${DOCKER_MOUNT}/dist/packages/bashc/homeln/.bashc/gen:uid=1000,gid=1000"
   environment:
     - RUN_ON_DOCKER=true
     - USER=${DOCKER_USER}

@@ -1,7 +1,7 @@
 **/local/*
-**/3rd/*
-!**/.gitkeep
 !**/local/README.md
+!**/.gitkeep
+
 **/*.local
 **/*.local.*
 !**/.local/
@@ -14,3 +14,4 @@
 /.env.override.*
 /dist/.env
 /dist/.env.override.*
+**/*.ovpn
