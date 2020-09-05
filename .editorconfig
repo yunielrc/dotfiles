@@ -19,3 +19,6 @@ trim_trailing_whitespace = false
 max_line_length = 500
 trim_trailing_whitespace = false
 insert_final_newline = false
+
+[.rsyncignore]
+insert_final_newline = false

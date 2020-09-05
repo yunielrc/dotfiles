@@ -22,13 +22,15 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  config.vm.synced_folder ".", ENV['AWS_WORKDIR'], type: "rsync", rsync__exclude: ['*~','content/.bashc/plugins/local/*','content/.bashc/themes/local/*','content/.bashc/gen/*','.git'], rsync__auto: true
+  config.vm.synced_folder ".", ENV['AWS_WORKDIR'], type: "rsync",
+    rsync__exclude: File::readlines("./.rsyncignore", chomp: true),
+    rsync__auto: true
 
   script = <<-SCRIPT
   cat #{ENV['AWS_WORKDIR']}/.env.override.server >> #{ENV['AWS_WORKDIR']}/.env
   cat #{ENV['AWS_WORKDIR']}/dist/.env.override.server >> #{ENV['AWS_WORKDIR']}/dist/.env
   SCRIPT
-  config.vm.provision "shell", inline: script, privileged: false
+  config.vm.provision "shell", inline: script, privileged: false, run: "always"
   config.vm.provision "shell", path: "./vagrant/provision/ubuntu-base.bash", env: local_env
 
   # this vm is not reusable, everything runs directly inside the vm

@@ -10,9 +10,5 @@ readonly ssh_user="$(echo "$ssh_config" | grep -P '\s*User\s+' | sed -e 's/^\s*U
 
 rsync -avzL \
       --progress \
-      --exclude '*~' \
-      --exclude 'content/.bashc/plugins/local/*' \
-      --exclude 'content/.bashc/themes/local/*' \
-      --exclude 'content/.bashc/gen/*' \
-      --exclude '.git' \
-      . "${ssh_user}@${ssh_host_name}":~/dotfiles
+      --exclude-from=./.rsyncignore \
+      . "${ssh_user}@${ssh_host_name}:${AWS_WORKDIR}"
