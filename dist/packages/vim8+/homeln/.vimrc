@@ -10,7 +10,8 @@ set tabstop=2
 set number
 color default
 set background=dark
-" set statusline+=%F
+set foldcolumn=0
+set statusline+=\ \ %P
 " set mouse=a
 " map <ScrollWheelUp> <C-Y>
 " map <ScrollWheelDown> <C-E>
