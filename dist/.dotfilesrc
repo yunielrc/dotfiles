@@ -292,18 +292,26 @@ dotf-i() {
   ecode="${PIPESTATUS[0]}"
 
   if [[ $DOTF_LOG_ERRORS == true && "$ecode" -ne 0 ]]; then
+    __log_error "$out_file"
+  fi
+  return "$ecode"
+}
+export -f dotf-i
+
+__log_error() {
+  local -r errmsg_file="$1"
+  [[ -f "$errmsg_file" ]]
+
 cat <<EOF >> ~/.dotfiles.err.log
 
 --------------------------------------------------------------
 $(date +%Y%m%d-%H%M%S)
 --------------------------------------------------------------
-$(cat "$out_file")
+$(cat "$errmsg_file")
 EOF
-  fi
-  rm -f "$out_file"
-  return "$ecode"
+  rm -f "$errmsg_file"
 }
-export -f dotf-i
+export -f __log_error
 
 ## :dotfiles functions
 
@@ -313,8 +321,29 @@ export -f apt-u
 apt-ug() { sudo apt-get upgrade -y; }
 export -f apt-ug
 
-apt-i() { sudo apt-get install -y "$@"; }
+apt-i() {
+  local -i ecode
+  local -r out_file="$(mktemp)"
+  sudo apt-get install -y "$@" 2>&1 | tee "$out_file"
+  ecode="${PIPESTATUS[0]}"
+
+  if [[ $DOTF_LOG_ERRORS == true && "$ecode" -ne 0 ]]; then
+    __log_error "$out_file"
+  fi
+}
 export -f apt-i
+
+brew-i() {
+  local -i ecode
+  local -r out_file="$(mktemp)"
+  brew install "$@" 2>&1 | tee "$out_file"
+  ecode="${PIPESTATUS[0]}"
+
+  if [[ $DOTF_LOG_ERRORS == true && "$ecode" -ne 0 ]]; then
+    __log_error "$out_file"
+  fi
+}
+export -f brew-i
 
 add_apt_key() {
   local -r apt_key="$1"

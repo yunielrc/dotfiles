@@ -10,6 +10,9 @@ truncation_length = 8
 [aws]
 disabled = true
 
+[status]
+disabled = false
+
 [custom.error]
 description = "The exit code of the last executed command"
 prefix = "exit "

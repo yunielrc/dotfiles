@@ -44,22 +44,22 @@ apt-i fortune cowsay
 
 echoc '>> BREW packages'
 # so slow executin with starship prompt: $ time for i in $(seq 1 1000000); do [ 1 = 1 ]; done
-brew install fd
-brew install rg
-brew install bat
-brew install exa
-brew install procs
-brew install sd
-brew install dust
-brew install tealdeer
-brew install tokei
+brew-i fd
+brew-i rg
+brew-i bat
+brew-i exa
+brew-i procs
+brew-i sd
+brew-i dust
+brew-i tealdeer
+brew-i tokei
 brew tap cjbassi/ytop
-brew install ytop
-brew install tealdeer
-brew install grex
-brew install cointop
-brew install neofetch
-brew install lolcat
+brew-i ytop
+brew-i tealdeer
+brew-i grex
+brew-i cointop
+brew-i neofetch
+brew-i lolcat
 
 echoc '>> CARGO packages'
 
