@@ -1,8 +1,7 @@
 load test_helper
 
 @test 'should install lsd' {
-  type -P brew || skip
-  bash ../setup
-
+  dotf-i lsd
+  eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
   type -P lsd
 }

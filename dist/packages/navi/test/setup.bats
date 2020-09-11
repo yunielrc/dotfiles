@@ -1,9 +1,7 @@
 load test_helper
 
-
-@test 'should install & configure navi' {
-  type -P brew || skip
-  bash ../setup
-
+@test 'should install navi' {
+  dotf-i navi
+  eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
   type -P navi
 }

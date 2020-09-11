@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euEo pipefail
 
+# Dependencies
+dotf-i brew
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
 # Install
 brew install bandwhich
 sudo ln --symbolic --force --verbose "$(type -P bandwhich)" /usr/local/bin/bandwhich

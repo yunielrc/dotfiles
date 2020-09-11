@@ -1,8 +1,7 @@
 load test_helper
 
-@test 'should install bandwhich & config' {
-  type -P brew || skip
-  bash ../setup
-
+@test 'should install bandwhich' {
+  dotf-i bandwhich
+  eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
   type -P bandwhich
 }

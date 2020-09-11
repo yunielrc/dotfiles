@@ -1,7 +1,7 @@
 load test_helper
 
 @test 'should install fzf' {
-  type -P brew || skip
   dotf-i fzf
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   type -P fzf
 }

@@ -1,9 +1,7 @@
 load test_helper
 
-
 @test 'should install & configure starship' {
-  type -P brew || skip
   dotf-i starship
-
+  eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
   type -P starship
 }

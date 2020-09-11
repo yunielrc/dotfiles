@@ -2,4 +2,9 @@
 
 set -euEo pipefail
 
+# Dependencies
+dotf-i brew
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# Install
 brew install lsd
