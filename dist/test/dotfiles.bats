@@ -8,7 +8,7 @@ setup() {
   run bash "${DIST_PATH}/dotfiles" config1
 
   assert_failure 1
-  assert_output --regexp "ERROR> Configuration management '.*/dist/test/fixtures/cm/config1.bash' doesn't exists"
+  assert_line --index 0 --regexp "ERROR> Configuration management 'config1' doesn't exists"
 }
 
 @test 'should run configuration' {
@@ -19,12 +19,14 @@ setup() {
   assert_line --index 2 "pkgfail setup"
   assert_line --index 3 "ERROR> Installing package: pkgfail, executing package setup"
   assert_line --index 4 "> FAIL. Installing package pkgfail"
-  assert_line --index 5 "> Installing package brew"
-  assert_line --index 6 "brew setup"
-  assert_line --index 7 "INFO> Installing bash plugin: brew"
-  assert_line --index 8 --regexp "'/tmp/.*/brew.plugin.bash' -> '/home/ubuntu/dotfiles/dist/test/fixtures/packages/brew/content/brew.plugin.bash'"
-  assert_line --index 9 --regexp "INFO> DONE. Installing bash plugin: brew"
-  assert_line --index 10 --regexp "> DONE. Installing package brew"
+  assert_line --index 5 "> Installing package brew1"
+  assert_line --index 6 "brew1 setup"
+  assert_line --index 7 "INFO> Installing bash plugin: brew1"
+  assert_line --index 8 --regexp "'/tmp/.*/brew1.plugin.bash' -> '.*/dist/test/fixtures/packages/brew1/content/brew1.plugin.bash'"
+  assert_line --index 9 --regexp "INFO> DONE. Installing bash plugin: brew1"
+  assert_line --index 10 --regexp "INFO> Installing bash theme: brew1"
+  assert_line --index 12 --regexp "INFO> DONE. Installing bash theme: brew1 "
+  assert_line --index 13 --regexp "> DONE. Installing package brew1"
 }
 
 

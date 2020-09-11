@@ -1,2 +1,2 @@
 dotf-i pkgfail
-dotf-i brew
+dotf-i brew1

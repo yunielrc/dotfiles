@@ -14,38 +14,38 @@ setup() {
 
 @test "plugin dir doesn't exists" {
     DOTF_BASH_PLUGINS_DIR="123456654321"
-    run __install_plugin 'brew'
+    run __install_plugin 'brew1'
 
     assert_failure 11
-    assert_output "INFO> Installing bash plugin: brew
-ERROR> Installing bash plugin: brew, plugins dir doesn't exist: 123456654321"
+    assert_output "INFO> Installing bash plugin: brew1
+ERROR> Installing bash plugin: brew1, plugins dir doesn't exist: 123456654321"
 }
 
 @test 'plugin: error creating link' {
   chmod 0550 "${DOTF_BASH_PLUGINS_DIR}"
 
-  run __install_plugin 'brew'
+  run __install_plugin 'brew1'
 
   assert_failure 12
-  assert_line --index 2 'ERROR> Installing bash plugin: brew, creating link'
+  assert_line --index 2 'ERROR> Installing bash plugin: brew1, creating link'
 }
 
 @test 'error adding plugin to settings' {
   chmod 0440 "${DOTF_BASH_GEN_SETTINGS_FILE}"
 
-  run __install_plugin 'brew'
+  run __install_plugin 'brew1'
 
   assert_failure 13
-  assert_line --index 3 'ERROR> Installing bash plugin: brew, adding plugin to settings'
+  assert_line --index 3 'ERROR> Installing bash plugin: brew1, adding plugin to settings'
 }
 
 @test "should install plugin" {
-  local -r plugin='brew'
+  local -r plugin='brew1'
 
   run __install_plugin "$plugin"
 
   assert_success
-  assert_line --index 2 --regexp "INFO> DONE. Installing bash plugin: brew"
+  assert_line --index 2 --regexp "INFO> DONE. Installing bash plugin: brew1"
 
   [[ -L "${DOTF_BASH_PLUGINS_DIR}/${plugin}.plugin.bash" && -f "${DOTF_BASH_PLUGINS_DIR}/${plugin}.plugin.bash" ]]
 
@@ -62,29 +62,29 @@ ERROR> Installing bash plugin: brew, plugins dir doesn't exist: 123456654321"
 
 @test "theme dir doesn't exists" {
     DOTF_BASH_THEMES_DIR="123456654321"
-    run __install_theme 'brew'
+    run __install_theme 'brew1'
 
     assert_failure 11
-    assert_output "INFO> Installing bash theme: brew
-ERROR> Installing bash theme: brew, themes dir doesn't exist: 123456654321"
+    assert_output "INFO> Installing bash theme: brew1
+ERROR> Installing bash theme: brew1, themes dir doesn't exist: 123456654321"
 }
 
 @test 'theme: error creating link' {
   chmod 0550 "${DOTF_BASH_THEMES_DIR}"
 
-  run __install_theme 'brew'
+  run __install_theme 'brew1'
 
   assert_failure 12
-  assert_line --index 2 'ERROR> Installing bash theme: brew, creating link'
+  assert_line --index 2 'ERROR> Installing bash theme: brew1, creating link'
 }
 
 @test "should install theme" {
-  local -r theme='brew'
+  local -r theme='brew1'
 
   run __install_theme "$theme"
 
   assert_success
-  assert_line --index 2 --regexp "INFO> DONE. Installing bash theme: brew"
+  assert_line --index 2 --regexp "INFO> DONE. Installing bash theme: brew1"
 
   [[ -L "${DOTF_BASH_THEMES_DIR}/${theme}.theme.bash" && -f "${DOTF_BASH_THEMES_DIR}/${theme}.theme.bash" ]]
 }
@@ -106,24 +106,24 @@ ERROR> Installing package: pkgfail, executing package setup"
 }
 
 @test 'should no install package, plugin fail' {
-  local -r pkg='brew'
+  local -r pkg='brew1'
   local -r plugin="$pkg"
   chmod 0440 "${DOTF_BASH_GEN_SETTINGS_FILE}"
 
   run __install_package "$pkg"
 
   assert_failure 12
-  assert_line --index 5 'ERROR> Installing package: brew, installing bash plugin'
+  assert_line --index 5 'ERROR> Installing package: brew1, installing bash plugin'
 }
 
 @test 'should install package' {
-  local -r pkg='brew'
+  local -r pkg='brew1'
   local -r plugin="$pkg"
   run __install_package "$pkg"
 
   assert_success
-  assert_line --index 0 --regexp "brew setup"
-  assert_line --index 3 --regexp "INFO> DONE. Installing bash plugin: brew"
+  assert_line --index 0 --regexp "brew1 setup"
+  assert_line --index 3 --regexp "INFO> DONE. Installing bash plugin: brew1"
 
   [[ -L "${DOTF_BASH_PLUGINS_DIR}/${plugin}.plugin.bash" && -f "${DOTF_BASH_PLUGINS_DIR}/${plugin}.plugin.bash" ]]
 
