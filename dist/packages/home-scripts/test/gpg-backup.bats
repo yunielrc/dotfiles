@@ -1,4 +1,14 @@
-load test_helper
+load test_helper_gpg
+
+setup_file() {
+  gpg --batch --yes --passphrase '' --quick-gen-key gpgid default default 0
+  [[ ! -d ~/.gnupg ]] && mkdir ~/.gnupg
+  cat <<EOF >> ~/.gnupg/gpg.conf
+use-agent
+pinentry-mode loopback
+EOF
+  echo 'allow-loopback-pinentry' > ~/.gnupg/gpg-agent.conf
+}
 
 @test 'main: show usage' {
   run "${REL_BIN}/gpg-backup"

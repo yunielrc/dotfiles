@@ -19,11 +19,16 @@ readonly PRIVATE_KEY=private_key.asc
 readonly OWNERTRUST=ownertrust
 
 
+# Config
+
 if [[ -f "$ENV_FILE" ]]; then
   set -o allexport
   . "$ENV_FILE"
   set +o allexport
 fi
+
+
+# Functions
 
 gpgtar_symmetric_encrypt() {
   local -r output="$1"
