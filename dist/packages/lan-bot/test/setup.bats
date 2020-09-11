@@ -1,7 +1,6 @@
 load test_helper
 
 @test 'should install lan-bot & config' {
-  apt-u
   dotf-i lan-bot
   type -P airos-random-mac-name
   type -P airos-random-mac-name-log
