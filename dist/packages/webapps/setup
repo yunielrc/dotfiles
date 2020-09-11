@@ -2,11 +2,6 @@
 
 set -euEo pipefail
 
-mkdir --parents ~/.local/share/{applications,icons} || :
+[[ -d ~/.local/share/applications/webapps ]] && rm --recursive --force --verbose ~/.local/share/applications/webapps
 
-readonly content_dir="$(realpath ~/.local/share)"
-readonly applications_dir="${content_dir}/applications"
-readonly icons_dir="${content_dir}/icons"
-
-ln --symbolic --force --verbose "${PKG_CONTENT}/applications/webapps" "$applications_dir"
-cp --force --verbose "${PKG_CONTENT}"/icons/webapps/* "$icons_dir"
+exit 0

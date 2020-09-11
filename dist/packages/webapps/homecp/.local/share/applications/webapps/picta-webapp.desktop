@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Picta
+Comment=Plataforma cubana de contenidos audiovisuales. Ofrece el servicio de televisión en vivo a través de streaming de video.
+Categories=Video;TV;
+Keywords=entretenimiento;películas;pelis;films;shows;series;streaming;videos;docu;documentales;webapp;
+Exec=/opt/google/chrome/google-chrome --app=https://www.picta.cu/home
+Icon=picta
+Terminal=false
+Type=Application
+StartupWMClass=www.picta.cu__home

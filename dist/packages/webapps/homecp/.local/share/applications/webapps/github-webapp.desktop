@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Github
+Comment=GitHub is a development platform inspired by the way you work, you can host and review code, manage projects, and build software alongside 50 million developers.
+Categories=Development;
+Keywords=git;repo;codigo;forja;source;repository;DEV;development;desarrollo;webapp;
+Exec=/opt/google/chrome/google-chrome --app=https://github.com
+Icon=github
+Terminal=false
+Type=Application
+StartupWMClass=github.com
