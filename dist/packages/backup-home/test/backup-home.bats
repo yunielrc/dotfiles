@@ -38,18 +38,18 @@ teardown() {
 
   output="$(echo "$output" | sed -e '/^$/d' -e '/^sending/d' -e '/^sent/d' -e '/^total/d')"
   assert_success
-  assert_output 'd1/
+  assert_output 'd with spaces1/
+d with spaces1/f1
+d with spaces1/f2
+d with spaces1/f4
+d with spaces1/f5
+d1/
 d1/f1
 d1/f2
 d2/
 d2/f1
 d2/f2
-d2/f3
-d with spaces1/
-d with spaces1/f1
-d with spaces1/f2
-d with spaces1/f4
-d with spaces1/f5'
+d2/f3'
 }
 
 @test 'should restore backup' {

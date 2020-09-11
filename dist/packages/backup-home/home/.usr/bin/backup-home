@@ -32,7 +32,7 @@ mount_nfs_device() {
   local -r mount_source="$1"
   local -r mount_target="$2"
 
-  if ! findmnt --types nfs --source "$mount_source" --target "$mount_target" > /dev/null; then
+  if ! findmnt --types nfs --source "$mount_source" --target "$mount_target" >/dev/null; then
     [[ ! -d "$mount_target" ]] && mkdir --verbose --parents "$mount_target"
     sudo mount -t nfs "$mount_source" "$mount_target"
   fi
@@ -80,9 +80,9 @@ make_home_backup() {
   return 0
 }
 
-usage(){
+usage() {
 
-cat <<HELPMSG
+  cat <<HELPMSG
 Usage:
 ${SCRIPT_NAME} [OPTIONS] COMMAND
 
@@ -117,8 +117,7 @@ Exit status:
 HELPMSG
 }
 
-
-main(){
+main() {
 
   [[ "$#" == 0 ]] && set -- '-h'
 
@@ -127,15 +126,15 @@ main(){
 
   while [[ $# -gt 0 ]]; do
     case "${1:-}" in
-      -h|--help)
-        usage
-        exit 0
+    -h | --help)
+      usage
+      exit 0
       ;;
-      -n|--no-mount-nfs)
-        no_mount_nfs=true
-        shift
+    -n | --no-mount-nfs)
+      no_mount_nfs=true
+      shift
       ;;
-      *) # unknown flag/switch
+    *) # unknown flag/switch
       positional+=("$1")
       shift
       ;;
@@ -151,20 +150,24 @@ main(){
 
   while [[ $# -gt 0 ]]; do
     case "${1:-}" in
-      backup)
-        [[ $no_mount_nfs ]] || mount_nfs_device "$MOUNT_SOURCE" "$BACKUP_TARGET"
-        make_home_backup "$BACKUP_TARGET" "${EXCLUDE_FOLDERS:-}"
-        return $?
+    backup)
+      if [[ $no_mount_nfs == false ]]; then
+        mount_nfs_device "$MOUNT_SOURCE" "$BACKUP_TARGET"
+      fi
+      make_home_backup "$BACKUP_TARGET" "${EXCLUDE_FOLDERS:-}"
+      return $?
       ;;
-      restore)
-        [[ $no_mount_nfs ]] || mount_nfs_device "$MOUNT_SOURCE" "$BACKUP_TARGET"
-        restore_home_backup "$BACKUP_TARGET"
-        return $?
+    restore)
+      if [[ $no_mount_nfs == false ]]; then
+        mount_nfs_device "$MOUNT_SOURCE" "$BACKUP_TARGET"
+      fi
+      restore_home_backup "$BACKUP_TARGET"
+      return $?
       ;;
-      *)
-        echo -e "Invalid param: ${1}\n" >&2
-        usage
-        return 13
+    *)
+      echo -e "Invalid param: ${1}\n" >&2
+      usage
+      return 13
       ;;
     esac
   done
