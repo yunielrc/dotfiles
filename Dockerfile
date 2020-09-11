@@ -10,12 +10,7 @@ RUN apt-get update -y && \
     useradd --no-log-init --create-home --shell /bin/bash "$USER" && \
     usermod -aG sudo "$USER" && \
     echo "${USER} ALL=NOPASSWD:ALL" > /etc/sudoers.d/nopasswd
-RUN apt-get install -y gnupg && \
-    sudo --user="$USER" gpg --batch --yes --passphrase '' --quick-gen-key gpgid default default 0
-RUN sudo --user="$USER" mkdir -p "/home/$USER/.gnupg" && \
-    sudo --user="$USER" echo 'use-agent' >> "/home/$USER/.gnupg/gpg.conf" && \
-    sudo --user="$USER" echo 'pinentry-mode loopback' >> "/home/$USER/.gnupg/gpg.conf" && \
-    sudo --user="$USER" echo 'allow-loopback-pinentry' >> "/home/$USER/.gnupg/gpg-agent.conf"
+RUN apt-get install -y gnupg
 RUN apt-get update -y && \
     apt-get install -y wget file xz-utils uuid-runtime gnupg tzdata 9base unzip curl iputils-ping cron rsync nfs-common && \
     apt-get install -y --no-install-recommends ubuntu-desktop-minimal gettext && \

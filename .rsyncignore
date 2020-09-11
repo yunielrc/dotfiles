@@ -5,3 +5,5 @@ homeln/.vim/local/*
 homeln/.bashc/gen/*
 homeln/.bashc/plugins/local/*
 homeln/.bashc/themes/local/*
+*.ovpn
+./passwd
