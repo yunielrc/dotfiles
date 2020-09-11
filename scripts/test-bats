@@ -62,18 +62,18 @@ if [[ $# -gt 0 ]]; then
   exit $?
 fi
 
-cd './dist/packages'
-
-echo -e "\n${LIGHTPURPLE}Testing Packages Units${NOCOLOR}\n"
-
 echo -e "\n${LIGHTPURPLE}Testing Units${NOCOLOR}\n"
 
  __test_dir "./dist/test"
 
+cd './dist/packages'
+
+echo -e "\n${LIGHTPURPLE}Testing Packages Units${NOCOLOR}\n"
+
 for pkg in *; do
   echo -e "\n> package: ${YELLOW}${pkg}${NOCOLOR}\n"
 
-  if [[ -n "${BATS_IGNORED_TESTS_PKG:-}" ]] && echo "$BATS_IGNORED_TESTS_PKG" | grep --quiet --word-regexp "$pkg"; then
+  if [[ -n "${TEST_IGNORED_PKG:-}" ]] && echo "$TEST_IGNORED_PKG" | grep --quiet --word-regexp "$pkg"; then
     echo -e "${LIGHTRED}>>TESTS IGNORED${NOCOLOR}"
     continue
   fi

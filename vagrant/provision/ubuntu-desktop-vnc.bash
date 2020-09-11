@@ -15,7 +15,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 sudo -s <<EOF
 apt-get update -y
-apt-get install -y --no-install-recommends ubuntu-desktop-minimal
+apt-get install -y ubuntu-desktop
 apt-get install -y tigervnc-standalone-server tigervnc-common
 apt-get autoremove -y
 apt-get autoclean -y
@@ -73,4 +73,4 @@ EOF
 # disown %%
 
 
-echo -e "\n>>RUN: vncviewer $(dig +short myip.opendns.com @resolver1.opendns.com):5901"
+echo -e "\n>>RUN: vncviewer -passwd ./passwd $(dig +short myip.opendns.com @resolver1.opendns.com):5901"
