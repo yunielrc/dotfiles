@@ -12,15 +12,20 @@ sudo apt-get install -y fonts-firacode \
 
 # Applications without installation script that have personalized configuration in the home
 sudo apt-get install -y gpg \
-                        neofetch
+                        neofetch \
+                        htop
+
+# OpenVPN Gnome plugin
+sudo apt-get install -y network-manager-openvpn-gnome openvpn-systemd-resolved
+sudo systemctl restart network-manager
 
 # Gnome Extension dependencies
 sudo apt-get install -y chrome-gnome-shell
 
-# Sensory Perception
+## Sensory Perception
 sudo apt-get install -y lm-sensors
 
-# Text Translator
+## Text Translator
 sudo apt-get install -y gir1.2-clutter-1.0 \
                         gir1.2-clutter-gst-3.0 \
                         gir1.2-gtkclutter-1.0
@@ -30,13 +35,8 @@ sudo apt-get install -y gir1.2-clutter-1.0 \
   sudo chmod a+x trans
 )
 
-# Nautilus extensions
-# gpg integration
+## nautilus gpg integration
 sudo apt-get install -y seahorse-nautilus
-
-# OpenVPN Gnome plugin
-sudo apt-get install -y network-manager-openvpn-gnome openvpn-systemd-resolved
-sudo systemctl restart network-manager
 
 # Config
 
