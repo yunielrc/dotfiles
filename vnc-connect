@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+readonly vm=vnc
+readonly ssh_config="$(vagrant ssh-config "$vm")"
+readonly ssh_host_name="$(echo "$ssh_config" | grep -P '\s*HostName\s+' | sed -e 's/^\s*HostName\s*//' -e 's/\s*$//')"
+
+vncviewer -passwd ./passwd "${ssh_host_name}:5901"
