@@ -2,6 +2,6 @@
 
 set -euEo pipefail
 
-[[ -d ~/.sexy-bash-prompt ]] && rm --recursive --force ~/.sexy-bash-prompt
+[[ ! -d ~/.sexy-bash-prompt ]] || rm --recursive --force ~/.sexy-bash-prompt
 git clone --depth 1 --config core.autocrlf=false https://github.com/twolfson/sexy-bash-prompt ~/.sexy-bash-prompt
 ln --symbolic --force ~/.sexy-bash-prompt/.bash_prompt ~/
