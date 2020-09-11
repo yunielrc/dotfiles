@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euEo pipefail
+
 # Idempotent
 type -P ghb &> /dev/null && {
   inf 'handbrake currently installed'
