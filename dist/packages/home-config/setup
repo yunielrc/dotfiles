@@ -3,19 +3,50 @@
 set -euEo pipefail
 
 # Dependencies
-apt-u
-apt-i fonts-firacode dconf-service dconf-cli network-manager
+sudo apt-get update -y
+sudo apt-get install -y fonts-firacode \
+                        dconf-service \
+                        dconf-cli network-manager
 
 # Install
-apt-i gpg
-brew install neofetch
+
+# Applications without installation script that have personalized configuration in the home
+sudo apt-get install -y gpg \
+                        neofetch
+
+# Gnome Extension dependencies
+sudo apt-get install -y chrome-gnome-shell
+
+# Sensory Perception
+sudo apt-get install -y lm-sensors
+
+# Text Translator
+sudo apt-get install -y gir1.2-clutter-1.0 \
+                        gir1.2-clutter-gst-3.0 \
+                        gir1.2-gtkclutter-1.0
+(
+  cd /usr/bin
+  sudo wget https://git.io/trans
+  sudo chmod a+x trans
+)
+
+# Nautilus extensions
+# gpg integration
+sudo apt-get install -y seahorse-nautilus
+
+# OpenVPN Gnome plugin
+sudo apt-get install -y network-manager-openvpn-gnome openvpn-systemd-resolved
+sudo systemctl restart network-manager
 
 # Config
-## gnome apps
-dconf load /org/gnome/ < "${PKG_PATH}/org.gnome.dconf"
 
-## import open vpn profiles
+## GNOME Extension & Apps
+envsubst < "${PKG_PATH}/org.gnome.dconf.ini" | dconf load /org/gnome/
+
+## Network
+### Import OpenVPN profiles
 for vpn in "${PKG_PATH}/ovpn-profiles"/*.ovpn; do
   [[ -f "$vpn" ]] || continue
-  nmcli connection import type openvpn file "$vpn" || :
+  nmcli connection import type openvpn file "$vpn" \
+  || sudo nmcli connection import type openvpn file "$vpn"
 done
