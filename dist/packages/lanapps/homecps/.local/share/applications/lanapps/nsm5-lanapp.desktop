@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=NanoStation M5
+Comment=Administra router de exterior CPE
+Categories=Network;Utility;
+Keywords=router;externo;wan;ubiquiti;LAN;NET;ADMIN;NETWORK;settings;administrar;red;ajustes;webapp;
+Exec=/opt/google/chrome/google-chrome --app=http://${OROUTER_IP}:3500
+Icon=nsm5
+Terminal=false
+Type=Application
+StartupWMClass=${OROUTER_IP}
