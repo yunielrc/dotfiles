@@ -1,4 +1,6 @@
-TODO: install dotfile from command
-TODO: install dotfile from specific file outside de project
-TODO: write script before pc disposing: backup gpg, data, etc
-TODO: write scripts for full pc installation: restore gpg backup, install dotfiles, private dotfiles, data, etc
+TODO: rsync script for apt-cacher-ng backup, RESTORE
+  - quiero poder definir en un archivo de configuración una lista de
+    directorios a respaldar, la unidad nfs, y la carpeta en la unidad nfs donde
+    se harán las copias de seguridad
+  - quiero poder ver el log de rsync
+  - quiero que las copias se hagan diariamente

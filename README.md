@@ -112,6 +112,8 @@ before testing you need to do this:
 
 ## Checklists
 
+## Checklists
+
 ## Before PC disposing
 
 - [ ] Backup personal data
@@ -122,10 +124,12 @@ before testing you need to do this:
 
 ## After installing the new PC
 
-- [ ] Restore gpg keys (D)
 - [ ] Pull dotfiles
+- [ ] Install dotf: gpg-backup, rsync-backup
+- [ ] Copy and Restore gpg keys with gpg-backup (D)
 - [ ] Pull private dotfiles (D)
 - [ ] Install private dotfiles
-- [ ] Install dotfiles (backup-home script)
-- [ ] Restore personal data & apt cache
-- [ ] Install dotfiles (needs the apt cache)
+- [ ] Restore apt cache with rsync-backup
+- [ ] Install dotfiles (uses apt cache)
+- [ ] Restore personal
+- [ ] Install dotfiles

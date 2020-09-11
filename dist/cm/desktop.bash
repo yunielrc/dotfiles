@@ -1,49 +1,67 @@
-apt-u
-dotf-i apt-cacher-ng # must be before apt-ug
+# BASE
+# dotf-i apt-cacher-ng # must be before apt-ug
 apt-ug
-# base
-dotf-i brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" # brew must be before bashc
-dotf-i bashc
+dotf-i brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 dotf-i rust && PATH="${PATH}:${HOME}/.cargo/bin"
-apt-i ruby-full
-dotf-i root-config
-dotf-i home-config
-dotf-i home-scripts
-dotf-i docker
-dotf-i node
-# :base
+# apt-i ruby-full
+# :BASE
 
-echoc '>> APT packages'
+echoc '> APT packages'
 
+# timeshift backup
+# sudo add-apt-repository -y ppa:teejee2008/ppa
+# apt-i timeshift
+#
+# ...
+apt-i dconf-editor
+# gui package manager
+apt-i synaptic
+# codecs & fonts
+sudo debconf-set-selections <<<'ttf-mscorefonts-installer       msttcorefonts/accepted-mscorefonts-eulaboolean true'
+apt-i ubuntu-restricted-extras
+# Command-line JSON processor
+apt-i jq
+# Log colorizer
+apt-i ccze
+# Cross-platform monitoring tool
 apt-i glances
+# Easily record/replay terminal sessions
 apt-i asciinema
+# ...
 apt-i wget
+# ...
 apt-i curl
-apt-i zip unzip
-apt-i git
-apt-i htop
+# ...
+apt-i zip unzip rar unrar p7zip-full p7zip-rar
+# Bandwidth monitor
 apt-i bmon
+# NFS client & server
 apt-i nfs-common
+# java
 apt-i default-jre
-# apt-i ubuntu-restricted-extras # caution: this pkg shows interactive dialog
-# apt-i ttf-mscorefonts-installer # caution: this pkg shows interactive dialog
-apt-i lm-sensors
+# ...
 apt-i vlc
+# video player
 apt-i mpv
+# desktop color picker
 apt-i gpick
+# screen recorder
 apt-i kazam
-apt-i gnome-shell-pomodoro
+# hp printer drivers
 apt-i hplip hplip-gui
+# virtualization
 apt-i virtualbox virtualbox-guest-additions-iso
+# paint
 apt-i pinta
+# shooter game
 apt-i assaultcube
+# Simplified man pages with examples
 apt-i tldr
-apt-i most
+# ...
 apt-i fortune cowsay
 # apt-i gimp gimp-help-en gimp-help-es
 
-echoc '>> BREW packages'
-# so slow executin with starship prompt: $ time for i in $(seq 1 1000000); do [ 1 = 1 ]; done
+echoc '> BREW packages'
 brew-i fd
 brew-i rg
 brew-i bat
@@ -51,17 +69,15 @@ brew-i exa
 brew-i procs
 brew-i sd
 brew-i dust
-brew-i tealdeer
+brew-i tealdeer # tldr
 brew-i tokei
 brew tap cjbassi/ytop
 brew-i ytop
-brew-i tealdeer
 brew-i grex
 brew-i cointop
-brew-i neofetch
 brew-i lolcat
 
-echoc '>> CARGO packages'
+echoc '> CARGO packages'
 
 cargo install dutree
 # cargo install exa
@@ -69,50 +85,69 @@ cargo install dutree
 # cargo install du-dust
 # cargo install starship
 
-echoc '>> DOTFILES packages'
+echoc '> DOTFILES packages'
 
-# dotf-i starship
-dotf-i backup-home
+# dotf-i backup-home
+dotf-i root-config
+dotf-i home-config
+dotf-i home-scripts
+
+echoc '>> bash'
+
+echoc '>>> bash themes'
+dotf-i starship
 dotf-i bash-git-prompt
 dotf-i sexy-bash-prompt
-echoc 'Text Editors'
-dotf-i vim8+
-echoc 'Tools'
+
+echoc '>> Tools'
 dotf-i fzf
-dotf-i bandwhich
 dotf-i navi
 dotf-i lsd
+dotf-i lan-bot
 
-echoc 'Video'
+echoc '>> Video & Streaming'
 dotf-i celluloid
 dotf-i handbrake
 dotf-i popcorn-time
 dotf-i stremio
-
-echoc 'Web apps'
-dotf-i webapps
-
-echoc 'Internet'
-dotf-i google-chrome
 dotf-i 4kvideodownloader
+
+echoc '>> Web apps'
+dotf-i webapps
+dotf-i lanapps
+
+echoc '>> Internet'
+dotf-i google-chrome
 dotf-i telegram
 dotf-i sweet-nauta-server
 
-echoc 'Network Tools'
-dotf-i nethogs
+echoc '>> Disk Tools'
+dotf-i iotop
 
-echoc 'Finance'
+echoc '>> Network Tools'
+dotf-i nethogs
+dotf-i bandwhich
+dotf-i iftop
+
+echoc '>> Finance'
 dotf-i electrum
 
-echoc 'Text editors'
+echoc '>> Text editors'
 dotf-i typora
 
-echoc 'Development'
+echoc '>> Development'
 dotf-i git --force
+dotf-i node
+dotf-i vim8+
+dotf-i docker
 dotf-i vscode
 dotf-i postman
 dotf-i insomnia
 dotf-i aws-cli
 dotf-i staruml
 dotf-i portainer
+dotf-i vagrant
 dotf-i swagger-editor
+
+echoc '> REVIEW'
+inf '50 Things to Do After installing Ubuntu 20.04 - https://youtu.be/MNX7HgcWqHc'
