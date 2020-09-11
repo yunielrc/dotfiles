@@ -12,7 +12,7 @@ if [[ -z "${BASE_PATH:-}" ]]; then
   readonly BASE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 fi
 if [[ -z "${WORK_DIR:-}" ]]; then
-  readonly WORK_DIR="${WORK_DIR:-"$BASE_PATH"}"
+  readonly WORK_DIR="$BASE_PATH"
 fi
 
 export PKGS_PATH="${WORK_DIR}/packages"
@@ -157,20 +157,6 @@ __install_package() {
     }
   fi
 
-  if [[ -d "$pkg_home_path" ]]; then
-    bl::recursive_slink "$pkg_home_path" ~/ || {
-      err "${msg}: ${pkg}, installing recursive slinks to home"
-      return 13
-    }
-  fi
-
-  if [[ -d "$pkg_root_path" ]]; then
-    bl::recursive_slink "$pkg_root_path" / || {
-      err "${msg}: ${pkg}, installing recursive slinks to root directory"
-      return 14
-    }
-  fi
-
   if [[ -d "$pkg_homecat_path" ]]; then
     bl::recursive_concat "$pkg_homecat_path" ~/ || {
       err "${msg}: ${pkg}, recursive concat files to home directory"
@@ -200,29 +186,43 @@ __install_package() {
   fi
 
   shopt -s dotglob
+  if [[ -d "$pkg_root_path" ]]; then
+    sudo cp --symbolic-link --recursive --force --verbose --backup "$pkg_root_path"/* / || {
+      err "${msg}: ${pkg}, installing recursive slinks to root directory"
+      return 16
+    }
+  fi
+
+  if [[ -d "$pkg_home_path" ]]; then
+    cp --symbolic-link --recursive --force --verbose --backup "$pkg_home_path"/* ~/ || {
+      err "${msg}: ${pkg}, installing recursive slinks to home directory"
+      return 16
+    }
+  fi
+
   if [[ -d "$pkg_rootcp_path" ]]; then
-    cp --recursive --force --verbose "$pkg_rootcp_path"/* / || {
+    sudo cp --recursive --force --verbose --backup "$pkg_rootcp_path"/* / || {
       err "${msg}: ${pkg}, recursive copy files to root directory"
       return 16
     }
   fi
 
   if [[ -d "$pkg_homecp_path" ]]; then
-    cp --recursive --force --verbose "$pkg_homecp_path"/* ~/ || {
+    cp --recursive --force --verbose --backup "$pkg_homecp_path"/* ~/ || {
       err "${msg}: ${pkg}, recursive copy files to home directory"
       return 16
     }
   fi
 
   if [[ -d "$pkg_rootln_path" ]]; then
-    ln --symbolic --force --verbose "$pkg_rootln_path"/* / || {
+    sudo ln --symbolic --force --verbose --backup "$pkg_rootln_path"/* / || {
       err "${msg}: ${pkg}, recursive link top files to root directory"
       return 16
     }
   fi
 
   if [[ -d "$pkg_homeln_path" ]]; then
-    ln --symbolic --force --verbose "$pkg_homeln_path"/* ~/ || {
+    ln --symbolic --force --verbose --backup "$pkg_homeln_path"/* ~/ || {
       err "${msg}: ${pkg}, recursive link top files to home directory"
       return 16
     }
