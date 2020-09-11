@@ -1,6 +1,6 @@
 load test_helper
 
-@test 'should install stremio & config' {
-  bash ../setup
-  which stremio
+@test 'should install stremio' {
+  dotf-i stremio
+  type -P stremio
 }

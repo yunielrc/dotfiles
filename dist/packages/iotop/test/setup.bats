@@ -1,7 +1,6 @@
 load test_helper
 
-@test 'should install iotop & config' {
-  apt-u
+@test 'should install iotop' {
   dotf-i iotop
   type -P iotop
 }

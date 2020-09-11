@@ -1,7 +1,6 @@
 load test_helper
 
-
-@test 'should install insomnia & config' {
-  bash ../setup
+@test 'should install insomnia' {
+  dotf-i insomnia
   type -P insomnia
 }

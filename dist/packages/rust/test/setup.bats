@@ -1,7 +1,7 @@
 load test_helper
 
 @test 'should install rust & cargo' {
-  bash ../setup
+  dotf-i rust
 
   PATH="${PATH}:${HOME}/.cargo/bin"
 

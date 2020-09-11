@@ -1,15 +1,6 @@
 load test_helper
 
-@test 'should install google chrome & config' {
-  bash ../setup
-
+@test 'should install google chrome' {
+  dotf-i google-chrome
   run type -P google-chrome
-
-  assert_success
-  assert_output --regexp '.*/google-chrome$'
-
-  run bash ../setup
-
-  assert_success
-  assert_output --regexp 'google-chrome currently installed'
 }

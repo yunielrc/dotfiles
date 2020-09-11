@@ -1,7 +1,6 @@
 load test_helper
 
 @test 'should install vagrant' {
-  bash ../setup
+  dotf-i vagrant
   type -P vagrant
-  bash ../setup | grep -q 'vagrant currently installed'
 }

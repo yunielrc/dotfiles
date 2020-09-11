@@ -1,7 +1,6 @@
 load test_helper
 
-@test 'should install Popcorn-Time & config' {
-  bash ../setup
-
-  [[ -f /opt/Popcorn-Time/Popcorn-Time ]]
+@test 'should install Popcorn-Time' {
+  dotf-i popcorn-time
+  [[ -x /opt/Popcorn-Time/Popcorn-Time ]]
 }

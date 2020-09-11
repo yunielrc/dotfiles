@@ -1,7 +1,6 @@
 load test_helper
 
-@test 'should install iftop & config' {
-  apt-u
+@test 'should install iftop' {
   dotf-i iftop
   type -P iftop
 }

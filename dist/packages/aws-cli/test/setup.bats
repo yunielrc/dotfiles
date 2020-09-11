@@ -1,8 +1,6 @@
 load test_helper
 
-
-@test 'should install aws-cli-linux' {
-  bash ../setup
+@test 'should install aws-cli' {
+  dotf-i aws-cli
   type -P aws
-  bash ../setup | grep -q 'aws-cli currently installed'
 }

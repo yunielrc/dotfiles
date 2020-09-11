@@ -1,16 +1,7 @@
 load test_helper
 
-
 @test 'should install vscode & config' {
-  bash ../setup
-
-  run type -P code
-
-  assert_success
-  assert_output --regexp '.*/code$'
-
-  run bash ../setup
-
-  assert_success
-  assert_output --partial 'vscode currently installed'
+  [[ "${RUN_ON_DOCKER:-}" == true ]] && skip
+  dotf-i vscode
+  type -P code
 }
