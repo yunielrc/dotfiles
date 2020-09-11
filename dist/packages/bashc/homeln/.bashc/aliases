@@ -27,6 +27,15 @@ alias proxmox-wakeup="wakeonlan ${PROXMOX_MAC}"
 alias storage-wakeup="wakeonlan ${STORAGE_MAC}"
 
 # tools
-alias fd="fd --exclude 'apt-cacher-ng/'"
-alias rg="rg --glob '!apt-cacher-ng/' --glob '!.portainer/data'"
+alias fd="fd --exclude '.apt-cacher-ng/'"
+alias rg="rg --glob '!.apt-cacher-ng/' --glob '!.portainer/data'"
 alias bat='bat --number'
+alias cca='ccze --mode=ansi'
+alias dconf-dump='dconf dump /org/gnome/ | bat -l ini --style "plain"'
+alias df='df -hT -x squashfs'
+alias lsblk='lsblk --exclude 7'
+alias diff='diff -u --color=auto'
+
+# bash
+alias reload='exec $SHELL'
+alias r='exec $SHELL'

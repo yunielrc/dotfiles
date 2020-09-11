@@ -9,6 +9,8 @@ export private=$local
 export corp=$local
 export home=$local
 
+# External router ip
+export OROUTER_IP=192.168.0.1
 
 # Make vim the default editor.
 export EDITOR='vim';

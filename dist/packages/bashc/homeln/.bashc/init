@@ -110,7 +110,16 @@ bashc::__load_plugins() {
 #   BASHC_THEME
 #
 bashc::main() {
+  # allows settings modifications by envars
+  if [[ -v BASHC_THEME ]]; then
+    __BASHC_THEME="$BASHC_THEME"
+  fi
   bashc::__load_files
+  # allows settings modifications by envars
+  if [[ -v __BASHC_THEME && "$__BASHC_THEME" != "$BASHC_THEME" ]]; then
+    BASHC_THEME="$__BASHC_THEME"
+  fi
+
   bashc::__load_theme
   bashc::__load_plugins
 }

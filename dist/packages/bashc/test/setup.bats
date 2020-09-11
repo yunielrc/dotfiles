@@ -6,7 +6,7 @@ setup() {
 }
 
 @test 'should install bashc' {
-  run dotf-i bashc
+  dotf-i bashc
   [[ -d ~/.bashc ]]
-  grep --silent '~/.bashc/init' ~/.bashrc
+  grep --quiet '~/.bashc/init' ~/.bashrc
 }

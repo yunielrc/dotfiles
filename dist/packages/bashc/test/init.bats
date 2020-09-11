@@ -15,9 +15,9 @@ load test_helper
   run bashc::__load_files
 
   assert_success
-  assert_output "environment
-DEBUG> file loaded '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.bashc/environment'
-DEBUG> don't exists: 'file1' in '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.bashc'"
+  assert_output --regexp "environment
+DEBUG> file loaded '.*/dist/packages/bashc/test/fixtures/.bashc/environment'
+DEBUG> don't exists: 'file1' in '.*/dist/packages/bashc/test/fixtures/.bashc'"
 }
 
 @test "should load files" {
@@ -26,10 +26,10 @@ DEBUG> don't exists: 'file1' in '/home/ubuntu/dotfiles/dist/packages/bashc/test/
   run bashc::__load_files
 
   assert_success
-  assert_output "environment
-DEBUG> file loaded '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.bashc/environment'
+  assert_output --regexp "environment
+DEBUG> file loaded '.*/dist/packages/bashc/test/fixtures/.bashc/environment'
 aliases
-DEBUG> file loaded '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.bashc/aliases'"
+DEBUG> file loaded '.*/dist/packages/bashc/test/fixtures/.bashc/aliases'"
 }
 
 @test "BASHC_THEME empty" {
@@ -47,8 +47,8 @@ DEBUG> file loaded '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.bas
     run bashc::__load_theme
 
     assert_success
-    assert_output "user example1 theme
-DEBUG> theme loaded 'example1' from '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.bashc/themes/user/example1.theme.bash'"
+    assert_output --regexp "user example1 theme
+DEBUG> theme loaded 'example1' from '.*/dist/packages/bashc/test/fixtures/.bashc/themes/user/example1.theme.bash'"
 }
 
 @test "should not load theme" {
@@ -57,7 +57,7 @@ DEBUG> theme loaded 'example1' from '/home/ubuntu/dotfiles/dist/packages/bashc/t
     run bashc::__load_theme
     # becho "${status}:${output}"
     assert_failure
-    assert_output "ERROR> theme doesn't exist: 'example123' in '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.bashc/{local 3rd user}'"
+    assert_output --regexp "ERROR> theme doesn't exist: 'example123' in '.*/dist/packages/bashc/test/fixtures/.bashc/\{local 3rd user\}'"
 }
 
 @test "BASHC_PLUGINS empty" {
@@ -75,11 +75,11 @@ DEBUG> theme loaded 'example1' from '/home/ubuntu/dotfiles/dist/packages/bashc/t
     run bashc::__load_plugins
     # becho "${status}:${output}"
     assert_failure
-    assert_output "3rd example0 plugin
-DEBUG> plugin loaded '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.bashc/plugins/3rd/example0.plugin.bash'
+    assert_output --regexp "3rd example0 plugin
+DEBUG> plugin loaded '.*/dist/packages/bashc/test/fixtures/.bashc/plugins/3rd/example0.plugin.bash'
 user example0 plugin
-DEBUG> plugin loaded '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.bashc/plugins/user/example0.plugin.bash'
-ERROR> plugin doesn't exist: 'plugin1' folders '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.bashc/{local 3rd user}"
+DEBUG> plugin loaded '.*/dist/packages/bashc/test/fixtures/.bashc/plugins/user/example0.plugin.bash'
+ERROR> plugin doesn't exist: 'plugin1' folders '.*/dist/packages/bashc/test/fixtures/.bashc/\{local 3rd user\}"
 }
 
 @test "should load plugins" {
@@ -88,12 +88,12 @@ ERROR> plugin doesn't exist: 'plugin1' folders '/home/ubuntu/dotfiles/dist/packa
     run bashc::__load_plugins
 
     assert_success
-    assert_output "3rd example0 plugin
-DEBUG> plugin loaded '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.bashc/plugins/3rd/example0.plugin.bash'
+    assert_output --regexp "3rd example0 plugin
+DEBUG> plugin loaded '.*/dist/packages/bashc/test/fixtures/.bashc/plugins/3rd/example0.plugin.bash'
 user example0 plugin
-DEBUG> plugin loaded '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.bashc/plugins/user/example0.plugin.bash'
+DEBUG> plugin loaded '.*/dist/packages/bashc/test/fixtures/.bashc/plugins/user/example0.plugin.bash'
 user example1 plugin
-DEBUG> plugin loaded '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.bashc/plugins/user/example1.plugin.bash'"
+DEBUG> plugin loaded '.*/dist/packages/bashc/test/fixtures/.bashc/plugins/user/example1.plugin.bash'"
 
 }
 
@@ -105,12 +105,12 @@ DEBUG> plugin loaded '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.b
     run bashc::main
 
     assert_success
-    assert_output "environment
-DEBUG> file loaded '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.bashc/environment'
+    assert_output --regexp "environment
+DEBUG> file loaded '.*/dist/packages/bashc/test/fixtures/.bashc/environment'
 user example0 theme
-DEBUG> theme loaded 'example0' from '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.bashc/themes/user/example0.theme.bash'
+DEBUG> theme loaded 'example0' from '.*/dist/packages/bashc/test/fixtures/.bashc/themes/user/example0.theme.bash'
 3rd example0 plugin
-DEBUG> plugin loaded '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.bashc/plugins/3rd/example0.plugin.bash'
+DEBUG> plugin loaded '.*/dist/packages/bashc/test/fixtures/.bashc/plugins/3rd/example0.plugin.bash'
 user example0 plugin
-DEBUG> plugin loaded '/home/ubuntu/dotfiles/dist/packages/bashc/test/fixtures/.bashc/plugins/user/example0.plugin.bash'"
+DEBUG> plugin loaded '.*/dist/packages/bashc/test/fixtures/.bashc/plugins/user/example0.plugin.bash'"
 }
