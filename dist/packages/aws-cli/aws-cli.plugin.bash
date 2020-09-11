@@ -1,6 +1,5 @@
-# Aliases
 
-# EC2
+# Aliases
 alias ec2-stop="aws ec2 stop-instances --instance-ids"
 alias ec2-start="aws ec2 start-instances --instance-ids"
 alias ec2-status="aws ec2 describe-instance-status"
