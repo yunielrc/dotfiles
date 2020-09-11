@@ -13,5 +13,5 @@ add_apt_key 'BA300B7755AFCFAE'
 echo 'deb https://typora.io/linux ./' | sudo tee '/etc/apt/sources.list.d/typora.list'
 
 # Install
-apt-u
-apt-i typora
+sudo apt-get update -y
+sudo apt-get install -y typora

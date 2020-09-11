@@ -3,7 +3,8 @@
 set -euEo pipefail
 
 # Install
-apt-i iotop
+sudo apt-get update -y
+sudo apt-get install -y iotop
 
 # Configure
 # https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos

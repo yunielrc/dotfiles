@@ -1,13 +1,9 @@
 load test_helper
 
 
-@test 'should install typora & config' {
-  bash ../setup
-
-  run type -P typora
-  assert_success
-
-  run bash ../setup
-  assert_success
+@test 'should install typora' {
+  dotf-i typora
+  type -P typora
+  run dotf-i typora
   assert_output --partial 'typora currently installed'
 }

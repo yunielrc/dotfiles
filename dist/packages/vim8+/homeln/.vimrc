@@ -19,3 +19,5 @@ set statusline+=\ \ %P
 " NERDTree
 " open NERDTree automatically when vim starts up
 " autocmd vimenter * NERDTree
+
+map <leader>t<leader> :tabnext<cr>

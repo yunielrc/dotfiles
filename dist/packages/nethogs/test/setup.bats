@@ -1,9 +1,7 @@
 load test_helper
 
 
-@test 'should install nethogs & config' {
-  apt-u
-  bash ../setup
-
+@test 'should install nethogs' {
+  dotf-i nethogs
   type -P nethogs
 }

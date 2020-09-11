@@ -10,7 +10,9 @@ wget -qO - https://raw.githubusercontent.com/yunielrc/install-scripts/master/dis
 sudo apt update -y
 sudo apt install -y fonts-firacode
 # extensions dependencies
-apt-i bats shellcheck
-type -P gem && gem install --user-install solargraph
+sudo apt install -y bats shellcheck
+if type -P gem; then
+  gem install --user-install solargraph
+fi
 
 # code --install-extension 'Shan.code-settings-sync'

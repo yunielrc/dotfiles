@@ -15,7 +15,7 @@ export PATH="${PATH}:${HOME_BIN}"
 REL_BIN=../home/.usr/bin
 
 [[ ! -d ~/.bashc ]] && {
-  mkdir -p ~/.bashc/{gen,plugins/local}
+  mkdir -p ~/.bashc/{gen,plugins/local,themes/local}
 }
 
 cd "$BATS_TEST_DIRNAME" || exit

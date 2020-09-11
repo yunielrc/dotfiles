@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
-set -euE
+set -euEo pipefail
 
 # Install
-apt-i nethogs
+sudo apt-get update -y
+sudo apt-get install -y nethogs
 
 # Configure
 # https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos
