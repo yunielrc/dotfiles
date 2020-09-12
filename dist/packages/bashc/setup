@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+[[ ! -d ~/.bashc ]] || {
+  echo 'bashc currently installed'
+  exit 55
+}
+# Config
+[[ ! -f ~/.bashrc ]] || sed -i -e '/HISTSIZE=/d' -e '/HISTFILESIZE=/d' ~/.bashrc
