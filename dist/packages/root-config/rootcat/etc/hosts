@@ -58,7 +58,7 @@
 #######################################
 
 # Storage - NAS
-192.168.1.4 drive.$loc storage.$loc mycloud.$loc # :http 80 (M), :ftp, :smb, :nfs, :afp
+$NAS_IP drive.$loc storage.$loc mycloud.$loc # :http 80 (M), :ftp, :smb, :nfs, :afp
 
 # Virtualization Management Platform
 192.168.1.5 proxmox.$loc compute.$loc # :http 80 & ssh (M), lxc, vm
