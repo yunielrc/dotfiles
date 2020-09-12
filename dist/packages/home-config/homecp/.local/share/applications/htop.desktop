@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=Htop
+Type=Application
+Comment=Show System Processes
+Comment[es]=Mostrar procesos del sistema
+Terminal=true
+Exec=/usr/bin/gnome-terminal --maximize -- /usr/bin/htop
+Icon=htop
+Categories=ConsoleOnly;System;
+GenericName=Process Viewer
+GenericName[es]=Visor de procesos
+Keywords=system;process;task
