@@ -138,6 +138,11 @@ __install_package() {
 
   if [[ -f "$setup_file_path" ]]; then
     env PKG_CONTENT="${PKGS_PATH}/${pkg}/content" PKG_PATH="${PKGS_PATH}/${pkg}" bash "$setup_file_path" || {
+
+      if [[ $? -eq 55 ]]; then
+        inf "${pkg} currently installed"
+        return 0
+      fi
       err "${msg}: ${pkg}, executing package setup"
       return 11
     }
