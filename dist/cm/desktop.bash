@@ -92,13 +92,6 @@ dotf-i root-config
 dotf-i home-config
 dotf-i home-scripts
 
-echoc '>> bash'
-
-echoc '>>> bash themes'
-dotf-i starship
-dotf-i bash-git-prompt
-dotf-i sexy-bash-prompt
-
 echoc '>> Tools'
 dotf-i fzf
 dotf-i navi

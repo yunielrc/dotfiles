@@ -1,6 +1,1 @@
-TODO: rsync script for apt-cacher-ng backup, RESTORE
-  - quiero poder definir en un archivo de configuración una lista de
-    directorios a respaldar, la unidad nfs, y la carpeta en la unidad nfs donde
-    se harán las copias de seguridad
-  - quiero poder ver el log de rsync
-  - quiero que las copias se hagan diariamente
+
