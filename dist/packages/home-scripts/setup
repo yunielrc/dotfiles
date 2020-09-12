@@ -4,4 +4,13 @@ set -euEo pipefail
 
 # Install dependencies
 sudo apt-get update -y
-sudo apt-get install -y gpg
+sudo apt-get install -y gpg rsync
+
+# Install
+
+cat <<EOF | sudo tee "/etc/cron.daily/rsync-backup-${USER}"
+#!/usr/bin/env sh
+sudo --user=${USER} bash -c "${HOME_BIN}/rsync-backup backup"
+EOF
+
+sudo chmod +x "/etc/cron.daily/rsync-backup-${USER}"

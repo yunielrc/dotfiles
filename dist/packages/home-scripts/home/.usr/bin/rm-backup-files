@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Delete backup files with pattern '.*~$'
+
+set -euEo pipefail
+
+find . -type f,l -regex '.*~$' -delete

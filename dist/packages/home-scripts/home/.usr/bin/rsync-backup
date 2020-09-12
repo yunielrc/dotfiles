@@ -1,0 +1,270 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2032
+
+#
+# Make/Restore a backup of directories to/from nfs mounted folder
+#
+
+if [[ "${NOLOCK:-}" != true && "${FLOCKER:-}" != "$0" ]]; then
+  exec env FLOCKER="$0" flock -E 3 -en "$0" "$0" "$@" || :
+fi
+
+set -euEo pipefail
+
+# Constants
+readonly SCRIPT_NAME="$(basename "$0")"
+readonly PREFIX="${RSYNC_BACKUP_PREFIX:-"$(realpath ~/)"}"
+# : "${RSYNC_BACKUP_PREFIX:="$(realpath ~/)"}"
+# readonly RSYNC_BACKUP_PREFIX
+# script directories
+readonly ETC_DIR="${RSYNC_BACKUP_ETC_DIR:-"$PREFIX"}"
+readonly VAR_DIR="${RSYNC_BACKUP_VAR_DIR:-"$PREFIX"}"
+# script files
+readonly ENV_FILE="${ETC_DIR}/.${SCRIPT_NAME}.env"
+readonly LOG_FILE="${VAR_DIR}/.${SCRIPT_NAME}.log"
+
+# Load Config Envars
+set -o allexport
+. "$ENV_FILE"
+set +o allexport
+
+# Replaceable configuration with environment variables
+readonly NFS_DEVICE="${RSYNC_BACKUP_NFS_DEVICE:-"$NFS_DEVICE"}"
+readonly MOUNT_DIR="${RSYNC_BACKUP_MOUNT_DIR:-"$MOUNT_DIR"}"
+readonly SRC_LIST="${RSYNC_BACKUP_SRC_LIST:-"$SRC_LIST"}"
+readonly BACKUP_FOLDER="${RSYNC_BACKUP_BACKUP_FOLDER:-"$BACKUP_FOLDER"}"
+# :
+readonly BACKUP_DIR="${MOUNT_DIR}/${BACKUP_FOLDER}"
+
+readonly WORK_DIR="$PREFIX"
+cd "$WORK_DIR"
+
+# Functions
+
+err() {
+  echo "ERROR> [$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
+}
+
+die() {
+  err "$@"
+  exit 10
+}
+
+inf() {
+  echo "$*"
+}
+
+#
+# Mount nfs_device in mount_dir, makes mount_dir directory
+# if it doesn't exists
+#
+# Globals:
+#   NFS_DEVICE
+#   MOUNT_DIR
+# Returns:
+#   0 if was mounted, non-zero on error.
+#
+mount_nfs(){
+  [[ -d "$MOUNT_DIR" ]] || mkdir --verbose --parents "$MOUNT_DIR"
+  sudo mount -t nfs "$NFS_DEVICE" "$MOUNT_DIR"
+}
+
+#
+# Make a backup of directories
+#
+# With the example parameters below the result
+# would be the following:
+#
+# ~/Backup/rsync-backup/etc/program1
+# ~/Backup/rsync-backup/home/$USER/Documents
+# ~/Backup/rsync-backup/home/$USER/Music
+#
+# By saving the full path from the root lets
+# it know where to restore each backup
+#
+# Globals:
+#   LOG_FILE       e.g.: ~/.rsyn-backup.log
+# Arguments:
+#   src_list       e.g.: (/etc/program1 ~/Documents ~/Music)
+#   backup_dir     e.g.: ~/Backup/rsync-backup
+# Returns:
+#   0 on success, non-zero on error.
+#
+backup() {
+  # (~/Documents /etc/program1 ~/Music)
+  local -r -n src_list="$1"
+  # ~/Backup/rsync-backup
+  # /home/$USER/Backup/rsync-backup
+  local -r backup_dir="$(realpath -m "$2")"
+
+  [[ -d "$backup_dir" ]] || mkdir --parents --verbose "$backup_dir"
+  # ~/Documents
+  local src
+  for src in "${src_list[@]}"; do
+    # /home/$USER/Documents
+    src="$(realpath -m "$src")"
+
+    if [[ ! -d "$src" ]]; then
+      err "src directory does not exist: '${src}'"
+      continue
+    fi
+    # /home/$USER/Documents/ == /home/$USER/Backup/rsync-backup/* # not equal, src valid
+    # /home/$USER/Backup/rsync-backup/dir == /home/$USER/Backup/rsync-backup/* # not valid
+    if [[ "${src}/" == "${backup_dir}/"* ]]; then
+      err "backup skipped, src: '${src}' is part of backup_dir: '${backup_dir}'"
+      continue
+    fi
+    # /home/$USER
+    local src_base_path="${src%/*}"
+    # home/$USER
+    src_base_path="${src_base_path#/}"
+    # /home/$USER/Backup/rsync-backup/home/$USER
+    local src_backup_dir="${backup_dir}/${src_base_path}"
+    [[ -d "$src_backup_dir" ]] || mkdir --parents --verbose "$src_backup_dir"
+    # rsync... "/home/$USER/Documents" \
+    #          "/home/$USER/Backup/rsync-backup/home/$USER" || :
+    rsync -azv --delete --log-file "$LOG_FILE" "$src" "$src_backup_dir" || :
+  done
+}
+
+#
+# Restore a backup of directories
+#
+# Globals:
+#   LOG_FILE       e.g.: ~/.rsyn-backup.log
+# Arguments:
+#   src_list       e.g.: (/etc/program1 ~/Documents ~/Music)
+#   backup_dir     e.g.: ~/Backup/rsync-backup
+# Returns:
+#   0 on success, non-zero on error.
+#
+restore() {
+  # (~/Documents /etc/program1 ~/Music)
+  local -r -n src_list="$1"
+  # ~/Backup/rsync-backup
+  # /home/$USER/Backup/rsync-backup
+  local -r backup_dir="$(realpath -m "$2")"
+
+  if [[ ! -d "$backup_dir" ]]; then
+    err "backup_dir directory does not exist: '${backup_dir}'"
+    return 1
+  fi
+  # ~/Documents
+  local src
+  for src in "${src_list[@]}"; do
+    # /home/$USER/Documents
+    src="$(realpath -m "$src")"
+    # /home/$USER/Backup/rsync-backup/home/$USER/Documents
+    local src_backup_dir="${backup_dir}/${src#/}"
+
+    if [[ ! -d "$src_backup_dir" ]]; then
+      inf "no backup for src: '${src}'"
+      continue
+    fi
+    # /home/$USER
+    local src_base_path="${src%/*}"
+
+    if [[ ! -d "$src_base_path" ]]; then
+       mkdir --parents --verbose "$src_base_path" \
+       || sudo mkdir --parents --verbose "$src_base_path" \
+       || {
+         err "creating dir: '${src_base_path}'"
+         continue
+       }
+    fi
+    # rsync...  "/home/$USER/Backup/rsync-backup/home/$USER/Documents" \
+    #          "/home/$USER" || :
+    if [[ -w "$src_base_path" ]]; then
+      rsync -azv --log-file "$LOG_FILE" "$src_backup_dir" "$src_base_path" || :
+    else
+      sudo rsync -azv --log-file "$LOG_FILE" "$src_backup_dir" "$src_base_path" || :
+    fi
+  done
+}
+
+#
+# Show main help
+#
+main_usage() {
+  cat <<-HELPMSG
+Usage:
+${SCRIPT_NAME} [OPTIONS] COMMAND
+
+Make/Restore a backup of directories to/from a nfs mounted folder
+
+Logs are saved in: ${LOG_FILE}
+
+Options:
+  -h, --help                  Show this help
+  -n, --no-mount-nfs          Doesn't mount nfs unit, uses local filesystem for
+                              backup
+Commands:
+  backup                      Make a backup of directories to a nfs mounted folder
+  restore                     Restore a backup of directories from a nfs mounted folder
+
+Environment:
+  Envars can be defined in config without 'RSYNC_BACKUP_' prefix:
+  ${ENV_FILE}
+
+  RSYNC_BACKUP_NFS_DEVICE     e.g.: 192.168.1.4:/nfs/PCBackup
+  RSYNC_BACKUP_MOUNT_DIR      e.g.: ~/Backup
+  RSYNC_BACKUP_SRC_LIST       e.g.: (~/Documents ~/Music)
+  RSYNC_BACKUP_BACKUP_FOLDER  e.g.: rsync-backup
+HELPMSG
+}
+
+on_exit() {
+  case $? in
+    0|130)
+      return
+    ;;
+    *)
+      main_usage
+    ;;
+  esac
+}
+trap on_exit INT TERM EXIT
+
+main() {
+  [[ $# == 0 ]] && set -- '-h'
+
+  local no_mount=false
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+    -h | --help)
+      shift
+      main_usage
+      return 0
+      ;;
+    -n | --no-mount-nfs)
+      shift
+      readonly no_mount=true
+      ;;
+    backup)
+      shift
+      [[ $no_mount == true ]] || mount_nfs
+      backup SRC_LIST "$BACKUP_DIR"
+      return
+      ;;
+    restore)
+      shift
+      [[ $no_mount == true ]] || mount_nfs
+      restore SRC_LIST "$BACKUP_DIR"
+      return
+      ;;
+    *)
+      err "Invalid parameter: ${1}\n"
+      return 10
+      ;;
+    esac
+  done
+
+  err "No command"
+  return 11
+}
+
+if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
+  main "$@"
+  exit $?
+fi
