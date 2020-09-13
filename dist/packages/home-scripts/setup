@@ -2,15 +2,32 @@
 
 set -euEo pipefail
 
-# Install dependencies
 sudo apt-get update -y
-sudo apt-get install -y gpg rsync
 
-# Install
+# GPG-BACKUP
 
-cat <<EOF | sudo tee "/etc/cron.daily/rsync-backup-${USER}"
+## Dependencies
+sudo apt-get install -y gpg
+# :GPG-BACKUP
+
+
+# RSYNC-BACKUP
+
+## Dependencies
+sudo apt-get install -y rsync
+
+## Config
+
+### allows rsync-backup to mount an nfs device
+# https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos
+echo "${USER} ALL=NOPASSWD:$(type -P mount)" | sudo tee "/etc/sudoers.d/${USER}-nopasswd-mount"
+
+### allows run rsync-backup daily
+cat <<EOF | sudo tee "/etc/cron.daily/${USER}-rsync-backup"
 #!/usr/bin/env sh
 sudo --user=${USER} bash -c "${HOME_BIN}/rsync-backup backup"
 EOF
+sudo chmod +x "/etc/cron.daily/${USER}-rsync-backup"
+# : rsync-backup
 
-sudo chmod +x "/etc/cron.daily/rsync-backup-${USER}"
+

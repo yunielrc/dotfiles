@@ -169,5 +169,5 @@ rsync-backup restore
 ```
 
 - [ ] Sync Google chrome & gnome-extensions
-- [ ] Sync vscode
 - [ ] Restore home data backup
+- [ ] Sync vscode
