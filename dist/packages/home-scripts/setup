@@ -28,6 +28,6 @@ cat <<EOF | sudo tee "/etc/cron.daily/${USER}-rsync-backup"
 sudo --user=${USER} bash -c "${HOME_BIN}/rsync-backup backup"
 EOF
 sudo chmod +x "/etc/cron.daily/${USER}-rsync-backup"
-# : rsync-backup
+# :RSYNC-BACKUP
 
 
