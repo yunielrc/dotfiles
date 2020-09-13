@@ -5,11 +5,9 @@ set -euEo pipefail
 # Config
 for c in environment aliases functions theme settings; do
   echo
-  ln --symbolic --force --backup --verbose ~/.bashc/"$c" ~/".${c}"
+  ln --symbolic --force --backup --verbose "${DOTF_BASH_DIR}/${c}" ~/".${c}"
 done
 
 
 # Themes
-dotf-i starship
-dotf-i bash-git-prompt
-dotf-i sexy-bash-prompt
+# dotf-i starship

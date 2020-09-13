@@ -13,5 +13,7 @@ fi
 source "/home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.bash"
 
 # Environment
-export FZF_DEFAULT_COMMAND='fd -H'
+# export FZF_DEFAULT_COMMAND='fd --hidden --follow --no-ignore --exclude .git'
+export FZF_DEFAULT_COMMAND='find'
 export FZF_COMPLETION_TRIGGER='**'
+export FZF_DEFAULT_OPTS='--height 50% --layout=reverse --border'

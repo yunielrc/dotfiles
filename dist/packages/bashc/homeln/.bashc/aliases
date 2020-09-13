@@ -35,6 +35,11 @@ alias dconf-dump='dconf dump /org/gnome/ | bat -l ini --style "plain"'
 alias df='df -hT -x squashfs'
 alias lsblk='lsblk --exclude 7'
 alias diff='diff -u --color=auto'
+alias shred='shred -u'
+alias vimfzf='vim $(fzf)'
+
+# services
+alias weather='curl wttr.in/havana'
 
 # bash
 alias reload='exec $SHELL'

@@ -5,3 +5,5 @@ set -euEo pipefail
 # Install
 sudo apt-get update -y
 sudo apt-get install -y git
+# https://git-lfs.github.com
+sudo apt-get install -y git-lfs

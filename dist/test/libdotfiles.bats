@@ -1,7 +1,7 @@
 load test_helper
 
 setup() {
-  . "${DIST_PATH}/.dotfilesrc"
+  . "${DIST_PATH}/lib/dotfiles.bash"
   touch "$DOTF_BASH_GEN_SETTINGS_FILE"
 }
 

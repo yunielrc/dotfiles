@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+# Dependencies
+dotf-i brew
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# Install
+# https://github.com/jarun/nnn
+brew install nnn
+
+# Install Plugins
+curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh

@@ -10,3 +10,15 @@
 [submodule "dist/packages/vim8+/homeln/.vim/pack/vendor/start/nerdtree"]
 	path = dist/packages/vim8+/homeln/.vim/pack/vendor/start/nerdtree
 	url = https://github.com/preservim/nerdtree.git
+[submodule "dist/packages/bashc/homeln/.bashc/plugins/3rd/forgit"]
+	path = dist/packages/bashc/homeln/.bashc/plugins/3rd/forgit
+	url = https://github.com/wfxr/forgit
+[submodule "dist/packages/bashc/homeln/.bashc/plugins/3rd/bash-git-prompt"]
+	path = dist/packages/bashc/homeln/.bashc/plugins/3rd/bash-git-prompt
+	url = https://github.com/magicmonty/bash-git-prompt.git
+[submodule "dist/packages/bashc/homeln/.bashc/themes/3rd/bash-git-prompt"]
+	path = dist/packages/bashc/homeln/.bashc/themes/3rd/bash-git-prompt
+	url = https://github.com/magicmonty/bash-git-prompt.git
+[submodule "dist/packages/bashc/homeln/.bashc/themes/3rd/sexy-bash-prompt"]
+	path = dist/packages/bashc/homeln/.bashc/themes/3rd/sexy-bash-prompt
+	url = https://github.com/twolfson/sexy-bash-prompt

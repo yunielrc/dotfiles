@@ -2,28 +2,24 @@
 
 set -euEo pipefail
 
-# Constants
-
 export DEBIAN_FRONTEND=noninteractive
 
-## :Colors
-
 if [[ -z "${BASE_PATH:-}" ]]; then
-  readonly BASE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  readonly BASE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 fi
 if [[ -z "${WORK_DIR:-}" ]]; then
   readonly WORK_DIR="$BASE_PATH"
 fi
+
+set -o allexport
+. "${WORK_DIR}/.env"
+set +o allexport
 
 export PKGS_PATH="${WORK_DIR}/packages"
 readonly PKGS_PATH
 # export PKGS_PATH="${WORK_DIR}/packages"
 
 . "${BASE_PATH}/lib/bash-libs/dist/bl.bash"
-
-set -o allexport
-. "${WORK_DIR}/.env"
-set +o allexport
 
 # Functions
 

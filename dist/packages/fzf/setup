@@ -5,6 +5,9 @@ set -euEo pipefail
 # Dependencies
 dotf-i brew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# Simple, fast and user-friendly alternative to find
+brew install fd
 
 # Install
+# https://github.com/junegunn/fzf#usage
 brew install fzf

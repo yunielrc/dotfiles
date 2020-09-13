@@ -9,6 +9,7 @@ while read -r bscript; do
 done < <(
   find \
   ./dist \
+  -not -path '*/3rd/*' \
   -type f -exec file {} \; | \
   grep 'Bourne-Again' | \
   sed 's/: Bourne-Again.*//'
