@@ -1,6 +1,6 @@
 # BASE
 #
-# apt upgrade
+# dotf-i apt-cacher-ng
 apt-ug
 dotf-i brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 dotf-i rust && PATH="${PATH}:${HOME}/.cargo/bin"
@@ -8,7 +8,6 @@ dotf-i rust && PATH="${PATH}:${HOME}/.cargo/bin"
 # :BASE
 
 echoc '> APT packages'
-
 # timeshift backup
 # sudo add-apt-repository -y ppa:teejee2008/ppa
 # apt-i timeshift

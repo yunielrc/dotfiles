@@ -131,14 +131,43 @@ git clone --recurse-submodules https://github.com/yunielrc/dotfiles.git ~/.dotfi
 ```sh
 cd ~/.dotfiles/dist
 cp .env.template .env
-vim .env
 ```
 
 - [ ] Install dotf: gpg-backup, rsync-backup
-- [ ] Copy and Restore gpg keys with gpg-backup (D)
-- [ ] Pull private dotfiles (D)
-- [ ] Install private dotfiles
-- [ ] Restore apt cache with rsync-backup
+
+```sh
+./dotfiles predesktop
+```
+
+- [ ] Restore gpg keys with gpg-backup (D)
+
+```sh
+exec $SHELL
+gpg-backup restore ./gpg-backup.gpg
+gpg --list-secret-keys
+gpg --list-keys
+```
+
+- [ ] Pull private dotfiles & Install (D)
+
+```sh
+git clone --recurse-submodules https://github.com/yunielrc/dotfiles-private.git ~/.dotfiles-private
+./dotfiles restore
+./dotfiles install
+```
+
+- [ ] Restore apt cache with rsync-backup before installing dotfiles
+
+```sh
+rsync-backup restore
+```
+
 - [ ] Install dotfiles (uses apt cache)
-- [ ] Restore personal
-- [ ] Install dotfiles
+
+```sh
+./dotfiles desktop
+```
+
+- [ ] Sync Google chrome & gnome-extensions
+- [ ] Sync vscode
+- [ ] Restore home data backup
