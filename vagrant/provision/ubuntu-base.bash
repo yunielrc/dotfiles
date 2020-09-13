@@ -26,7 +26,7 @@ apt-get autoclean -y
 rm -rf /var/lib/apt/lists/*
 
 # User
-echo "${USER_NAME} ALL=NOPASSWD:ALL" > /etc/sudoers.d/nopasswd
+echo "${USER_NAME} ALL=NOPASSWD:ALL" > "/etc/sudoers.d/${USER_NAME}-nopasswd"
 
 if ! getent passwd | grep --quiet "$USER_NAME" ; then
   useradd --create-home --shell /bin/bash "$USER_NAME"

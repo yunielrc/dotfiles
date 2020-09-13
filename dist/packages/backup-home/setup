@@ -8,9 +8,9 @@ sudo apt-get install -y rsync nfs-common
 
 # Install
 
-cat <<EOF | sudo tee "/etc/cron.daily/backup-home-${USER}"
+cat <<EOF | sudo tee "/etc/cron.daily/${USER}-backup-home"
 #!/usr/bin/env sh
 sudo --user=${USER} bash -c "${HOME_BIN}/backup-home backup"
 EOF
 
-sudo chmod +x "/etc/cron.daily/backup-home-${USER}"
+sudo chmod +x "/etc/cron.daily/${USER}-backup-home"

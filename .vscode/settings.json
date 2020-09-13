@@ -15,9 +15,11 @@
     "latex"
   ],
   "search.exclude": {
-    ".vagrant/": true
+    ".vagrant/": true,
+    "3rd/": true
   },
   "files.exclude": {
-    ".vagrant/": true
+    ".vagrant/": true,
+    "3rd/": true
   }
 }
