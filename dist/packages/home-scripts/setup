@@ -4,20 +4,34 @@ set -euEo pipefail
 
 sudo apt-get update -y
 
+# NETCONN-TOGGLE
+cat <<EOF | dconf load /org/gnome/settings-daemon/
+[plugins/media-keys]
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/']
+
+[plugins/media-keys/custom-keybindings/custom1]
+binding='<Ctrl>F8'
+command='gtk-launch netconn-toggle-ethernet'
+name='Toggle ethernet'
+
+[plugins/media-keys/custom-keybindings/custom2]
+binding='<Ctrl><Shift>F8'
+command='gtk-launch netconn-toggle-wifi'
+name='Toggle wifi'
+EOF
+# :NETCONN-TOGGLE
+
 # GPG-BACKUP
 
 ## Dependencies
 sudo apt-get install -y gpg
 # :GPG-BACKUP
 
-
 # RSYNC-BACKUP
 
 ## Dependencies
 sudo apt-get install -y rsync
-
 ## Config
-
 ### allows rsync-backup to mount an nfs device
 # https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos
 echo "${USER} ALL=NOPASSWD:$(type -P mount)" | sudo tee "/etc/sudoers.d/${USER}-nopasswd-mount"

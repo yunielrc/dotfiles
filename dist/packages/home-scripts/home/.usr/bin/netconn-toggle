@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#
+# Enable/disable a network connection
+#
+# Usage examples:
+# netconn-toggle wifi
+# netconn-toggle ethernet
+#
+
+set -euEo pipefail
+
+readonly SCRIPT_NAME="$(basename "$0")"
+readonly TYPE="${1:-}" # $ nmcli -f type dev # preferably 'ethernet' or 'wifi'
+if [[ -z "${TYPE:-}" ]]; then
+  echo "${SCRIPT_NAME}: no device type especified, select one from: \$ nmcli -f type dev" >&2
+  exit 10
+fi
+readonly DEVICE="$(nmcli dev | grep -w "$TYPE" | grep -P '\s(connected|disconnected)\s' | head -n 1 | awk '{ print $1 }')"
+if [[ -z "${DEVICE:-}" ]]; then
+  echo "${SCRIPT_NAME}: no ${TYPE} device" >&2
+  exit 11
+fi
+
+notify(){
+  if type -P notify-send &> /dev/null; then
+    notify-send "$SCRIPT_NAME" "$1"
+  else
+    echo "${SCRIPT_NAME}: ${1}"
+  fi
+}
+
+if nmcli dev | grep -w "$DEVICE" | grep -qw 'connected' ; then
+   nmcli device disconnect "$DEVICE"
+   notify "${TYPE^} disconnected"
+else
+   nmcli device connect "$DEVICE"
+   notify "${TYPE^} connected"
+fi
