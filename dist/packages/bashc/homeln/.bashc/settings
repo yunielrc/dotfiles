@@ -6,8 +6,8 @@ HISTSIZE=10000
 HISTFILESIZE=1000000
 
 # BASHC_THEME=default
-# BASHC_THEME=starship
+BASHC_THEME=starship
 # BASHC_THEME=bash-git-prompt
-BASHC_THEME=sexy-bash-prompt
+# BASHC_THEME=sexy-bash-prompt
 
 BASHC_PLUGINS+=(forgit)

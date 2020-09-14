@@ -38,6 +38,7 @@ alias diff='diff -u --color=auto'
 alias shred='shred -u'
 alias vimfzf='vim $(fzf)'
 alias du='du -bsh'
+alias journalnav='journalctl -f | lnav'
 
 # services
 alias weather='curl wttr.in/havana'
