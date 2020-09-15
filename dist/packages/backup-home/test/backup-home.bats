@@ -25,14 +25,6 @@ teardown() {
   :
 }
 
-# @test 'should mount nfs device' {
-#   [[ "$RUN_ON_DOCKER" == true ]] && skip
-#   skip # TODO: setup nfs server for testing
-#   . ../content/backup-home
-
-#   run mount_nfs_device
-# }
-
 @test 'should make backup' {
   run bash ./backup-home --no-mount-nfs backup
 
