@@ -2,22 +2,27 @@
 
 set -euEo pipefail
 
+
 # Dependencies
 sudo apt-get update -y
 sudo apt-get install -y fonts-firacode \
                         dconf-service \
                         dconf-cli network-manager
 
-# Install
-
-# Applications without installation script that have personalized configuration in the home
+# Applications without installation script that have personalized configuration in home
 sudo apt-get install -y gpg \
                         neofetch \
                         htop
 
-# OpenVPN Gnome plugin
+# Gnome plugins
+
+## Network Manager openvpn
 sudo apt-get install -y network-manager-openvpn-gnome openvpn-systemd-resolved
 sudo systemctl restart network-manager
+
+## Nautilus gpg integration
+sudo apt-get install -y seahorse-nautilus
+# :Gnome plugins
 
 # Gnome Extension dependencies
 sudo apt-get install -y chrome-gnome-shell
@@ -34,19 +39,16 @@ sudo apt-get install -y gir1.2-clutter-1.0 \
   sudo wget https://git.io/trans
   sudo chmod a+x trans
 )
+# :Gnome Extension dependencies
 
-## nautilus gpg integration
-sudo apt-get install -y seahorse-nautilus
-
-# Config
-
-## GNOME Extension & Apps
-envsubst < "${PKG_PATH}/org.gnome.dconf.ini" | dconf load /org/gnome/
+# Gnome Pre-installed Apps & Extensions dconf configuration
 
 ## Network
+
 ### Import OpenVPN profiles
 for vpn in "${PKG_PATH}/ovpn-profiles"/*.ovpn; do
   [[ -f "$vpn" ]] || continue
   nmcli connection import type openvpn file "$vpn" \
   || sudo nmcli connection import type openvpn file "$vpn"
 done
+# :Gnome Pre-installed Apps & Extensions dconf configuration

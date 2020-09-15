@@ -1,9 +1,11 @@
 # home-config
 
-In this package:
+This package contains:
 
-- Applications without installation script that have personalized configuration in the home.
+- Applications without installation script that have personalized configuration in home
 
-- Gnome Extension dependencies and configuration
+- Gnome plugins
 
-- Gnome Pre-installed applications configuration
+- Gnome Extension dependencies
+
+- Gnome Pre-installed Apps & Extensions dconf configuration
