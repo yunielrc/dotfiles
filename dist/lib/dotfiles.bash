@@ -23,8 +23,17 @@ readonly PKGS_PATH
 
 # Functions
 
-## dotfiles functions
+## DOTFILES FUNCTIONS
 
+#
+# Install dotfiles theme
+#
+# Arguments:
+#   theme       theme name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
 __install_theme() {
   local -r theme="$1"
 
@@ -57,6 +66,15 @@ __install_theme() {
 }
 export -f __install_theme
 
+#
+# Install dotfiles plugin
+#
+# Arguments:
+#   plugin       plugin name
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
 __install_plugin() {
   local -r plugin="$1"
 
@@ -96,28 +114,21 @@ __install_plugin() {
 }
 export -f __install_plugin
 
+#
+# Install dotfiles package
+#
+# Arguments:
+#   pkg       package name
+#   force     force package installation, true or false
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
 __install_package() {
   local -r pkg="$1"
   local -r force="${2:-false}"
 
   local -r pkg_dir="${PKGS_PATH}/${pkg}"
-  local -r setup_file_path="${pkg_dir}/setup"
-  local -r postsetup_file_path="${pkg_dir}/postsetup"
-  local -r plugin_file_path="${pkg_dir}/${pkg}.plugin.bash"
-  local -r plugin_file_path2="${pkg_dir}/content/${pkg}.plugin.bash"
-  local -r theme_file_path="${pkg_dir}/${pkg}.theme.bash"
-  local -r theme_file_path2="${pkg_dir}/content/${pkg}.theme.bash"
-  # TODO: add support to concat files
-  local -r pkg_home_path="${pkg_dir}/home"
-  local -r pkg_root_path="${pkg_dir}/root"
-  local -r pkg_homecat_path="${pkg_dir}/homecat"
-  local -r pkg_rootcat_path="${pkg_dir}/rootcat"
-  local -r pkg_homecp_path="${pkg_dir}/homecp"
-  local -r pkg_rootcp_path="${pkg_dir}/rootcp"
-  local -r pkg_homeln_path="${pkg_dir}/homeln"
-  local -r pkg_rootln_path="${pkg_dir}/rootln"
-  local -r pkg_homecps_path="${pkg_dir}/homecps"
-  local -r pkg_rootcps_path="${pkg_dir}/rootcps"
 
   local -r msg='Installing package'
 
@@ -126,11 +137,14 @@ __install_package() {
     return 10
   fi
 
-  # Idempotent
+  # Guarantees Idempotency
   [[ "$force" == false ]] && type -P "$pkg" &>/dev/null && {
     inf "${pkg} currently installed"
     return 0
   }
+
+  # Execute pkg setup
+  local -r setup_file_path="${pkg_dir}/setup"
 
   if [[ -f "$setup_file_path" ]]; then
     env PKG_CONTENT="${PKGS_PATH}/${pkg}/content" PKG_PATH="${PKGS_PATH}/${pkg}" bash "$setup_file_path" || {
@@ -143,6 +157,11 @@ __install_package() {
       return 11
     }
   fi
+  # :
+
+  # Install bashc plugin
+  local -r plugin_file_path="${pkg_dir}/${pkg}.plugin.bash"
+  local -r plugin_file_path2="${pkg_dir}/content/${pkg}.plugin.bash"
 
   if [[ -f "$plugin_file_path" || -f "$plugin_file_path2" ]]; then
     __install_plugin "$pkg" || {
@@ -150,6 +169,11 @@ __install_package() {
       return 12
     }
   fi
+  # :
+
+  # Install bashc theme
+  local -r theme_file_path="${pkg_dir}/${pkg}.theme.bash"
+  local -r theme_file_path2="${pkg_dir}/content/${pkg}.theme.bash"
 
   if [[ -f "$theme_file_path" || -f "$theme_file_path2" ]]; then
     __install_theme "$pkg" || {
@@ -157,42 +181,56 @@ __install_package() {
       return 12
     }
   fi
+  # :
+
+  # Recursive concat files to home directory
+  local -r pkg_homecat_path="${pkg_dir}/homecat"
 
   if [[ -d "$pkg_homecat_path" ]]; then
     bl::recursive_concat "$pkg_homecat_path" ~/ || {
       err "${msg}: ${pkg}, recursive concat files to home directory"
-      return 15
+      return 14
     }
   fi
+  # :
+
+  # Recursive concat files to root directory
+  local -r pkg_rootcat_path="${pkg_dir}/rootcat"
 
   if [[ -d "$pkg_rootcat_path" ]]; then
     bl::recursive_concat "$pkg_rootcat_path" / || {
       err "${msg}: ${pkg}, recursive concat files to root directory"
-      return 16
+      return 14
     }
   fi
+  # :
+
+  # Recursive copy files with env substitution to home directory
+  local -r pkg_homecps_path="${pkg_dir}/homecps"
 
   if [[ -d "$pkg_homecps_path" ]]; then
     bl::recursive_copy_envsub "$pkg_homecps_path" ~/ || {
       err "${msg}: ${pkg}, recursive copy files with env substitution to home directory"
-      return 16
+      return 15
     }
   fi
+  # :
+
+  # Recursive copy files with env substitution to root directory
+  local -r pkg_rootcps_path="${pkg_dir}/rootcps"
 
   if [[ -d "$pkg_rootcps_path" ]]; then
     bl::recursive_copy_envsub "$pkg_rootcps_path" / || {
       err "${msg}: ${pkg}, recursive copy files with env substitution to root directory"
-      return 16
+      return 15
     }
   fi
+  # :
 
   shopt -s dotglob
-  if [[ -d "$pkg_root_path" ]]; then
-    sudo cp --symbolic-link --recursive --force --verbose --backup "$pkg_root_path"/* / || {
-      err "${msg}: ${pkg}, installing recursive slinks to root directory"
-      return 16
-    }
-  fi
+
+  # Make recursive slinks files to home directory
+  local -r pkg_home_path="${pkg_dir}/home"
 
   if [[ -d "$pkg_home_path" ]]; then
     cp --symbolic-link --recursive --force --verbose --backup "$pkg_home_path"/* ~/ || {
@@ -200,47 +238,100 @@ __install_package() {
       return 16
     }
   fi
+  # :
+
+  # Make recursive slinks files to root directory
+  local -r pkg_root_path="${pkg_dir}/root"
+
+  if [[ -d "$pkg_root_path" ]]; then
+    sudo cp --symbolic-link --recursive --force --verbose --backup "$pkg_root_path"/* / || {
+      err "${msg}: ${pkg}, installing recursive slinks to root directory"
+      return 16
+    }
+  fi
+  # :
+
+  # Recursive copy files to root directory
+  local -r pkg_rootcp_path="${pkg_dir}/rootcp"
 
   if [[ -d "$pkg_rootcp_path" ]]; then
     sudo cp --recursive --force --verbose --backup "$pkg_rootcp_path"/* / || {
       err "${msg}: ${pkg}, recursive copy files to root directory"
-      return 16
+      return 17
     }
   fi
+  # :
+
+  # Recursive copy files to home directory
+  local -r pkg_homecp_path="${pkg_dir}/homecp"
 
   if [[ -d "$pkg_homecp_path" ]]; then
     cp --recursive --force --verbose --backup "$pkg_homecp_path"/* ~/ || {
       err "${msg}: ${pkg}, recursive copy files to home directory"
-      return 16
+      return 17
     }
   fi
+  # :
 
-  if [[ -d "$pkg_rootln_path" ]]; then
-    sudo ln --symbolic --force --verbose --backup "$pkg_rootln_path"/* / || {
-      err "${msg}: ${pkg}, recursive link top files to root directory"
-      return 16
-    }
-  fi
+  # Recursive link top files to home directory
+  local -r pkg_homeln_path="${pkg_dir}/homeln"
 
   if [[ -d "$pkg_homeln_path" ]]; then
     ln --symbolic --force --verbose --backup "$pkg_homeln_path"/* ~/ || {
       err "${msg}: ${pkg}, recursive link top files to home directory"
-      return 16
+      return 18
     }
   fi
+  # :
+
+  # Recursive link top files to root directory
+  local -r pkg_rootln_path="${pkg_dir}/rootln"
+
+  if [[ -d "$pkg_rootln_path" ]]; then
+    sudo ln --symbolic --force --verbose --backup "$pkg_rootln_path"/* / || {
+      err "${msg}: ${pkg}, recursive link top files to root directory"
+      return 18
+    }
+  fi
+  # :
   shopt -u dotglob
+
+  # Import dconf.ini
+  local -r pkg_dconf_file="${pkg_dir}/dconf.ini"
+
+  if [[ -f "$pkg_dconf_file" ]]; then
+    envsubst < "$pkg_dconf_file" | dconf load / || {
+      err "${msg}: ${pkg}, importing dconf.ini"
+      return 19
+    }
+  fi
+  # :
+
+  # Execute pkg postsetup
+  local -r postsetup_file_path="${pkg_dir}/postsetup"
 
   if [[ -f "$postsetup_file_path" ]]; then
     env PKG_CONTENT="${PKGS_PATH}/${pkg}/content" PKG_PATH="${PKGS_PATH}/${pkg}" bash "$postsetup_file_path" || {
       err "${msg}: ${pkg}, executing package postsetup"
-      return 11
+      return 25
     }
   fi
-
+  # :
   return 0
 }
 export -f __install_package
 
+#
+# Install dotfiles package
+# show installation messages with colors & log errors
+#
+# Arguments:
+#   pkg       package name
+#   force     force package installation, true or false
+#
+# Returns:
+#   0 on success, non-zero on error.
+#
 dotf-i() {
   local force=false
 
@@ -314,7 +405,7 @@ EOF
 }
 export -f __log_error
 
-## :dotfiles functions
+## :DOTFILES FUNCTIONS
 
 apt-u() { sudo apt-get update -y; }
 export -f apt-u
