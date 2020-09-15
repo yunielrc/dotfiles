@@ -27,11 +27,11 @@ alias proxmox-wakeup="wakeonlan ${PROXMOX_MAC}"
 alias storage-wakeup="wakeonlan ${STORAGE_MAC}"
 
 # tools
-alias fd="fd --exclude '.apt-cacher-ng/'"
+alias fd="fd -H --exclude '.apt-cacher-ng/'"
 alias rg="rg --glob '!.apt-cacher-ng/' --glob '!.portainer/data'"
 alias bat='bat --number'
 alias cca='ccze --mode=ansi'
-alias dconf-dump='dconf dump /org/gnome/ | bat -l ini --style "plain"'
+alias dconf-dump='dconf dump / | bat -l ini --style "plain"'
 alias df='df -hT -x squashfs'
 alias lsblk='lsblk --exclude 7'
 alias diff='diff -u --color=auto'
@@ -39,6 +39,7 @@ alias shred='shred -u'
 alias vimfzf='vim $(fzf)'
 alias du='du -bsh'
 alias journalnav='journalctl -f | lnav'
+alias bmon='bmon -b'
 
 # services
 alias weather='curl wttr.in/havana'
