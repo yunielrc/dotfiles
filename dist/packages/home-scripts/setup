@@ -5,20 +5,23 @@ set -euEo pipefail
 sudo apt-get update -y
 
 # NETCONN-TOGGLE
-cat <<EOF | dconf load /org/gnome/settings-daemon/
-[plugins/media-keys]
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/']
 
-[plugins/media-keys/custom-keybindings/custom1]
-binding='<Ctrl>F8'
-command='gtk-launch netconn-toggle-ethernet'
-name='Toggle ethernet'
-
-[plugins/media-keys/custom-keybindings/custom2]
-binding='<Ctrl><Shift>F8'
-command='gtk-launch netconn-toggle-wifi'
-name='Toggle wifi'
-EOF
+# Idempotent
+if [[ ! -f ~/.usr/bin/netconn-toggle ]]; then
+  ## add keybindings
+  bl::gnome_add_custom_keybinding 'Toggle ethernet' \
+                                  "bash -c 'netconn-toggle ${NETCONN_TOGGLE_USB_ETHERNET_CONN}'" \
+                                  "$NETCONN_TOGGLE_USB_ETHERNET_KEYBIND"
+  bl::gnome_add_custom_keybinding 'Toggle vpn' \
+                                  "bash -c 'netconn-toggle ${NETCONN_TOGGLE_VPN_CONN}'" \
+                                  "$NETCONN_TOGGLE_VPN_KEYBIND"
+  bl::gnome_add_custom_keybinding 'Toggle wifi 2.4' \
+                                  "bash -c 'netconn-toggle ${NETCONN_TOGGLE_WIFI2_CONN}'" \
+                                  "$NETCONN_TOGGLE_WIFI2_KEYBIND"
+  bl::gnome_add_custom_keybinding 'Toggle wifi 5' \
+                                  "bash -c 'netconn-toggle ${NETCONN_TOGGLE_WIFI5_CONN}'" \
+                                  "$NETCONN_TOGGLE_WIFI5_KEYBIND"
+fi
 # :NETCONN-TOGGLE
 
 # GPG-BACKUP

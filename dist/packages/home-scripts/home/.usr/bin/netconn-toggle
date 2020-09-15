@@ -10,15 +10,10 @@
 set -euEo pipefail
 
 readonly SCRIPT_NAME="$(basename "$0")"
-readonly TYPE="${1:-}" # $ nmcli -f type dev # preferably 'ethernet' or 'wifi'
-if [[ -z "${TYPE:-}" ]]; then
-  echo "${SCRIPT_NAME}: no device type especified, select one from: \$ nmcli -f type dev" >&2
+readonly CONN="${1:-}"
+if [[ -z "${CONN:-}" ]]; then
+  echo "${SCRIPT_NAME}: no connection especified" >&2
   exit 10
-fi
-readonly DEVICE="$(nmcli dev | grep -w "$TYPE" | grep -P '\s(connected|disconnected)\s' | head -n 1 | awk '{ print $1 }')"
-if [[ -z "${DEVICE:-}" ]]; then
-  echo "${SCRIPT_NAME}: no ${TYPE} device" >&2
-  exit 11
 fi
 
 notify(){
@@ -29,10 +24,10 @@ notify(){
   fi
 }
 
-if nmcli dev | grep -w "$DEVICE" | grep -qw 'connected' ; then
-   nmcli device disconnect "$DEVICE"
-   notify "${TYPE^} disconnected"
+if nmcli -f general.state conn show "$CONN" | grep -qw 'activated'; then
+   nmcli conn down "$CONN"
+   notify "${CONN} disconnected"
 else
-   nmcli device connect "$DEVICE"
-   notify "${TYPE^} connected"
+   nmcli conn up "$CONN"
+   notify "${CONN} connected"
 fi
