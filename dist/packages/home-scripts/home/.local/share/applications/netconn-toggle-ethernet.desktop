@@ -1,9 +1,0 @@
-#!/usr/bin/env xdg-open
-[Desktop Entry]
-Name=Toggle ethernet
-Comment=Enable/disable ethernet connection
-NoDisplay=true
-Categories=Network;Utility;
-Keywords=ADMIN;NETWORK;settings;
-Exec=netconn-toggle ethernet
-Type=Application

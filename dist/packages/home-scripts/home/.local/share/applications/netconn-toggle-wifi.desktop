@@ -1,9 +1,0 @@
-#!/usr/bin/env xdg-open
-[Desktop Entry]
-Name=Toggle wifi
-Comment=Enable/disable wifi connection
-NoDisplay=true
-Categories=Network;Utility;
-Keywords=ADMIN;NETWORK;settings;
-Exec=netconn-toggle wifi
-Type=Application
