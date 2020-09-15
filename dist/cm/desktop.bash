@@ -31,7 +31,7 @@ apt-i dconf-editor
 # Graphical package management tool
 apt-i synaptic
 # Commonly used media codecs and fonts for Ubuntu
-sudo debconf-set-selections <<<'ttf-mscorefonts-installer       msttcorefonts/accepted-mscorefonts-eulaboolean true'
+sudo debconf-set-selections <<<'ttf-mscorefonts-installer       msttcorefonts/accepted-mscorefonts-eula boolean true'
 apt-i ubuntu-restricted-extras
 # Robust, modular log coloriser
 apt-i ccze
@@ -71,7 +71,7 @@ apt-i fortune cowsay
 echoc '>> CTF tools'
 
 # Command-line tools for building TCP client-server applications
-apt-i ucspi-tcp
+# apt-i ucspi-tcp
 # Utility for managing network connections
 apt-i netcat
 # Analyzing and reporting on tcpdump (or other libpcap) dump files
@@ -127,6 +127,8 @@ brew-i glances
 brew-i ack
 # GIT quick statistics
 brew-i git-quick-stats
+
+
 echoc '> CARGO packages'
 
 # A tool to analyze file system usage written in Rust
@@ -134,9 +136,7 @@ cargo install dutree
 
 echoc '> DOTFILES packages'
 
-# dotf-i backup-home
 dotf-i home-config
-dotf-i home-scripts
 
 echoc '>> BASHC'
 
@@ -226,7 +226,10 @@ dotf-i vagrant
 # Open source editor fully dedicated to OpenAPI-based APIs
 dotf-i swagger-editor
 
-echoc '> For add more tools visit:'
+echoc '> Configure network:'
+echo '$ nm-connection-editor'
+
+echoc '> For adding more tools visit:'
 cat <<EOF
 50 Things to Do After installing Ubuntu 20.04 - https://youtu.be/MNX7HgcWqHc
 https://github.com/alebcay/awesome-shell

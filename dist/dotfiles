@@ -6,12 +6,12 @@ fi
 
 # Bootstrap a configuration management available in cm folder
 
+readonly SCRIPT_NAME="$(basename "${0}")"
 readonly BASE_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 readonly WORK_DIR="${WORK_DIR:-"$BASE_PATH"}"
 
 . "${BASE_PATH}/lib/dotfiles.bash"
 
-readonly SCRIPT_NAME="$(basename "${0}")"
 readonly CM_PATH="${WORK_DIR}/cm"
 
 readonly INCLUDE_BASE_CM="${INCLUDE_BASE_CM:-true}"

@@ -110,14 +110,15 @@ vncviewer DIG_OUTPUT_HERE:5901
 vagrant destroy -f vnc
 ```
 
-## Checklists
+## My Checklists
 
 ## Before PC disposing
 
 - [ ] Backup personal data
 - [ ] Backup gpg keys (E)
-- [ ] Push private dotfiles (E)
+- [ ] Backup & Push private dotfiles (E)
 - [ ] Push dotfiles
+- [ ] Run **After installing the new PC** in a test machine with a fast internet
 - [ ] Erase disk
 
 ## After installing the new PC
