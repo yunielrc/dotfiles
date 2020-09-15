@@ -44,14 +44,7 @@ EOF
 sudo chown nauta:nauta /opt/sweet-nauta-server/.env
 sudo chmod 444 /opt/sweet-nauta-server/.env
 
-# gnome_add_custom_keybinding 'Sweet Nauta Server - Login Test' 'gtk-launch sweet-nauta-server-login-test' "${SWEET_NAUTA_SERVER_KEYBIND}"
-
-cat <<EOF | dconf load /org/gnome/settings-daemon/
-[plugins/media-keys]
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/']
-
-[plugins/media-keys/custom-keybindings/custom0]
-binding='F9'
-command='gtk-launch sweet-nauta-server-login-test'
-name='Sweet Nauta Server - Login Test'
-EOF
+## add keybinding
+bl::gnome_add_custom_keybinding 'Sweet Nauta Server - Login Test' \
+                                'gtk-launch sweet-nauta-server-login-test' \
+                                "${SWEET_NAUTA_SERVER_KEYBIND}"
