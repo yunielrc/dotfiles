@@ -34,6 +34,7 @@ sudo apt-get install -y gpg
 
 ## Dependencies
 sudo apt-get install -y rsync
+
 ## Config
 ### allows rsync-backup to mount an nfs device
 # https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos
@@ -42,7 +43,7 @@ echo "${USER} ALL=NOPASSWD:$(type -P mount)" | sudo tee "/etc/sudoers.d/${USER}-
 ### allows run rsync-backup daily
 cat <<EOF | sudo tee "/etc/cron.daily/${USER}-rsync-backup"
 #!/usr/bin/env sh
-sudo --user=${USER} bash -c "${HOME_BIN}/rsync-backup backup"
+sudo --user=${USER} ${HOME_BIN}/rsync-backup backup | sudo --user=${USER} logger --tag \$(basename \$0) --id=\$\$
 EOF
 sudo chmod +x "/etc/cron.daily/${USER}-rsync-backup"
 # :RSYNC-BACKUP

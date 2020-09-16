@@ -35,28 +35,22 @@ setup_file() {
 @test 'backup: should make a backup' {
   run "${REL_BIN}/rsync-backup" -n backup
   assert_success
-  assert_output --regexp "mkdir: created directory '/.*/Backup'
-mkdir: created directory '/.*/Backup/rsync-backup'
-mkdir: created directory '/.*/Backup/rsync-backup/.*'
-mkdir: created directory '/.*/Backup/rsync-backup/.*/user'
-mkdir: created directory '/.*/Backup/rsync-backup/.*/user/files'
-sending incremental file list
-Documents/
-Documents/doc1
-Documents/doc2
-Documents/my docs/
-Documents/my docs/mydocs
+  assert_output "mkdir: created directory '/tmp/Backup'
+mkdir: created directory '/tmp/Backup/rsync-backup'
+mkdir: created directory '/tmp/Backup/rsync-backup/tmp'
+mkdir: created directory '/tmp/Backup/rsync-backup/tmp/user'
+mkdir: created directory '/tmp/Backup/rsync-backup/tmp/user/files'
+START backup, from '/tmp/user/files/Documents' to '/tmp/Backup/rsync-backup/tmp/user/files'
+END backup done, from '/tmp/user/files/Documents' to '/tmp/Backup/rsync-backup/tmp/user/files'
+ERROR> src directory does not exist: '/tmp/user/Videos'
+ERROR> backup skipped, src: '/tmp/Backup/rsync-backup/tmp/user/files/Documents' is part of backup_dir: '/tmp/Backup/rsync-backup'
+START backup, from '/tmp/user/files/Music' to '/tmp/Backup/rsync-backup/tmp/user/files'
+END backup done, from '/tmp/user/files/Music' to '/tmp/Backup/rsync-backup/tmp/user/files'
+rsync logs are saved in: /tmp/.rsync-backup.log"
 
-.*
-.*
-ERROR>.*: src directory does not exist: '/.*/user/Videos'
-ERROR>.*: backup skipped, src: '/.*/Backup/rsync-backup/.*/user/files/Documents' is part of backup_dir: '/.*/Backup/rsync-backup'
-sending incremental file list
-Music/
-Music/foo.mp3
-Music/my collection/
-Music/my collection/m1.mp3
-Music/my collection/m2.mp3"
+  run diff <(cd /tmp/Backup/rsync-backup/tmp/user/ && find) <(cd /tmp/user/ && find )
+  assert_output "1a2
+> ./.rsync-backup.env"
 }
 
 @test 'restore: backup_dir directory does not exist' {
@@ -73,22 +67,16 @@ Music/my collection/m2.mp3"
   rm -rf "${BATS_TMPDIR}/user/files"
   run "${REL_BIN}/rsync-backup" -n restore
   assert_success
-  assert_output --regexp "mkdir: created directory '/.*/user/files'
-sending incremental file list
-Documents/
-Documents/doc1
-Documents/doc2
-Documents/my docs/
-Documents/my docs/mydocs
+  assert_output "mkdir: created directory '/tmp/user/files'
+START restoring backup, from '/tmp/Backup/rsync-backup/tmp/user/files/Documents' to '/tmp/user/files'
+END backup restored successfully, from '/tmp/Backup/rsync-backup/tmp/user/files/Documents' to '/tmp/user/files'
+no backup for src: '/tmp/user/Videos'
+no backup for src: '/tmp/Backup/rsync-backup/tmp/user/files/Documents'
+START restoring backup, from '/tmp/Backup/rsync-backup/tmp/user/files/Music' to '/tmp/user/files'
+END backup restored successfully, from '/tmp/Backup/rsync-backup/tmp/user/files/Music' to '/tmp/user/files'
+rsync logs are saved in: /tmp/.rsync-backup.log"
 
-.*
-.*
-no backup for src: '/.*/user/Videos'
-no backup for src: '/.*/Backup/rsync-backup/.*/user/files/Documents'
-sending incremental file list
-Music/
-Music/foo.mp3
-Music/my collection/
-Music/my collection/m1.mp3
-Music/my collection/m2.mp3"
+  run diff <(cd /tmp/Backup/rsync-backup/tmp/user/ && find) <(cd /tmp/user/ && find )
+  assert_output "1a2
+> ./.rsync-backup.env"
 }

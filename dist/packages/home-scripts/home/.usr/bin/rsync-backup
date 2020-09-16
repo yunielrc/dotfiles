@@ -42,11 +42,11 @@ cd "$WORK_DIR"
 # Functions
 
 err() {
-  echo "ERROR> [$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
+  echo "ERROR> $*" >&2
 }
 
 die() {
-  err "$@"
+  err "$*"
   exit 10
 }
 
@@ -123,8 +123,15 @@ backup() {
     [[ -d "$src_backup_dir" ]] || mkdir --parents --verbose "$src_backup_dir"
     # rsync... "/home/$USER/Documents" \
     #          "/home/$USER/Backup/rsync-backup/home/$USER" || :
-    rsync -azv --delete --log-file "$LOG_FILE" "$src" "$src_backup_dir" || :
+    inf "START backup, from '${src}' to '${src_backup_dir}'"
+    if rsync --archive --compress --verbose --quiet --delete --log-file "$LOG_FILE" \
+      "$src" "$src_backup_dir"; then
+      inf "END backup done, from '${src}' to '${src_backup_dir}'"
+    else
+      err "FAILED backup, from '${src}' to '${src_backup_dir}'"
+    fi
   done
+  inf "rsync logs are saved in: ${LOG_FILE}"
 }
 
 #
@@ -174,12 +181,18 @@ restore() {
     fi
     # rsync...  "/home/$USER/Backup/rsync-backup/home/$USER/Documents" \
     #          "/home/$USER" || :
-    if [[ -w "$src_base_path" ]]; then
-      rsync -azv --log-file "$LOG_FILE" "$src_backup_dir" "$src_base_path" || :
+    local _rsync='rsync'
+    [[ -w "$src_base_path" ]] || _rsync='sudo rsync'
+
+    inf "START restoring backup, from '${src_backup_dir}' to '${src_base_path}'"
+    if $_rsync --archive --compress --verbose --quiet --log-file "$LOG_FILE" \
+       "$src_backup_dir" "$src_base_path"; then
+      inf "END backup restored successfully, from '${src_backup_dir}' to '${src_base_path}'"
     else
-      sudo rsync -azv --log-file "$LOG_FILE" "$src_backup_dir" "$src_base_path" || :
+      err "FAILED restoring backup, from '${src_backup_dir}' to '${src_base_path}'"
     fi
   done
+  inf "rsync logs are saved in: ${LOG_FILE}"
 }
 
 #
@@ -192,7 +205,7 @@ ${SCRIPT_NAME} [OPTIONS] COMMAND
 
 Make/Restore a backup of directories to/from a nfs mounted folder
 
-Logs are saved in: ${LOG_FILE}
+rsync logs are saved in: ${LOG_FILE}
 
 Options:
   -h, --help                  Show this help
@@ -213,17 +226,20 @@ Environment:
 HELPMSG
 }
 
-on_exit() {
-  case $? in
-    0|130)
-      return
-    ;;
-    *)
-      main_usage
-    ;;
-  esac
-}
-trap on_exit INT TERM EXIT
+# on_INT() {
+#   inf "Process interrupted with code $?"
+# }
+# trap on_INT INT
+
+# on_TERM() {
+#   inf "Process terminated with code $?"
+# }
+# trap on_TERM TERM
+
+# on_EXIT() {
+#   inf "Process exited with code $?"
+# }
+# trap on_EXIT EXIT
 
 main() {
   [[ $# == 0 ]] && set -- '-h'
@@ -255,12 +271,14 @@ main() {
       ;;
     *)
       err "Invalid parameter: ${1}\n"
+      main_usage
       return 10
       ;;
     esac
   done
 
   err "No command"
+  main_usage
   return 11
 }
 
