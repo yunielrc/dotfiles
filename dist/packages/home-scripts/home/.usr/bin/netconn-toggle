@@ -11,23 +11,42 @@ set -euEo pipefail
 
 readonly SCRIPT_NAME="$(basename "$0")"
 readonly CONN="${1:-}"
-if [[ -z "${CONN:-}" ]]; then
-  echo "${SCRIPT_NAME}: no connection especified" >&2
-  exit 10
-fi
 
 notify(){
   if type -P notify-send &> /dev/null; then
-    notify-send "$SCRIPT_NAME" "$1"
-  else
-    echo "${SCRIPT_NAME}: ${1}"
+    notify-send "$SCRIPT_NAME" "$*"
   fi
 }
 
+inf(){
+  notify "$*"
+  echo "${SCRIPT_NAME}: $*"
+}
+
+err(){
+  notify "$*"
+  echo "${SCRIPT_NAME}: $*" >&2
+}
+
+if [[ -z "${CONN:-}" ]]; then
+  err "no connection especified"
+  exit 10
+fi
+
+declare -i ecode=0
+
 if nmcli -f general.state conn show "$CONN" | grep -qw 'activated'; then
-   nmcli conn down "$CONN"
-   notify "${CONN} disconnected"
+  out="$(nmcli conn down "$CONN" 2>&1)" || {
+    ecode=$?
+    err "$out"
+    exit $ecode
+  }
+  inf "${CONN} disconnected"
 else
-   nmcli conn up "$CONN"
-   notify "${CONN} connected"
+  out="$(nmcli conn up "$CONN" 2>&1)" || {
+    ecode=$?
+    err "$out"
+    exit $ecode
+  }
+  inf "${CONN} connected"
 fi
