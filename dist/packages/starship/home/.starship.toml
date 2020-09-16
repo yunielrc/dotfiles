@@ -10,9 +10,10 @@ truncation_length = 8
 [aws]
 disabled = true
 
-[custom.error]
-description = "The exit code of the last executed command"
+[custom.exit_status]
+description = "The last commands exit status"
 prefix = "exit "
 command = "echo $STATUS"
 when = "[ $STATUS -ne 0 ]"
-style = "bold fg:red"
+style = "bold red"
+# format = "[\\[$output\\]]($style) "
