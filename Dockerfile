@@ -12,7 +12,7 @@ RUN apt-get update -y && \
     echo "${USER} ALL=NOPASSWD:ALL" > /etc/sudoers.d/nopasswd
 RUN apt-get install -y gnupg
 RUN apt-get update -y && \
-    apt-get install -y wget file xz-utils uuid-runtime gnupg tzdata 9base unzip curl iputils-ping cron rsync nfs-common && \
+    apt-get install -y wget file xz-utils uuid-runtime gnupg tzdata 9base unzip curl iputils-ping cron rsync nfs-common tree && \
     apt-get install -y --no-install-recommends ubuntu-desktop-minimal gettext && \
     apt-get autoremove -y && \
     apt-get autoclean -y && \
