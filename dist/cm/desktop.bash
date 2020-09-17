@@ -11,6 +11,9 @@ echoc '> APT packages'
 # timeshift backup
 # sudo add-apt-repository -y ppa:teejee2008/ppa
 # apt-i timeshift
+
+# displays the percentage of copied data
+apt-i progress
 # The log file navigator
 apt-i lnav
 # The Silver Searcher is grep-like program implemented by C
@@ -82,8 +85,6 @@ apt-i tcpflow
 apt-i socat
 # Utility for network exploration or security auditing
 apt-i nmap
-# displays the percentage of copied data
-apt-i progress
 
 
 echoc '> BREW packages'

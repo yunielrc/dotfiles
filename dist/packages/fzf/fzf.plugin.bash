@@ -16,4 +16,9 @@ source "/home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.bash"
 # export FZF_DEFAULT_COMMAND='fd --hidden --follow --no-ignore --exclude .git'
 export FZF_DEFAULT_COMMAND='find'
 export FZF_COMPLETION_TRIGGER='**'
-export FZF_DEFAULT_OPTS='--height 50% --layout=reverse --border'
+export FZF_DEFAULT_OPTS='--multi --height 50% --layout=reverse --border'
+
+# Supported commands
+# usage: _fzf_setup_completion path|dir|var|alias|host COMMANDS...
+_fzf_setup_completion path bat
+
