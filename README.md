@@ -153,6 +153,7 @@ gpg --list-keys
 
 ```sh
 git clone --recurse-submodules https://github.com/yunielrc/dotfiles-private.git ~/.dotfiles-private
+cd ~/.dotfiles-private/dist
 ./dotfiles restore
 ./dotfiles install
 ```
@@ -160,7 +161,7 @@ git clone --recurse-submodules https://github.com/yunielrc/dotfiles-private.git 
 - [ ] Restore apt cache with rsync-backup before installing dotfiles
 
 ```sh
-rsync-backup restore
+rsync-backup **restore**
 ```
 
 - [ ] Install dotfiles (uses apt cache)
