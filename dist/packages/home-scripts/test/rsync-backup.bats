@@ -37,15 +37,19 @@ setup_file() {
   assert_success
   assert_output "mkdir: created directory '/tmp/Backup'
 mkdir: created directory '/tmp/Backup/rsync-backup'
+4 directories to backup
+START backup 1/4 from '/tmp/user/files/Documents'
 mkdir: created directory '/tmp/Backup/rsync-backup/tmp'
 mkdir: created directory '/tmp/Backup/rsync-backup/tmp/user'
 mkdir: created directory '/tmp/Backup/rsync-backup/tmp/user/files'
-START backup, from '/tmp/user/files/Documents' to '/tmp/Backup/rsync-backup/tmp/user/files'
-END backup done, from '/tmp/user/files/Documents' to '/tmp/Backup/rsync-backup/tmp/user/files'
-ERROR> src directory does not exist: '/tmp/user/Videos'
-ERROR> backup skipped, src: '/tmp/Backup/rsync-backup/tmp/user/files/Documents' is part of backup_dir: '/tmp/Backup/rsync-backup'
-START backup, from '/tmp/user/files/Music' to '/tmp/Backup/rsync-backup/tmp/user/files'
-END backup done, from '/tmp/user/files/Music' to '/tmp/Backup/rsync-backup/tmp/user/files'
+OK backup 1/4 from '/tmp/user/files/Documents' to '/tmp/Backup/rsync-backup/tmp/user/files'
+START backup 2/4 from '/tmp/user/Videos'
+ERROR backup 2/4, src directory does not exist: '/tmp/user/Videos'
+START backup 3/4 from '/tmp/Backup/rsync-backup/tmp/user/files/Documents'
+ERROR backup 3/4, src: '/tmp/Backup/rsync-backup/tmp/user/files/Documents' is part of backup_dir
+START backup 4/4 from '/tmp/user/files/Music'
+OK backup 4/4 from '/tmp/user/files/Music' to '/tmp/Backup/rsync-backup/tmp/user/files'
+2/4 backups ok, 2 failed
 rsync logs are saved in: /tmp/.rsync-backup.log"
 
   run diff <(cd /tmp/Backup/rsync-backup/tmp/user/ && find) <(cd /tmp/user/ && find )
@@ -67,13 +71,17 @@ rsync logs are saved in: /tmp/.rsync-backup.log"
   rm -rf "${BATS_TMPDIR}/user/files"
   run "${REL_BIN}/rsync-backup" -n restore
   assert_success
-  assert_output "mkdir: created directory '/tmp/user/files'
-START restoring backup, from '/tmp/Backup/rsync-backup/tmp/user/files/Documents' to '/tmp/user/files'
-END backup restored successfully, from '/tmp/Backup/rsync-backup/tmp/user/files/Documents' to '/tmp/user/files'
-no backup for src: '/tmp/user/Videos'
-no backup for src: '/tmp/Backup/rsync-backup/tmp/user/files/Documents'
-START restoring backup, from '/tmp/Backup/rsync-backup/tmp/user/files/Music' to '/tmp/user/files'
-END backup restored successfully, from '/tmp/Backup/rsync-backup/tmp/user/files/Music' to '/tmp/user/files'
+  assert_output "4 backups to restore
+START restore 1/4 from '/tmp/Backup/rsync-backup/tmp/user/files/Documents'
+mkdir: created directory '/tmp/user/files'
+OK restore 1/4 from '/tmp/Backup/rsync-backup/tmp/user/files/Documents' to '/tmp/user/files'
+START restore 2/4 from '/tmp/Backup/rsync-backup/tmp/user/Videos'
+ERROR restore 2/4, no backup for src: '/tmp/user/Videos'
+START restore 3/4 from '/tmp/Backup/rsync-backup/tmp/Backup/rsync-backup/tmp/user/files/Documents'
+ERROR restore 3/4, no backup for src: '/tmp/Backup/rsync-backup/tmp/user/files/Documents'
+START restore 4/4 from '/tmp/Backup/rsync-backup/tmp/user/files/Music'
+OK restore 4/4 from '/tmp/Backup/rsync-backup/tmp/user/files/Music' to '/tmp/user/files'
+2/4 restores ok, 2 failed
 rsync logs are saved in: /tmp/.rsync-backup.log"
 
   run diff <(cd /tmp/Backup/rsync-backup/tmp/user/ && find) <(cd /tmp/user/ && find )

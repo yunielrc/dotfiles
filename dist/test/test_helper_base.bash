@@ -6,8 +6,9 @@
 test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
 test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+export NOLOCK=true
 export ENV=testing
-readonly ENV
+readonly NOLOCK ENV
 export DEBUG=true
 export PATH="${PATH}:${HOME_BIN}"
 # export PATH="${PATH}:../home/.usr/bin"

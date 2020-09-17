@@ -42,7 +42,7 @@ cd "$WORK_DIR"
 # Functions
 
 err() {
-  echo "ERROR> $*" >&2
+  echo "$*" >&2
 }
 
 die() {
@@ -98,20 +98,28 @@ backup() {
   local -r backup_dir="$(realpath -m "$2")"
 
   [[ -d "$backup_dir" ]] || mkdir --parents --verbose "$backup_dir"
+
+  local -ri stats_total="${#src_list[@]}"
+  local -i stats_curr=0
+  local -i stats_ok=0
+
+  inf "${stats_total} directories to backup"
+
   # ~/Documents
   local src
   for src in "${src_list[@]}"; do
     # /home/$USER/Documents
     src="$(realpath -m "$src")"
+    inf "START backup $((++stats_curr))/${stats_total} from '${src}'"
 
     if [[ ! -d "$src" ]]; then
-      err "src directory does not exist: '${src}'"
+      err "ERROR backup ${stats_curr}/${stats_total}, src directory does not exist: '${src}'"
       continue
     fi
     # /home/$USER/Documents/ == /home/$USER/Backup/rsync-backup/* # not equal, src valid
     # /home/$USER/Backup/rsync-backup/dir == /home/$USER/Backup/rsync-backup/* # not valid
     if [[ "${src}/" == "${backup_dir}/"* ]]; then
-      err "backup skipped, src: '${src}' is part of backup_dir: '${backup_dir}'"
+      err "ERROR backup ${stats_curr}/${stats_total}, src: '${src}' is part of backup_dir"
       continue
     fi
     # /home/$USER
@@ -123,15 +131,18 @@ backup() {
     [[ -d "$src_backup_dir" ]] || mkdir --parents --verbose "$src_backup_dir"
     # rsync... "/home/$USER/Documents" \
     #          "/home/$USER/Backup/rsync-backup/home/$USER" || :
-    inf "START backup, from '${src}' to '${src_backup_dir}'"
     if rsync --archive --compress --verbose --quiet --delete --log-file "$LOG_FILE" \
       "$src" "$src_backup_dir"; then
-      inf "END backup done, from '${src}' to '${src_backup_dir}'"
+      ((stats_ok++)) || :
+      inf "OK backup ${stats_curr}/${stats_total} from '${src}' to '${src_backup_dir}'"
     else
-      err "FAILED backup, from '${src}' to '${src_backup_dir}'"
+      err "FAIL backup ${stats_curr}/${stats_total} from '${src}' to '${src_backup_dir}'"
     fi
   done
+  inf "${stats_ok}/${stats_total} backups ok, $((stats_total-stats_ok)) failed"
   inf "rsync logs are saved in: ${LOG_FILE}"
+
+  return 0
 }
 
 #
@@ -156,6 +167,13 @@ restore() {
     err "backup_dir directory does not exist: '${backup_dir}'"
     return 1
   fi
+
+  local -ri stats_total="${#src_list[@]}"
+  local -i stats_curr=0
+  local -i stats_ok=0
+
+  inf "${stats_total} backups to restore"
+
   # ~/Documents
   local src
   for src in "${src_list[@]}"; do
@@ -163,9 +181,10 @@ restore() {
     src="$(realpath -m "$src")"
     # /home/$USER/Backup/rsync-backup/home/$USER/Documents
     local src_backup_dir="${backup_dir}/${src#/}"
+    inf "START restore $((++stats_curr))/${stats_total} from '${src_backup_dir}'"
 
     if [[ ! -d "$src_backup_dir" ]]; then
-      inf "no backup for src: '${src}'"
+      err "ERROR restore ${stats_curr}/${stats_total}, no backup for src: '${src}'"
       continue
     fi
     # /home/$USER
@@ -175,8 +194,8 @@ restore() {
        mkdir --parents --verbose "$src_base_path" \
        || sudo mkdir --parents --verbose "$src_base_path" \
        || {
-         err "creating dir: '${src_base_path}'"
-         continue
+          err "ERROR restore ${stats_curr}/${stats_total}, creating dir: '${src_base_path}'"
+          continue
        }
     fi
     # rsync...  "/home/$USER/Backup/rsync-backup/home/$USER/Documents" \
@@ -184,14 +203,15 @@ restore() {
     local _rsync='rsync'
     [[ -w "$src_base_path" ]] || _rsync='sudo rsync'
 
-    inf "START restoring backup, from '${src_backup_dir}' to '${src_base_path}'"
     if $_rsync --archive --compress --verbose --quiet --log-file "$LOG_FILE" \
        "$src_backup_dir" "$src_base_path"; then
-      inf "END backup restored successfully, from '${src_backup_dir}' to '${src_base_path}'"
+       ((stats_ok++)) || :
+      inf "OK restore ${stats_curr}/${stats_total} from '${src_backup_dir}' to '${src_base_path}'"
     else
-      err "FAILED restoring backup, from '${src_backup_dir}' to '${src_base_path}'"
+      err "FAIL restore ${stats_curr}/${stats_total} from '${src_backup_dir}' to '${src_base_path}'"
     fi
   done
+  inf "${stats_ok}/${stats_total} restores ok, $((stats_total-stats_ok)) failed"
   inf "rsync logs are saved in: ${LOG_FILE}"
 }
 
