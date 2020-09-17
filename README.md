@@ -142,6 +142,8 @@ cp .env.template .env
 
 - [ ] Restore gpg keys with gpg-backup (D)
 
+Execute commands directly in the vm or via vnc, no with a ssh session
+
 ```sh
 exec $SHELL
 gpg-backup restore ./gpg-backup.gpg
@@ -150,6 +152,8 @@ gpg --list-keys
 ```
 
 - [ ] Pull private dotfiles & Install (D)
+
+Execute commands directly in the vm or via vnc, no with a ssh session
 
 ```sh
 git clone --recurse-submodules https://github.com/yunielrc/dotfiles-private.git ~/.dotfiles-private
@@ -165,6 +169,8 @@ rsync-backup restore
 ```
 
 - [ ] Install dotfiles (uses apt cache)
+
+Execute commands directly in the vm or via vnc, no with a ssh session
 
 ```sh
 cd ~/.dotfiles/dist
