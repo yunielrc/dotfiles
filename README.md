@@ -136,6 +136,8 @@ cp .env.template .env
 
 - [ ] Install dotf: gpg-backup, rsync-backup
 
+Execute commands directly in the vm or via vnc, no with a ssh session
+
 ```sh
 ./dotfiles predesktop
 ```
