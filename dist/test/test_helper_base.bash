@@ -8,7 +8,7 @@ test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/bre
 
 export NOLOCK=true
 export ENV=testing
-readonly NOLOCK ENV
+readonly ENV
 export DEBUG=true
 export PATH="${PATH}:${HOME_BIN}"
 # export PATH="${PATH}:../home/.usr/bin"

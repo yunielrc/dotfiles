@@ -279,6 +279,18 @@ main() {
       ;;
     backup)
       shift
+      # verify that backup is allowed, as the backup is really a
+      # mirror, there is only one backup, this allows to avoid loss of
+      # data
+      local -r backup_allow_file_name=".${SCRIPT_NAME}_backup.allow"
+      [[ -f ~/"$backup_allow_file_name" ]] || {
+        cat <<EOF
+Create the file '~/$backup_allow_file_name' to be able to make backup.
+Note that there is only one copy of each directory, and if you make a copy of
+an empty directory the data will be deleted in the backup.
+EOF
+        return
+      }
       [[ $no_mount == true ]] || mount_nfs
       backup SRC_LIST "$BACKUP_DIR"
       return

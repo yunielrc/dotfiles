@@ -6,6 +6,10 @@ setup_file() {
   # chmod -R 500 "${BATS_TMPDIR}/user"
 }
 
+setup() {
+  touch ~/.rsync-backup_backup.allow
+}
+
 @test 'main: show usage' {
   run "${REL_BIN}/rsync-backup"
   assert_success
@@ -30,6 +34,16 @@ setup_file() {
   run "${REL_BIN}/rsync-backup" -n
   assert_failure 11
   assert_line --index 0 --partial 'No command'
+}
+
+@test 'backup: No allow file in user home' {
+  # skip
+  rm ~/.rsync-backup_backup.allow
+  run "${REL_BIN}/rsync-backup" -n backup
+
+  assert_output "Create the file '~/.rsync-backup_backup.allow' to be able to make backup.
+Note that there is only one copy of each directory, and if you make a copy of
+an empty directory the data will be deleted in the backup."
 }
 
 @test 'backup: should make a backup' {
