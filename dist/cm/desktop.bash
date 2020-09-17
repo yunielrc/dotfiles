@@ -1,6 +1,6 @@
 # BASE
-#
-# dotf-i apt-cacher-ng
+dotf-i root-config # configure the file /etc/hosts
+dotf-i apt-cacher-ng
 apt-ug
 dotf-i brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 dotf-i rust && PATH="${PATH}:${HOME}/.cargo/bin"
