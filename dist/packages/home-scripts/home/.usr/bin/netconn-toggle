@@ -33,8 +33,6 @@ if [[ -z "${CONN:-}" ]]; then
   exit 10
 fi
 
-declare -i ecode=0
-
 if nmcli -f general.state conn show "$CONN" | grep -qw 'activated'; then
   out="$(nmcli conn down "$CONN" 2>&1)" || {
     ecode=$?
