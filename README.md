@@ -161,12 +161,13 @@ cd ~/.dotfiles-private/dist
 - [ ] Restore apt cache with rsync-backup before installing dotfiles
 
 ```sh
-rsync-backup **restore**
+rsync-backup restore
 ```
 
 - [ ] Install dotfiles (uses apt cache)
 
 ```sh
+cd ~/.dotfiles/dist
 ./dotfiles desktop
 ```
 
