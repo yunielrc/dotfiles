@@ -60,7 +60,7 @@ apt-i gpick
 # Screencast and screenshot application
 apt-i kazam
 # HP Linux Printing and Imaging System
-apt-i hplip hplip-gui
+# apt-i hplip hplip-gui
 # x86 Virtualization solution
 apt-i virtualbox virtualbox-guest-additions-iso
 # Pinta is an easy to use drawing/editing program
