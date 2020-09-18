@@ -8,50 +8,12 @@ set -euEo pipefail
   exit 0
 }
 
-# Add npm proxy
-
-add_npm_proxy() {
-  local -r proxy="$1"
-  local -r root="${2:-false}"
-
-  local home=~/
-  local _tee='tee --append'
-  local _grep='grep --quiet'
-  local _test='test'
-
-  if [[ "$root" == true ]]; then
-    home=/root
-    _tee='sudo tee --append'
-    _grep='sudo grep --quiet'
-    _test='sudo test'
-  fi
-  readonly home _tee _grep
-
-  if $_test ! -f "${home}/.npmrc"; then
-cat <<EOF | $_tee "${home}/.npmrc"
-proxy=${proxy}
-https-proxy=${proxy}
-EOF
-  else
-    if ! $_grep '^proxy=' "${home}/.npmrc"; then
-      echo "proxy=${proxy}" | $_tee "${home}/.npmrc"
-    fi
-    if ! $_grep '^https-proxy=' "${home}/.npmrc"; then
-      echo "https-proxy=${proxy}" | $_tee "${home}/.npmrc"
-    fi
-  fi
-}
-
-if [[ -n "${PROXY_URL:-}"  ]]; then
-  add_npm_proxy "$PROXY_URL"
-  add_npm_proxy "$PROXY_URL" true
-fi
-
 # Dependencies
 sudo apt-get update -y
 sudo apt-get install -y dconf-service dconf-cli
 # Install
 wget -qO - https://raw.githubusercontent.com/yunielrc/sweet-nauta-server/master/bin/install | sudo bash
+
 
 # Configure
 cat <<EOF | sudo tee /opt/sweet-nauta-server/.env
@@ -66,7 +28,24 @@ EOF
 sudo chown nauta:nauta /opt/sweet-nauta-server/.env
 sudo chmod 444 /opt/sweet-nauta-server/.env
 
+
 ## add keybinding
 bl::gnome_add_custom_keybinding 'Sweet Nauta Server - Login Test' \
                                 'gtk-launch sweet-nauta-server-login-test' \
                                 "${SWEET_NAUTA_SERVER_KEYBIND}"
+# add ssh keys to nauta user
+readonly NUSER=nauta
+readonly NUSER_HOME="/home/${NUSER}"
+
+sudo --shell <<EOF
+  [[ ! -d "${NUSER_HOME}/.ssh" ]] || rm --recursive --force "${NUSER_HOME}/.ssh"
+EOF
+
+sudo mkdir "${NUSER_HOME}/.ssh"
+sudo cp ~/.ssh/id_rsa{,.pub} "${NUSER_HOME}/.ssh/"
+sudo chmod 700 "${NUSER_HOME}/.ssh"
+sudo chmod 600 "${NUSER_HOME}/.ssh/id_rsa"
+sudo chmod 664 "${NUSER_HOME}/.ssh/id_rsa.pub"
+sudo chown --recursive "${NUSER}:${NUSER}" "${NUSER_HOME}/.ssh"
+
+sudo systemctl start sweet-nauta-server.service
