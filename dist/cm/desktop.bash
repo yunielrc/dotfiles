@@ -1,6 +1,4 @@
 # BASE
-dotf-i root-config # configure the file /etc/hosts
-# dotf-i apt-cacher-ng
 apt-ug
 dotf-i brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 dotf-i rust && PATH="${PATH}:${HOME}/.cargo/bin"
@@ -12,6 +10,7 @@ echoc '> APT packages'
 # sudo add-apt-repository -y ppa:teejee2008/ppa
 # apt-i timeshift
 
+apt-i wakeonlan
 # displays the percentage of copied data
 apt-i progress
 # The log file navigator
