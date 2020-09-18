@@ -27,7 +27,7 @@ vagrant plugin install vagrant-aws
 vagrant plugin install vagrant-readenv
 ## vagrant boxes
 vagrant box add dummy https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box
-vagrant box add ubuntu/focal64
+# vagrant box add ubuntu/focal64
 ## dependencies
 
 # Install vnc client
@@ -40,7 +40,7 @@ echo "VNC_PASSWORD=${vnc_pass}" >> ./.env
 git submodule update --init --recursive
 
 # Config
-readonly apt_proxy_ip="$(ifconfig docker0 | awk 'NR==2 {print $2}')"
+readonly apt_proxy_ip="$(nmcli -f IP4.ADDRESS dev show docker0 | awk '{ print $2 }' | sed 's/\/[[:digit:]]\+$//')"
 
 cat <<EOF >> ./.env
 
