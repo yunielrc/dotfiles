@@ -9,20 +9,42 @@ set -euEo pipefail
 }
 
 # Add npm proxy
-if [[ -n "${PROXY_URL:-}"  ]]; then
-  if [[ ! -f ~/.npmrc  ]]; then
-cat <<EOF >> ~/.npmrc
-proxy=${PROXY_URL}
-https-proxy=${PROXY_URL}
+
+add_npm_proxy() {
+  local -r proxy="$1"
+  local -r root="${2:-false}"
+
+  local home=~/
+  local _tee='tee --append'
+  local _grep='grep --quiet'
+  local _test='test'
+
+  if [[ "$root" == true ]]; then
+    home=/root
+    _tee='sudo tee --append'
+    _grep='sudo grep --quiet'
+    _test='sudo test'
+  fi
+  readonly home _tee _grep
+
+  if $_test ! -f "${home}/.npmrc"; then
+cat <<EOF | $_tee "${home}/.npmrc"
+proxy=${proxy}
+https-proxy=${proxy}
 EOF
   else
-    if ! grep -q '^proxy=' ~/.npmrc; then
-      echo "proxy=${PROXY_URL}" >> ~/.npmrc
+    if ! $_grep '^proxy=' "${home}/.npmrc"; then
+      echo "proxy=${proxy}" | $_tee "${home}/.npmrc"
     fi
-    if ! grep -q '^https-proxy=' ~/.npmrc; then
-      echo "https-proxy=${PROXY_URL}" >> ~/.npmrc
+    if ! $_grep '^https-proxy=' "${home}/.npmrc"; then
+      echo "https-proxy=${proxy}" | $_tee "${home}/.npmrc"
     fi
   fi
+}
+
+if [[ -n "${PROXY_URL:-}"  ]]; then
+  add_npm_proxy "$PROXY_URL"
+  add_npm_proxy "$PROXY_URL" true
 fi
 
 # Dependencies
