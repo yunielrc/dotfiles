@@ -201,6 +201,7 @@
 [user]
 	email = yuniel.work@gmail.com
 	name = yuniel
+	username = yunielrc
 
 [gc]
 	autoDetach = false
