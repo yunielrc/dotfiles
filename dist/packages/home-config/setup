@@ -17,16 +17,12 @@ sudo apt-get install -y gpg \
 
 # Gnome plugins
 
-## Network Manager openvpn
-sudo apt-get install -y network-manager-openvpn-gnome openvpn-systemd-resolved
-sudo systemctl restart network-manager
-
 ## Nautilus gpg integration
 sudo apt-get install -y seahorse-nautilus
 # :Gnome plugins
 
 # Gnome Extension dependencies
-sudo apt-get install -y chrome-gnome-shell
+sudo apt-get install -y gnome-shell-extension-prefs chrome-gnome-shell
 
 ## Sensory Perception
 sudo apt-get install -y lm-sensors
@@ -41,15 +37,3 @@ sudo apt-get install -y gir1.2-clutter-1.0 \
   sudo chmod a+x trans
 )
 # :Gnome Extension dependencies
-
-# Gnome Pre-installed Apps & Extensions dconf configuration
-
-## Network
-
-### Import OpenVPN profiles
-for vpn in "${PKG_PATH}/ovpn-profiles"/*.ovpn; do
-  [[ -f "$vpn" ]] || continue
-  nmcli connection import type openvpn file "$vpn" \
-  || sudo nmcli connection import type openvpn file "$vpn"
-done
-# :Gnome Pre-installed Apps & Extensions dconf configuration
