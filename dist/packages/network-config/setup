@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+# MAIN CONFIG
+
+nmcli connection modify "$NETWORK_CONFIG_CONN_WIFI2" \
+  ipv6.method disabled \
+  ipv4.method manual \
+  ipv4.addresses "$NETWORK_CONFIG_IP" \
+  ipv4.gateway "$NETWORK_CONFIG_GATEWAY" \
+  ipv4.dns "$NETWORK_CONFIG_DNS" || :
+
+nmcli connection modify "$NETWORK_CONFIG_CONN_WIFI5" \
+  ipv6.method disabled \
+  ipv4.method manual \
+  ipv4.addresses "$NETWORK_CONFIG_IP" \
+  ipv4.gateway "$NETWORK_CONFIG_GATEWAY" \
+  ipv4.dns "$NETWORK_CONFIG_DNS" || :
+# :MAIN CONFIG
+
+# OPEN-VPN
+
+## Dependencies
+sudo apt-get install -y network-manager-openvpn-gnome \
+                        openvpn-systemd-resolved
+## Import OpenVPN profiles
+for vpn in "${PKG_PATH}/ovpn-profiles"/*.ovpn; do
+  [[ -f "$vpn" ]] || continue
+  # skip if already added
+  vpn_con="${vpn%.ovpn}"
+  vpn_con="${vpn_con##*/}"
+
+  if nmcli -g name connection | grep --perl-regexp "^${vpn_con}\$"; then
+    continue
+  fi
+
+  nmcli connection import type openvpn file "$vpn" \
+  || sudo nmcli connection import type openvpn file "$vpn"
+done
+# :OPEN-VPN
