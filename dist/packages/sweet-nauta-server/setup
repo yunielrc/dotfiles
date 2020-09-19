@@ -50,4 +50,4 @@ EOF
   sudo chown --recursive "${NUSER}:${NUSER}" "${NUSER_HOME}/.ssh"
 fi
 
-sudo systemctl start sweet-nauta-server.service
+sudo systemctl enable sweet-nauta-server --now
