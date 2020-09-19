@@ -34,18 +34,20 @@ bl::gnome_add_custom_keybinding 'Sweet Nauta Server - Login Test' \
                                 'gtk-launch sweet-nauta-server-login-test' \
                                 "${SWEET_NAUTA_SERVER_KEYBIND}"
 # add ssh keys to nauta user
-readonly NUSER=nauta
-readonly NUSER_HOME="/home/${NUSER}"
+if [[ -f ~/.ssh/id_rsa && -f ~/.ssh/id_rsa.pub ]]; then
+  readonly NUSER=nauta
+  readonly NUSER_HOME="/home/${NUSER}"
 
-sudo --shell <<EOF
-  [[ ! -d "${NUSER_HOME}/.ssh" ]] || rm --recursive --force "${NUSER_HOME}/.ssh"
+  sudo --shell <<-EOF
+    [[ ! -d "${NUSER_HOME}/.ssh" ]] || rm --recursive --force "${NUSER_HOME}/.ssh"
 EOF
 
-sudo mkdir "${NUSER_HOME}/.ssh"
-sudo cp ~/.ssh/id_rsa{,.pub} "${NUSER_HOME}/.ssh/"
-sudo chmod 700 "${NUSER_HOME}/.ssh"
-sudo chmod 600 "${NUSER_HOME}/.ssh/id_rsa"
-sudo chmod 664 "${NUSER_HOME}/.ssh/id_rsa.pub"
-sudo chown --recursive "${NUSER}:${NUSER}" "${NUSER_HOME}/.ssh"
+  sudo mkdir "${NUSER_HOME}/.ssh"
+  sudo cp ~/.ssh/id_rsa{,.pub} "${NUSER_HOME}/.ssh/"
+  sudo chmod 700 "${NUSER_HOME}/.ssh"
+  sudo chmod 600 "${NUSER_HOME}/.ssh/id_rsa"
+  sudo chmod 664 "${NUSER_HOME}/.ssh/id_rsa.pub"
+  sudo chown --recursive "${NUSER}:${NUSER}" "${NUSER_HOME}/.ssh"
+fi
 
 sudo systemctl start sweet-nauta-server.service
