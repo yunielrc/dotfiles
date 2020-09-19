@@ -2,12 +2,6 @@
 
 set -euEo pipefail
 
-# Idempotent
-type -P node &> /dev/null && {
-  inf 'node currently installed'
-  exit 0
-}
-
 # Add Repo
 curl -sL 'https://deb.nodesource.com/setup_14.x' | sudo bash -
 

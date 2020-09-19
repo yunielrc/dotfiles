@@ -184,37 +184,10 @@ dotf-i webapps
 # Local Network apps
 dotf-i lanapps
 
-echoc '>> Internet'
-dotf-i google-chrome
-# Cloud-based instant messaging
-dotf-i telegram
-# Nauta session management service
-dotf-i sweet-nauta-server
-
-echoc '>> Disk Tools'
-# watches I/O usage
-dotf-i iotop
-
-echoc '>> Network Tools'
-# Net top tool grouping bandwidth per process
-dotf-i nethogs
-# Net top tool grouping bandwidth per process
-dotf-i bandwhich
-# Display an interface's bandwidth usage
-dotf-i iftop
-
-echoc '>> Finance'
-# Bitcoin Wallet
-dotf-i electrum
-
-echoc '>> Text editors'
-# A minimal Markdown reading & writing app
-dotf-i typora
-
 echoc '>> Development'
 dotf-i git --force
 # Node.js event-based server-side javascript engine
-dotf-i node
+dotf-i node --force
 # Vi IMproved - enhanced vi editor
 dotf-i vim8+
 # Pack, ship and run any application as a lightweight container
@@ -235,6 +208,33 @@ dotf-i portainer
 dotf-i vagrant
 # Open source editor fully dedicated to OpenAPI-based APIs
 dotf-i swagger-editor
+
+echoc '>> Internet'
+dotf-i google-chrome
+# Cloud-based instant messaging
+dotf-i telegram
+# Nauta session management service
+dotf-i sweet-nauta-server #
+
+echoc '>> Disk Tools'
+# watches I/O usage
+dotf-i iotop
+
+echoc '>> Network Tools'
+# Net top tool grouping bandwidth per process
+dotf-i nethogs
+# Net top tool grouping bandwidth per process
+dotf-i bandwhich
+# Display an interface's bandwidth usage
+dotf-i iftop
+
+echoc '>> Finance'
+# Bitcoin Wallet
+dotf-i electrum
+
+echoc '>> Text editors'
+# A minimal Markdown reading & writing app
+dotf-i typora
 
 echoc '> Configure network:'
 echo '$ nm-connection-editor'
