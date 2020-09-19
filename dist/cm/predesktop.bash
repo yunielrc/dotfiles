@@ -1,13 +1,14 @@
 apt-u
 # bashc & home-scripts can be installed with .env.template default values
 dotf-i bashc
-dotf-i root-config # /etc/hosts
-dotf-i nm-config
+# add /etc/hosts
+dotf-i root-config
+# config network, add vpn
+dotf-i network-config
 
 if [[ "${INSTALL_WITH_VPN:-}" == true ]]; then
   # LOAD NETWORK CONFIG
-  sudo systemctl restart network-manager
-  nmcli conn up "$NETCONN_TOGGLE_VPN_CONN"
+  nmcli conn up "$NETWORK_CONFIG_CONN_VPN"
 fi
 
 dotf-i home-scripts # install gpg-backup, rsync-backup
