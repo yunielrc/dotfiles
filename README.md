@@ -183,6 +183,7 @@ cd ~/.dotfiles/dist
 Open other terminal:
 
 ```sh
+cd ~/.dotfiles/dist
 ./dotfiles desktop
 ```
 
