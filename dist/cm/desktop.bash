@@ -8,10 +8,6 @@ if [[ "${INSTALL_WITH_VPN:-}" == true ]]; then
   # LOAD NETWORK CONFIG
   nmcli conn up "$NETWORK_CONFIG_CONN_VPN" || exit $?
 fi
-if [[ "${INSTALL_APT_CACHER:-}" == true ]]; then
-  dotf-i apt-cacher-ng || exit $?
-  sleep 10
-fi
 
 apt-ug
 dotf-i brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"

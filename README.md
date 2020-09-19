@@ -140,7 +140,7 @@ vim .env
 Execute commands directly in the vm or via vnc, no with a ssh session
 
 ```sh
-./dotfiles predesktop
+./dotfiles home-scripts
 ```
 
 - [ ] Restore gpg keys with gpg-backup (D)
@@ -177,6 +177,12 @@ Execute commands directly in the vm or via vnc, no with a ssh session
 
 ```sh
 cd ~/.dotfiles/dist
+./dotfiles apt-cacher-ng
+```
+
+Open other terminal:
+
+```sh
 ./dotfiles desktop
 ```
 
