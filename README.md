@@ -123,6 +123,17 @@ vagrant destroy -f vnc
 
 ## After installing the new PC
 
+- [ ] Change sudo password timeout
+
+```sh
+sudo visudo
+```
+
+```text
+-Defaults        env_reset
++Defaults        env_reset, timestamp_timeout=240
+`
+
 - [ ] Pull dotfiles
 
 ```sh

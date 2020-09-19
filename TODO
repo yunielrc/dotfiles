@@ -1,4 +1,2 @@
 
-FIX
-
-- quit sudo timeout during dotfiles installation
+quitar timeout sudo
