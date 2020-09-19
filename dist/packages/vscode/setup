@@ -2,14 +2,27 @@
 
 set -euEo pipefail
 
+# Dependencies
+sudo apt-get update -y
+sudo apt-get install -y software-properties-common \
+                        apt-transport-https wget
+# Import GPG key
+wget -qO - https://packages.microsoft.com/keys/microsoft.asc \
+  | sudo apt-key add -
+
+# Add repo
+sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+
 # Install
-wget -qO - https://raw.githubusercontent.com/yunielrc/install-scripts/master/dist/packages/vscode/vscode-ubuntu | bash
+sudo apt-get update -y
+sudo apt-get install -y code
 
 # Configure
-# font
+## font
 sudo apt update -y
 sudo apt install -y fonts-firacode
-# extensions dependencies
+
+## Extensions dependencies
 sudo apt install -y bats shellcheck
 if type -P gem; then
   gem install --user-install solargraph
