@@ -2,7 +2,9 @@ load test_helper
 
 teardown() {
   [[ "${RUN_ON_DOCKER:-}" == true ]] && return 0;
-  [[ -f /etc/apt/apt.conf.d/00proxy ]] && sudo rm /etc/apt/apt.conf.d/00proxy
+  if [[ -f /etc/apt/apt.conf.d/00proxy ]]; then
+    sudo rm /etc/apt/apt.conf.d/00proxy
+  fi
 }
 
 @test 'should install & config apt-cacher-ng' {
