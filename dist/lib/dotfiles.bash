@@ -410,7 +410,7 @@ export -f __log_error
 apt-u() { sudo apt-get update -y; }
 export -f apt-u
 
-apt-ug() { sudo apt-get upgrade -y; }
+apt-ug() { sudo apt-get update -y && sudo apt-get upgrade -y; }
 export -f apt-ug
 
 apt-i() {
