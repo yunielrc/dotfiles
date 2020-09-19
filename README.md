@@ -129,8 +129,6 @@ vagrant destroy -f vnc
 git clone --recurse-submodules https://github.com/yunielrc/dotfiles.git ~/.dotfiles
 ```
 
-Define 'LOCAL_DOMAIN' and 'EXTERNAL_SERVER_IP':
-
 ```sh
 cd ~/.dotfiles/dist
 cp .env.template .env
