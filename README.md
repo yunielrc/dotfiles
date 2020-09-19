@@ -129,10 +129,12 @@ vagrant destroy -f vnc
 sudo visudo
 ```
 
+Edit:
+
 ```text
 -Defaults        env_reset
 +Defaults        env_reset, timestamp_timeout=240
-`
+```
 
 - [ ] Pull dotfiles
 
