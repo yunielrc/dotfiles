@@ -1,5 +1,4 @@
 # BASE
-
 # add /etc/hosts
 dotf-i root-config
 # config network, add vpn
@@ -8,6 +7,10 @@ dotf-i network-config
 if [[ "${INSTALL_WITH_VPN:-}" == true ]]; then
   # LOAD NETWORK CONFIG
   nmcli conn up "$NETWORK_CONFIG_CONN_VPN" || exit $?
+fi
+if [[ "${INSTALL_APT_CACHER:-}" == true ]]; then
+  dotf-i apt-cacher-ng || exit $?
+  sleep 10
 fi
 
 apt-ug
