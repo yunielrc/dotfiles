@@ -20,6 +20,10 @@ echoc '> APT packages'
 # sudo add-apt-repository -y ppa:teejee2008/ppa
 # apt-i timeshift
 
+# Peek - an animated GIF recorder
+sudo add-apt-repository -y ppa:peek-developers/stable
+apt-i peek
+# Perl script to wake up computers
 apt-i wakeonlan
 # displays the percentage of copied data
 apt-i progress
@@ -108,8 +112,6 @@ brew-i fx
 brew-i httpie
 # Search tool like grep and The Silver Searcher
 brew-i rg
-# Clone of cat(1) with syntax highlighting and Git integration
-brew-i bat
 # Modern replacement for 'ls'
 brew-i exa
 # Modern replacement for ps written by Rust
@@ -153,8 +155,10 @@ echoc '>> BASHC'
 echoc '>>> Themes'
 # The cross-shell prompt for astronauts
 dotf-i starship
-
+apt-ca
 echoc '>> Tools'
+# Clone of cat(1) with syntax highlighting and Git integration
+dotf-i bat
 # It's an interactive Unix filter for command-line
 dotf-i fzf
 # Interactive cheatsheet tool for the command-line
