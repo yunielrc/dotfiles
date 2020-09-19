@@ -181,6 +181,8 @@ cd ~/.dotfiles/dist
 ```
 
 Open other terminal:
+For some reason debian packages installation fails if it is done from the
+same terminal where apt-cacher-ng was installed
 
 ```sh
 cd ~/.dotfiles/dist
