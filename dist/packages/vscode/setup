@@ -23,7 +23,9 @@ sudo apt update -y
 sudo apt install -y fonts-firacode
 
 ## Extensions dependencies
+dotf-i shfmt
 sudo apt install -y bats shellcheck
+
 if type -P gem; then
   gem install --user-install solargraph
 fi
