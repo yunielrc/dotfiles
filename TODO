@@ -1,1 +1,6 @@
 
+TODO
+
+- add git hooks:
+  - shellcheck
+  - shfmt

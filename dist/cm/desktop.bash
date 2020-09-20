@@ -99,7 +99,6 @@ apt-i socat
 # Utility for network exploration or security auditing
 apt-i nmap
 
-
 echoc '> BREW packages'
 # Lightweight and flexible command-line JSON processor
 brew-i jq

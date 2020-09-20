@@ -103,7 +103,7 @@ __install_plugin() {
   }
 
   if [[ ! -f "$DOTF_BASH_GEN_SETTINGS_FILE" ]] || ! grep --silent "BASHC_PLUGINS+=($plugin)" "$DOTF_BASH_GEN_SETTINGS_FILE"; then
-    echo "BASHC_PLUGINS+=($plugin)" >> "$DOTF_BASH_GEN_SETTINGS_FILE" || {
+    echo "BASHC_PLUGINS+=($plugin)" >>"$DOTF_BASH_GEN_SETTINGS_FILE" || {
       err "${msg}: ${plugin}, adding plugin to settings"
       return 13
     }
@@ -300,7 +300,7 @@ __install_package() {
   local -r pkg_dconf_file="${pkg_dir}/dconf.ini"
 
   if [[ -f "$pkg_dconf_file" ]]; then
-    envsubst < "$pkg_dconf_file" | dconf load / || {
+    envsubst <"$pkg_dconf_file" | dconf load / || {
       err "${msg}: ${pkg}, importing dconf.ini"
       return 19
     }
@@ -394,7 +394,7 @@ __log_error() {
   local -r errmsg_file="$1"
   [[ -f "$errmsg_file" ]]
 
-cat <<EOF >> ~/.dotfiles.err.log
+  cat <<EOF >>~/.dotfiles.err.log
 
 --------------------------------------------------------------
 $(date +%Y%m%d-%H%M%S)
