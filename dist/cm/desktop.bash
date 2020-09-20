@@ -107,9 +107,6 @@ brew-i jq
 brew-i jo
 # Command-line JSON processing tool
 brew-i fx
-# Human-friendly CLI HTTP client for the API era
-# https://github.com/httpie/httpie#examples
-brew-i httpie
 # Search tool like grep and The Silver Searcher
 brew-i rg
 # Modern replacement for 'ls'
@@ -122,8 +119,6 @@ brew-i sd
 brew-i dust
 # Very fast implementation of tldr in Rust
 brew-i tealdeer # tldr
-# Program that allows you to count code, quickly
-brew-i tokei
 # A TUI system monitor written in Rust
 brew tap cjbassi/ytop
 brew-i ytop
@@ -131,15 +126,23 @@ brew-i ytop
 brew-i grex
 # Interactive terminal based UI application for tracking cryptocurrencies
 brew-i cointop
-# Interactive terminal based UI application for tracking cryptocurrencies
+# Rainbows and unicorns in your console!
 brew-i lolcat
 # Cross-platform monitoring tool
 brew-i glances
 # Search tool like grep, but optimized for programmers
 brew-i ack
+
+echoc '>> Development'
+# A framework for managing and maintaining multi-language pre-commit hooks
+brew-i pre-commit
 # GIT quick statistics
 brew-i git-quick-stats
-
+# Program that allows you to count code, quickly
+brew-i tokei
+# Human-friendly CLI HTTP client for the API era
+# https://github.com/httpie/httpie#examples
+brew-i httpie
 
 echoc '> CARGO packages'
 
