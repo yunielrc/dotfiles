@@ -135,7 +135,7 @@ brew-i ack
 
 echoc '>> Development'
 # A framework for managing and maintaining multi-language pre-commit hooks
-brew-i pre-commit
+# brew-i pre-commit
 # GIT quick statistics
 brew-i git-quick-stats
 # Program that allows you to count code, quickly
