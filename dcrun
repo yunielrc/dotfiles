@@ -24,4 +24,3 @@ docker-compose run --rm \
 -v "$(readlink -f ./dist/.env):${DOCKER_MOUNT}/dist/.env" \
 -v "$(readlink -f ./dist/.env.override.server):${DOCKER_MOUNT}/dist/.env.override.server" \
 "${SERVICE#build-}" "$@"
-

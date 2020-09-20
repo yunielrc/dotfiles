@@ -47,5 +47,3 @@ sudo --user=${USER} ${HOME_BIN}/rsync-backup backup | sudo --user=${USER} logger
 EOF
 sudo chmod +x "/etc/cron.daily/${USER}-rsync-backup"
 # :RSYNC-BACKUP
-
-

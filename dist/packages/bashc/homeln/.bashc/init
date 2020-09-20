@@ -127,4 +127,3 @@ bashc::main() {
 if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
   bashc::main "$@"
 fi
-

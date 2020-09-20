@@ -40,4 +40,3 @@ RUN apt-get update -y && \
 FROM dev as brew
 ARG USER
 RUN wget -qO - https://raw.githubusercontent.com/yunielrc/install-scripts/master/dist/packages/brew/brew-ubuntu | sudo --user="$USER" bash
-

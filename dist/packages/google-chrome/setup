@@ -4,4 +4,3 @@ set -euEo pipefail
 
 # Install
 wget -qO - https://raw.githubusercontent.com/yunielrc/install-scripts/master/dist/packages/google-chrome/google-chrome-ubuntu | bash
-

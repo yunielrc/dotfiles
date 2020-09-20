@@ -71,4 +71,3 @@ d2/f3'
   assert_failure 13
   assert_line --index 0 'Invalid param: invalid'
 }
-

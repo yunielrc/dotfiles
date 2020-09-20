@@ -38,5 +38,3 @@ setup() {
 base2 cm
 dummy cm'
 }
-
-

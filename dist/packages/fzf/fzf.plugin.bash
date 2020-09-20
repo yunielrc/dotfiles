@@ -21,4 +21,3 @@ export FZF_DEFAULT_OPTS='--multi --height 50% --layout=reverse --border'
 # Supported commands
 # usage: _fzf_setup_completion path|dir|var|alias|host COMMANDS...
 _fzf_setup_completion path bat
-

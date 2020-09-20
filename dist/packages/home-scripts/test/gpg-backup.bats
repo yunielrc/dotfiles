@@ -161,4 +161,3 @@ gpg:              unchanged: 1
 gpg:       secret keys read: 1
 gpg:  secret keys unchanged: 1'
 }
-
