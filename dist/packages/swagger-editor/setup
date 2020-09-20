@@ -10,10 +10,10 @@ dotf-i google-chrome
 [[ -n "$(sudo docker ps --all --quiet --filter name=swagger-editor)" ]] && exit 0
 
 sudo docker run \
-                --name swagger-editor \
-                --detach \
-                --restart always \
-                --publish "${DAPP_SWAGGER_EDITOR_PORT}:8080" \
-                swaggerapi/swagger-editor
+  --name swagger-editor \
+  --detach \
+  --restart always \
+  --publish "${DAPP_SWAGGER_EDITOR_PORT}:8080" \
+  swaggerapi/swagger-editor
 
 # Configure
