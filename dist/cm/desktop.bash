@@ -230,7 +230,7 @@ echoc '>> Network Tools'
 # Net top tool grouping bandwidth per process
 dotf-i nethogs
 # Net top tool grouping bandwidth per process
-dotf-i bandwhich
+# dotf-i bandwhich # hangs, inverts upload and download data
 # Display an interface's bandwidth usage
 dotf-i iftop
 
