@@ -36,9 +36,12 @@ sudo apt-get install -y gpg
 sudo apt-get install -y rsync
 
 ## Config
-### allows rsync-backup to mount an nfs device
+### allows user to mount a device
 # https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos
 echo "${USER} ALL=NOPASSWD:$(type -P mount)" | sudo tee "/etc/sudoers.d/${USER}-nopasswd-mount"
+### allows user to umount a device
+echo "${USER} ALL=NOPASSWD:$(type -P umount)" | sudo tee "/etc/sudoers.d/${USER}-nopasswd-umount"
+
 
 ### allows run rsync-backup daily
 cat <<EOF | sudo tee "/etc/cron.daily/${USER}-rsync-backup"

@@ -33,6 +33,7 @@ readonly NFS_DEVICE="${RSYNC_BACKUP_NFS_DEVICE:-"$NFS_DEVICE"}"
 readonly MOUNT_DIR="${RSYNC_BACKUP_MOUNT_DIR:-"$MOUNT_DIR"}"
 readonly SRC_LIST="${RSYNC_BACKUP_SRC_LIST:-"$SRC_LIST"}"
 readonly BACKUP_FOLDER="${RSYNC_BACKUP_BACKUP_FOLDER:-"$BACKUP_FOLDER"}"
+readonly UMOUNT="${RSYNC_BACKUP_UMOUNT:-"${UMOUNT:-false}"}"
 # :
 readonly BACKUP_DIR="${MOUNT_DIR}/${BACKUP_FOLDER}"
 
@@ -67,6 +68,10 @@ inf() {
 mount_nfs(){
   [[ -d "$MOUNT_DIR" ]] || mkdir --verbose --parents "$MOUNT_DIR"
   sudo mount -t nfs "$NFS_DEVICE" "$MOUNT_DIR"
+}
+
+umount_nfs() {
+  sudo umount "$MOUNT_DIR"
 }
 
 #
@@ -293,12 +298,14 @@ EOF
       }
       [[ $no_mount == true ]] || mount_nfs
       backup SRC_LIST "$BACKUP_DIR"
+      [[ "$UMOUNT" == false ]] || umount_nfs
       return
       ;;
     restore)
       shift
       [[ $no_mount == true ]] || mount_nfs
       restore SRC_LIST "$BACKUP_DIR"
+      [[ "$UMOUNT" == false ]] || umount_nfs
       return
       ;;
     *)
