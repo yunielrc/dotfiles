@@ -38,3 +38,7 @@ LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${HOME}/.local/lib"
 export PATH="${PATH}:${HOME}/.usr/bin"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${HOME}/.usr/lib"
 export PREFIX="${HOME}/.usr"
+
+# File search commands
+export FIND_COMMAND="find -not -path '*/.apt-cacher-ng/*' -not -path '*/.git/*'"
+export FD_COMMAND="fd --hidden --follow --no-ignore --exclude '\.git/' --exclude '\.apt-cacher-ng/'"

@@ -27,7 +27,8 @@ alias proxmox-wakeup="wakeonlan ${PROXMOX_MAC}"
 alias storage-wakeup="wakeonlan ${STORAGE_MAC}"
 
 # tools
-alias fd="fd -H --exclude '.apt-cacher-ng/'"
+alias find="$FIND_COMMAND"
+alias fd="$FD_COMMAND"
 alias rg="rg --glob '!.apt-cacher-ng/' --glob '!.portainer/data'"
 alias cca='ccze --mode=ansi'
 alias df='df -hT -x squashfs'
