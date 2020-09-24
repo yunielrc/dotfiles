@@ -4,9 +4,17 @@ set -euEo pipefail
 
 [[ "${RUN_ON_DOCKER:-}" == true ]] && exit 1
 
+readonly ACNG_USER='apt-cacher-ng'
+readonly ACNG_HOME="/home/${ACNG_USER}"
+readonly ACNG_CACHE_DIR="${ACNG_HOME}/.apt-cacher-ng"
+
+if [[ ! -d "$ACNG_HOME" ]]; then
+   sudo mkdir "$ACNG_HOME"
+   sudo chown "${ACNG_USER}:${ACNG_USER}" "$ACNG_HOME"
+fi
+
 sudo systemctl stop apt-cacher-ng.service
 sudo rm --recursive --force /var/cache/apt-cacher-ng
-[[ -d ~/.apt-cacher-ng ]] || mkdir ~/.apt-cacher-ng
-sudo chown -R apt-cacher-ng:apt-cacher-ng ~/.apt-cacher-ng
-sudo ln --symbolic --force ~/.apt-cacher-ng /var/cache/apt-cacher-ng
+[[ -d "$ACNG_CACHE_DIR" ]] || sudo --user "$ACNG_USER" mkdir "$ACNG_CACHE_DIR"
+sudo ln --symbolic --force "$ACNG_CACHE_DIR" /var/cache/apt-cacher-ng
 sudo systemctl start apt-cacher-ng.service
