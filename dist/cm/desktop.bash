@@ -19,7 +19,12 @@ echoc '> APT packages'
 # timeshift backup
 # sudo add-apt-repository -y ppa:teejee2008/ppa
 # apt-i timeshift
-
+# Basic GL utilities built by Mesa, including glxinfo and glxgears
+apt-i mesa-utils
+# Tools for debugging the Intel graphics driver
+apt-i intel-gpu-tools
+# Displays an indented directory tree, in color
+apt-i tree
 # Peek - an animated GIF recorder
 sudo add-apt-repository -y ppa:peek-developers/stable
 apt-i peek
@@ -38,8 +43,6 @@ apt-i rlwrap
 apt-i pv
 # Packages essential for building
 apt-i build-essential
-# Software suite to create, edit, and compose bitmap images
-apt-i imagemagick
 # Growing collection of the Unix tools
 apt-i moreutils
 # Gnome simple configuration storage system - graphical editor
@@ -142,6 +145,8 @@ brew-i tokei
 # Human-friendly CLI HTTP client for the API era
 # https://github.com/httpie/httpie#examples
 brew-i httpie
+# Lazier way to manage everything docker
+brew-i lazydocker
 
 echoc '> CARGO packages'
 
