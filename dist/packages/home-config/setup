@@ -19,6 +19,9 @@ sudo apt-get install -y gpg \
 
 ## Nautilus gpg integration
 sudo apt-get install -y seahorse-nautilus
+
+# Nautilus image converter
+sudo apt-get install -y imagemagick nautilus-image-converter
 # :Gnome plugins
 
 # Gnome Extension dependencies
