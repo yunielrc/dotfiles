@@ -15,7 +15,6 @@ alias net-public-ip='dig +short myip.opendns.com @resolver1.opendns.com'
 
 alias export_proxy="export http_proxy=${PROXY}"
 alias rmac="openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/:$//'"
-alias download_speed="wget --report-speed=bits -O /dev/null http://ipv4.download.thinkbroadband.com/5MB.zip"
 
 # proxmox server
 alias proxmox-suspend='ssh proxmox systemctl suspend'
@@ -46,3 +45,7 @@ alias weather='curl wttr.in/havana'
 # bash
 alias reload='exec $SHELL'
 alias r='exec $SHELL'
+
+# test
+alias test-write-speed='dd if=/dev/zero of=/tmp/twspeed.img bs=1G count=2 oflag=dsync; rm -vf /tmp/twspeed.img'
+alias test-download-speed="wget --report-speed=bits -O /dev/null http://ipv4.download.thinkbroadband.com/5MB.zip"

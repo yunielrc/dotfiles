@@ -9,3 +9,9 @@ sudo apt-get install -y gocryptfs
 # Configure
 [[ -d ~/.crypted ]] || mkdir ~/.crypted
 [[ -d ~/Decrypted ]] || mkdir ~/Decrypted
+
+
+if [[ -f ~/.bash_logout ]] && grep --quiet 'umount ~/Decrypted' ~/.bash_logout; then
+  exit 0
+fi
+echo 'umount ~/Decrypted || :' >> ~/.bash_logout
