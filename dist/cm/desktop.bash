@@ -16,6 +16,8 @@ dotf-i rust && PATH="${PATH}:${HOME}/.cargo/bin"
 # :BASE
 
 echoc '> APT packages'
+# A Pomodoro timer for GNOME
+# apt-i gnome-shell-pomodoro # has bugs
 # timeshift backup
 # sudo add-apt-repository -y ppa:teejee2008/ppa
 # apt-i timeshift
@@ -176,6 +178,8 @@ dotf-i lsd
 dotf-i nnn
 # Automate tasks on the local network
 dotf-i lan-bot
+# Create or mount an encrypted filesystem
+dotf-i gocryptfs
 
 echoc '>> Video & Streaming'
 # Celluloid (formerly GNOME MPV)
@@ -247,14 +251,23 @@ echoc '>> Text editors'
 # A minimal Markdown reading & writing app
 dotf-i typora
 
+echoc '> Flatpack'
+
+echoc '>> Setup Flatpack'
+apt-i flatpak
+apt-i gnome-software-plugin-flatpak
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install -y flathub com.github.tchx84.Flatseal
+
+echoc '>> Flatpack apps'
+flatpak install -y flathub org.gnucash.GnuCash
+flatpak install -y flathub org.gaphor.Gaphor
+
 echoc '> Configure network:'
 echo '$ nm-connection-editor'
 
 echoc '> For adding more tools visit:'
 cat <<EOF
 50 Things to Do After installing Ubuntu 20.04 - https://youtu.be/MNX7HgcWqHc
-https://github.com/alebcay/awesome-shell
-https://github.com/agarrharr/awesome-cli-apps
-https://github.com/herrbischoff/awesome-command-line-apps
-https://github.com/mathiasbynens/dotfiles/blob/main/brew.sh
+https://github.com/alebcay/awesomflatpak install flathub com.github.tchx84.Flatseal
 EOF

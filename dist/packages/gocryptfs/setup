@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+# Install
+sudo apt-get update -y
+sudo apt-get install -y gocryptfs
+
+# Configure
+[[ -d ~/.crypted ]] || mkdir ~/.crypted
+[[ -d ~/Decrypted ]] || mkdir ~/Decrypted
