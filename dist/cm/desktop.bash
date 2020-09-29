@@ -18,8 +18,6 @@ dotf-i rust && PATH="${PATH}:${HOME}/.cargo/bin"
 echoc '> APT packages'
 # Queue, examine, or delete jobs for later execution
 apt-i at
-# Important tools for controlling the network
-apt-i net-tools
 # Basic GL utilities built by Mesa, including glxinfo and glxgears
 apt-i mesa-utils
 # Tools for debugging the Intel graphics driver
@@ -163,8 +161,12 @@ echoc '>> BASHC'
 echoc '>>> Themes'
 # The cross-shell prompt for astronauts
 dotf-i starship
-apt-ca
+
 echoc '>> Tools'
+# Important tools for controlling the network
+dotf-i --force net-tools
+# List open files
+dotf-i --force lsof
 # Clone of cat(1) with syntax highlighting and Git integration
 dotf-i bat
 # It's an interactive Unix filter for command-line
