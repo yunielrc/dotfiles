@@ -16,11 +16,10 @@ dotf-i rust && PATH="${PATH}:${HOME}/.cargo/bin"
 # :BASE
 
 echoc '> APT packages'
-# A Pomodoro timer for GNOME
-# apt-i gnome-shell-pomodoro # has bugs
-# timeshift backup
-# sudo add-apt-repository -y ppa:teejee2008/ppa
-# apt-i timeshift
+# Queue, examine, or delete jobs for later execution
+apt-i at
+# Important tools for controlling the network
+apt-i net-tools
 # Basic GL utilities built by Mesa, including glxinfo and glxgears
 apt-i mesa-utils
 # Tools for debugging the Intel graphics driver
