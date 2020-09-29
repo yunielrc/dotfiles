@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+# Install
+sudo apt-get update -y
+sudo apt-get install -y net-tools
+
+# Configure
+# https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos
+echo "${USER} ALL=NOPASSWD:$(type -P netstat)" | sudo tee "/etc/sudoers.d/${USER}-nopasswd-netstat"
