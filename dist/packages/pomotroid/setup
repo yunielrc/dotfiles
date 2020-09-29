@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+# Install
+cd "$(mktemp -d)"
+wget -qO - https://api.github.com/repos/Splode/pomotroid/releases/latest |
+  grep -o 'https.*-linux.deb' |
+  wget -O pomotroid.deb -qi - &&
+  sudo apt-get update -qq &&
+  sudo apt-get install -y ./pomotroid.deb &&
+  rm ./pomotroid.deb
