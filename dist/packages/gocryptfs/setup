@@ -9,3 +9,8 @@ sudo apt-get install -y gocryptfs
 # Configure
 [[ -d ~/.crypted ]] || mkdir ~/.crypted
 [[ -d ~/Decrypted ]] || mkdir ~/Decrypted
+
+## add keybinding
+bl::gnome_add_custom_keybinding 'Mount Crypted Directory' \
+                                "gnome-terminal -- sh -c 'gocryptfs ~/.crypted ~/Decrypted'" \
+                                "${GOCRYPTFS_MOUNT_KEYBIND}"
