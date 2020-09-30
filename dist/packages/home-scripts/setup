@@ -10,16 +10,16 @@ sudo apt-get update -y
 if [[ ! -f ~/.usr/bin/netconn-toggle ]]; then
   ## add keybindings
   bl::gnome_add_custom_keybinding 'Toggle ethernet' \
-                                  "bash -c 'netconn-toggle ${NETCONN_TOGGLE_USB_ETHERNET_CONN}'" \
+                                  "sh -c 'netconn-toggle ${NETCONN_TOGGLE_USB_ETHERNET_CONN}'" \
                                   "$NETCONN_TOGGLE_USB_ETHERNET_KEYBIND"
   bl::gnome_add_custom_keybinding 'Toggle vpn' \
-                                  "bash -c 'netconn-toggle ${NETCONN_TOGGLE_VPN_CONN}'" \
+                                  "sh -c 'netconn-toggle ${NETCONN_TOGGLE_VPN_CONN}'" \
                                   "$NETCONN_TOGGLE_VPN_KEYBIND"
   bl::gnome_add_custom_keybinding 'Toggle wifi 2.4' \
-                                  "bash -c 'netconn-toggle ${NETCONN_TOGGLE_WIFI2_CONN}'" \
+                                  "sh -c 'netconn-toggle ${NETCONN_TOGGLE_WIFI2_CONN}'" \
                                   "$NETCONN_TOGGLE_WIFI2_KEYBIND"
   bl::gnome_add_custom_keybinding 'Toggle wifi 5' \
-                                  "bash -c 'netconn-toggle ${NETCONN_TOGGLE_WIFI5_CONN}'" \
+                                  "sh -c 'netconn-toggle ${NETCONN_TOGGLE_WIFI5_CONN}'" \
                                   "$NETCONN_TOGGLE_WIFI5_KEYBIND"
 fi
 # :NETCONN-TOGGLE
