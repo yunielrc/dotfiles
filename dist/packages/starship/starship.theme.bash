@@ -1,4 +1,4 @@
-export STATUS
+# export STATUS # for custom exit status
 eval "$(starship init bash)"
 export STARSHIP_CONFIG=~/.starship.toml
 

@@ -1,5 +1,9 @@
 # add_newline = false
 
+[status]
+disabled = false
+symbol = ""
+
 [docker_context]
 disabled = false
 # only_with_files = true
@@ -10,10 +14,10 @@ truncation_length = 8
 [aws]
 disabled = true
 
-[custom.exit_status]
-description = "The last commands exit status"
-prefix = "exit "
-command = "echo $STATUS"
-when = "[ $STATUS -ne 0 ]"
-style = "bold red"
-# format = "[\\[$output\\]]($style) "
+# [custom.exit_status]
+# description = "The last commands exit status"
+# prefix = "exit "
+# command = "echo $STATUS"
+# when = "[ $STATUS -ne 0 ]"
+# style = "bold red"
+# # format = "[\\[$output\\]]($style) "
