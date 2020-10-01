@@ -194,6 +194,9 @@ dotf-i stremio
 # Download video and audio content from YouTube
 dotf-i 4kvideodownloader
 
+echoc '>> Gaming'
+dotf-i mangohud
+
 echoc '>> Web apps'
 # Web apps
 dotf-i webapps
