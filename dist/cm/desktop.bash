@@ -102,6 +102,10 @@ apt-i socat
 apt-i nmap
 
 echoc '> BREW packages'
+# New way to see and navigate directory trees
+brew-i broot
+# Command-line benchmarking tool
+brew-i hyperfine
 # Lightweight and flexible command-line JSON processor
 brew-i jq
 # A small utility to create JSON objects
@@ -151,6 +155,7 @@ echoc '> CARGO packages'
 
 # A tool to analyze file system usage written in Rust
 cargo install dutree
+cargo install rustscan # depends on nmap
 
 echoc '> DOTFILES packages'
 
