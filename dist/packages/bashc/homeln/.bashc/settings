@@ -10,4 +10,4 @@ BASHC_THEME=starship
 # BASHC_THEME=bash-git-prompt
 # BASHC_THEME=sexy-bash-prompt
 
-BASHC_PLUGINS+=(forgit)
+BASHC_PLUGINS+=(forgit terraform rustscan)

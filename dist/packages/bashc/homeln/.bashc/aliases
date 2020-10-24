@@ -11,10 +11,15 @@ alias -- -="cd -"
 alias cdt='cd $(mktemp -d)'
 
 # Network
-alias net-public-ip='dig +short myip.opendns.com @resolver1.opendns.com'
+alias dig-public-ip='dig +short myip.opendns.com @resolver1.opendns.com'
+alias curl-public-ip='curl ifconfig.me'
+alias wget-public-ip='wget -qO - ifconfig.me'
 
-alias export_proxy="export http_proxy=${PROXY}"
 alias rmac="openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/:$//'"
+
+
+# outer router
+alias orouter-reboot="ssh ubnt@${OROUTER_IP} reboot"
 
 # proxmox server
 alias proxmox-suspend='ssh proxmox systemctl suspend'
@@ -39,6 +44,7 @@ alias du='du -bsh'
 alias journalnav='journalctl --pager-end --follow | lnav'
 alias bmon='bmon -b'
 alias http-server='python3 -m http.server 8888'
+alias terraform="HTTPS_PROXY=${PROXY} terraform"
 
 # services
 alias weather='curl wttr.in/havana'
@@ -51,4 +57,5 @@ alias r='exec $SHELL'
 alias dd-wspeed='dd if=/dev/zero of=/tmp/twspeed.img bs=1G count=2 oflag=dsync; rm -vf /tmp/twspeed.img'
 alias wget-dspeed="wget --report-speed=bits -O /dev/null http://ipv4.download.thinkbroadband.com/5MB.zip"
 
-
+# 
+alias umount="sudo umount"
