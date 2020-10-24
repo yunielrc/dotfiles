@@ -13,8 +13,9 @@ fi
 source "/home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.bash"
 
 # Environment
+FIND_CMD="find -not -path '*/.git/*'"
 export FZF_DEFAULT_COMMAND="command ${FD_COMMAND}"
-# export FZF_DEFAULT_COMMAND="command ${FIND_COMMAND}"
+# export FZF_DEFAULT_COMMAND="command ${FIND_CMD}"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_COMPLETION_TRIGGER=',,'
 export FZF_DEFAULT_OPTS='--multi --height 50% --layout=reverse --border'
