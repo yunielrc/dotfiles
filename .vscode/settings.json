@@ -1,19 +1,11 @@
 {
-  "shellcheck.exclude": [1091, 1090, 2155],
-  "shellcheck.ignoreFileSchemes": ["git", "gitfs"],
+  "shellcheck.exclude": ["1091", "1090", "2155"],
   "files.associations": {
     "Vagrantfile.vbox": "ruby",
     ".env*": "shellscript",
     "*.env": "shellscript",
     "htoprc": "ini"
   },
-  "spellright.language": [
-    "English"
-  ],
-  "spellright.documentTypes": [
-    "markdown",
-    "latex"
-  ],
   "search.exclude": {
     ".vagrant/": true,
     "3rd/": true
