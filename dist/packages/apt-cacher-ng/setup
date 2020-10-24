@@ -2,8 +2,6 @@
 
 set -euEo pipefail
 
-[[ "${RUN_ON_DOCKER:-}" == true ]] && exit 1
-
 # Install
 sudo apt-get update -y
 sudo debconf-set-selections <<< 'apt-cacher-ng   apt-cacher-ng/tunnelenable      boolean true'
