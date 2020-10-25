@@ -6,4 +6,4 @@ set -euEo pipefail
 dotf-i brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # Install
-brew install rustscanq
+brew install rustscan
