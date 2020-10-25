@@ -17,6 +17,10 @@ alias wget-public-ip='wget -qO - ifconfig.me'
 
 alias rmac="openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/:$//'"
 
+# Gnome
+# X11 Gnome restart
+alias gnome-restart="busctl --user call org.gnome.Shell /org/gnome/Shell org.gnome.Shell Eval s 'Meta.restart(\"Restarting…\")'"
+alias gnome-restart-force="killall -HUP gnome-shell"
 
 # outer router
 alias orouter-reboot="ssh ubnt@${OROUTER_IP} reboot"
