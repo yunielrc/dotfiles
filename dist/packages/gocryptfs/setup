@@ -5,6 +5,7 @@ set -euEo pipefail
 # Install
 sudo apt-get update -y
 sudo apt-get install -y gocryptfs
+# nix-env -i gocryptfs
 
 # Configure
 [[ -d ~/.crypted ]] || mkdir ~/.crypted
