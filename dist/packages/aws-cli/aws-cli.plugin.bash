@@ -1,6 +1,5 @@
-
 # Aliases
-alias aws-ec2-spot-prices="aws ec2 describe-spot-price-history --start-time \"$(date -Idate)\" --product-descriptions 'Linux/UNIX' --query 'sort_by(SpotPriceHistory, &SpotPrice)'"
+alias aws-ec2-spot-prices="aws ec2 describe-spot-price-history --start-time \"\$(date -Idate)\" --product-descriptions 'Linux/UNIX' --query 'sort_by(SpotPriceHistory, &SpotPrice)'"
 alias aws-ec2-volumes="aws ec2 describe-volumes --query 'Volumes[*].{State:State,ID:VolumeId,AZ:AvailabilityZone,Size:Size,Created:CreateTime,Instance:Attachments[0].InstanceId}'"
 alias aws-ec2-instances="aws ec2 describe-instances --query 'Reservations[].Instances[].{State:State.Name, Type:InstanceType, ID:InstanceId, Launched:LaunchTime, PublicIp:PublicIpAddress, Name:Tags[?Key==\`Name\`].Value | [0]}'"
 alias ec2lsi='aws-ec2-instances'

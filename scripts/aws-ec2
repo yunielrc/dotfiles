@@ -89,7 +89,7 @@ public-ip() {
   echo "$public_ip"
 }
 
-usage(){
+usage() {
 
   cat <<HELPMSG
   Usage:
@@ -144,26 +144,26 @@ main() {
   local -r cmd="${1:-}"
 
   case "$cmd" in
-    -h|--help|'')
-      usage
+  -h | --help | '')
+    usage
     ;;
-    start)
-      shift
-      start "$@"
+  start)
+    shift
+    start "$@"
     ;;
-    stop)
-      shift
-      stop "$@"
+  stop)
+    shift
+    stop "$@"
     ;;
-    state|status)
-      shift
-      state "$@"
+  state | status)
+    shift
+    state "$@"
     ;;
-    public-ip)
-      shift
-      public-ip "$@"
+  public-ip)
+    shift
+    public-ip "$@"
     ;;
-    *)
+  *)
     usage
     exit 1
     ;;

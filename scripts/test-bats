@@ -48,7 +48,7 @@ __test_dir() {
   while read -r suite; do
     has_tests=true
     __test_suite "$suite"
-  done < <(find "$test_dir" -ignore_readdir_race -name '*.bats' -type f 2> /dev/null )
+  done < <(find "$test_dir" -ignore_readdir_race -name '*.bats' -type f 2>/dev/null)
 
   if [[ $has_tests == false ]]; then
     echo -e "${LIGHTRED}>> NO TESTS${NOCOLOR}"
@@ -64,7 +64,7 @@ fi
 
 echo -e "\n${LIGHTPURPLE}Testing Units${NOCOLOR}\n"
 
- __test_dir "./dist/test"
+__test_dir "./dist/test"
 
 cd './dist/packages'
 
@@ -79,7 +79,7 @@ for pkg in *; do
   fi
   __test_dir "${pkg}/test"
 done
-cd - > /dev/null
+cd - >/dev/null
 
 # echo -e "\n${LIGHTPURPLE}Testing e2e${NOCOLOR}\n"
 

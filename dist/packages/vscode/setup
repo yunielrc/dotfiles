@@ -5,15 +5,14 @@ set -euEo pipefail
 # Dependencies
 sudo apt-get update -y
 sudo apt-get install -y software-properties-common \
-                        apt-transport-https wget
+  apt-transport-https wget
 # Import GPG key
-wget -qO - https://packages.microsoft.com/keys/microsoft.asc \
-  | sudo apt-key add -
+wget -qO - https://packages.microsoft.com/keys/microsoft.asc |
+  sudo apt-key add -
 
 # Add repo
 #sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
 echo 'deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main' | sudo tee /etc/apt/sources.list.d/vscode.list
- 
 
 # Install
 sudo apt-get update -y
@@ -32,4 +31,9 @@ if type -P gem; then
   gem install --user-install solargraph
 fi
 
+# Dockerfile linter
+## Dependencies
+wget -qO - https://git.io/JTlbH?=brew-ubuntu | bash
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+brew install hadolint
 # code --install-extension 'Shan.code-settings-sync'

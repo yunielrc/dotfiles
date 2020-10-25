@@ -9,7 +9,7 @@ set +o allexport
 export DEBIAN_FRONTEND=noninteractive
 
 # APT cache proxy
-[[ -n "${APT_PROXY:-}" ]] && echo "${APT_PROXY:-}" > /etc/apt/apt.conf.d/00proxy
+[[ -n "${APT_PROXY:-}" ]] && echo "${APT_PROXY:-}" >/etc/apt/apt.conf.d/00proxy
 
 # System update
 apt-get update -y
@@ -26,19 +26,19 @@ apt-get autoclean -y
 rm -rf /var/lib/apt/lists/*
 
 # User
-echo "${USER_NAME} ALL=NOPASSWD:ALL" > "/etc/sudoers.d/${USER_NAME}-nopasswd"
+echo "${USER_NAME} ALL=NOPASSWD:ALL" >"/etc/sudoers.d/${USER_NAME}-nopasswd"
 
-if ! getent passwd | grep --quiet "$USER_NAME" ; then
+if ! getent passwd | grep --quiet "$USER_NAME"; then
   useradd --create-home --shell /bin/bash "$USER_NAME"
   usermod -aG sudo "$USER_NAME"
 fi
 # shellcheck disable=SC2028
-echo 'XKBMODEL="pc105"\nXKBLAYOUT="us"\nXKBVARIANT="alt-intl"\nBACKSPACE="guess"' > /etc/default/keyboard
+echo 'XKBMODEL="pc105"\nXKBLAYOUT="us"\nXKBVARIANT="alt-intl"\nBACKSPACE="guess"' >/etc/default/keyboard
 
 readonly text="cd ${WORKDIR}"
 readonly file="/home/${USER_NAME}/.bashrc"
 
 if ! grep -q "$text" "$file"; then
-  echo "$text" >> "$file"
+  echo "$text" >>"$file"
   chown "${USER_NAME}:${USER_NAME}" "$file"
 fi

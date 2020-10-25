@@ -57,5 +57,5 @@ alias r='exec $SHELL'
 alias dd-wspeed='dd if=/dev/zero of=/tmp/twspeed.img bs=1G count=2 oflag=dsync; rm -vf /tmp/twspeed.img'
 alias wget-dspeed="wget --report-speed=bits -O /dev/null http://ipv4.download.thinkbroadband.com/5MB.zip"
 
-# 
+#
 alias umount="sudo umount"

@@ -14,13 +14,13 @@ set +o allexport
 readonly SERVICE="$1"
 
 if [[ "$SERVICE" == build-* ]]; then
-    docker-compose build "${SERVICE#build-}"
+  docker-compose build "${SERVICE#build-}"
 fi
 
 shift
 docker-compose run --rm \
--v "$(readlink -f ./.env):${DOCKER_MOUNT}/.env" \
--v "$(readlink -f ./.env.override.server):${DOCKER_MOUNT}/.env.override.server" \
--v "$(readlink -f ./dist/.env):${DOCKER_MOUNT}/dist/.env" \
--v "$(readlink -f ./dist/.env.override.server):${DOCKER_MOUNT}/dist/.env.override.server" \
-"${SERVICE#build-}" "$@"
+  -v "$(readlink -f ./.env):${DOCKER_MOUNT}/.env" \
+  -v "$(readlink -f ./.env.override.server):${DOCKER_MOUNT}/.env.override.server" \
+  -v "$(readlink -f ./dist/.env):${DOCKER_MOUNT}/dist/.env" \
+  -v "$(readlink -f ./dist/.env.override.server):${DOCKER_MOUNT}/dist/.env.override.server" \
+  "${SERVICE#build-}" "$@"

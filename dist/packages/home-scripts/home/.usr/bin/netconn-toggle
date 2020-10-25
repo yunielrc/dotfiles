@@ -12,18 +12,18 @@ set -euEo pipefail
 readonly SCRIPT_NAME="$(basename "$0")"
 readonly CONN="${1:-}"
 
-notify(){
-  if type -P notify-send &> /dev/null; then
+notify() {
+  if type -P notify-send &>/dev/null; then
     notify-send "$SCRIPT_NAME" "$*"
   fi
 }
 
-inf(){
+inf() {
   notify "$*"
   echo "${SCRIPT_NAME}: $*"
 }
 
-err(){
+err() {
   notify "$*"
   echo "${SCRIPT_NAME}: $*" >&2
 }

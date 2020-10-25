@@ -65,7 +65,7 @@ inf() {
 # Returns:
 #   0 if was mounted, non-zero on error.
 #
-mount_nfs(){
+mount_nfs() {
   [[ -d "$MOUNT_DIR" ]] || mkdir --verbose --parents "$MOUNT_DIR"
   sudo mount -t nfs "$NFS_DEVICE" "$MOUNT_DIR"
 }
@@ -144,7 +144,7 @@ backup() {
       err "FAIL backup ${stats_curr}/${stats_total} from '${src}' to '${src_backup_dir}'"
     fi
   done
-  inf "${stats_ok}/${stats_total} backups ok, $((stats_total-stats_ok)) failed"
+  inf "${stats_ok}/${stats_total} backups ok, $((stats_total - stats_ok)) failed"
   inf "rsync logs are saved in: ${LOG_FILE}"
 
   return 0
@@ -196,12 +196,12 @@ restore() {
     local src_base_path="${src%/*}"
 
     if [[ ! -d "$src_base_path" ]]; then
-       mkdir --parents --verbose "$src_base_path" \
-       || sudo mkdir --parents --verbose "$src_base_path" \
-       || {
+      mkdir --parents --verbose "$src_base_path" ||
+        sudo mkdir --parents --verbose "$src_base_path" ||
+        {
           err "ERROR restore ${stats_curr}/${stats_total}, creating dir: '${src_base_path}'"
           continue
-       }
+        }
     fi
     # rsync...  "/home/$USER/Backup/rsync-backup/home/$USER/Documents" \
     #          "/home/$USER" || :
@@ -209,14 +209,14 @@ restore() {
     [[ -w "$src_base_path" ]] || _rsync='sudo rsync'
 
     if $_rsync --archive --compress --verbose --quiet --log-file "$LOG_FILE" \
-       "$src_backup_dir" "$src_base_path"; then
-       ((stats_ok++)) || :
+      "$src_backup_dir" "$src_base_path"; then
+      ((stats_ok++)) || :
       inf "OK restore ${stats_curr}/${stats_total} from '${src_backup_dir}' to '${src_base_path}'"
     else
       err "FAIL restore ${stats_curr}/${stats_total} from '${src_backup_dir}' to '${src_base_path}'"
     fi
   done
-  inf "${stats_ok}/${stats_total} restores ok, $((stats_total-stats_ok)) failed"
+  inf "${stats_ok}/${stats_total} restores ok, $((stats_total - stats_ok)) failed"
   inf "rsync logs are saved in: ${LOG_FILE}"
 }
 

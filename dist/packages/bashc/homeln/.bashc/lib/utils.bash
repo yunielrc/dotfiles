@@ -13,6 +13,6 @@ infn() {
 }
 
 debug() {
-  [[ "${DEBUG:-}" != true ]] && return 0;
+  [[ "${DEBUG:-}" != true ]] && return 0
   echo "DEBUG> $*"
 }

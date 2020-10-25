@@ -13,6 +13,6 @@ readonly ssh_host_name="$(echo "$ssh_config" | grep -P '\s*HostName\s+' | sed -e
 readonly ssh_user="$(echo "$ssh_config" | grep -P '\s*User\s+' | sed -e 's/^\s*User\s*//' -e 's/\s*$//')"
 
 rsync -avzL \
-      --progress \
-      --exclude-from=./.rsyncignore \
-      . "${ssh_user}@${ssh_host_name}:${AWS_WORKDIR}"
+  --progress \
+  --exclude-from=./.rsyncignore \
+  . "${ssh_user}@${ssh_host_name}:${AWS_WORKDIR}"

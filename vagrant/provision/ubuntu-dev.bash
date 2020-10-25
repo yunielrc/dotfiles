@@ -12,7 +12,7 @@ readonly text="export LIBS_DIR=/usr/local/lib"
 readonly file="/home/${USER_NAME}/.bashrc"
 
 if ! grep -q "$text" "$file"; then
-  echo "$text" >> "$file"
+  echo "$text" >>"$file"
   chown "${USER_NAME}:${USER_NAME}" "$file"
 fi
 
