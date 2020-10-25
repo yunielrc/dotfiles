@@ -2,5 +2,11 @@
 
 set -euEo pipefail
 
+# Idempotent
+[[ -x /home/linuxbrew/.linuxbrew/bin/brew ]] && {
+  echo 'brew currently installed'
+  exit 0
+}
+
 # Install
 wget -qO - https://raw.githubusercontent.com/yunielrc/install-scripts/master/dist/packages/brew/brew-ubuntu | bash
