@@ -159,6 +159,21 @@ __install_package() {
   fi
   # :
 
+  # Setup docker-compose.yml
+  local -r pkg_dcompose_file="${pkg_dir}/docker-compose.yml"
+
+  if [[ -f "$pkg_dcompose_file" ]]; then
+    type -P docker >/dev/null || dotf-i docker
+    (
+      cd "${pkg_dir}"
+      sudo docker-compose up -d || {
+        err "${msg}: ${pkg}, on docker-compose up"
+        return 13
+      }
+    )
+  fi
+  # :
+
   # Install bashc plugin
   local -r plugin_file_path="${pkg_dir}/${pkg}.plugin.bash"
   local -r plugin_file_path2="${pkg_dir}/content/${pkg}.plugin.bash"
@@ -428,6 +443,12 @@ export -f apt-i
 brew-i() {
   local -i ecode
   local -r out_file="$(mktemp)"
+
+  type -P brew >/dev/null || {
+    dotf-i brew
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  }
+
   brew install "$@" 2>&1 | tee "$out_file"
   ecode="${PIPESTATUS[0]}"
 
@@ -442,3 +463,9 @@ add_apt_key() {
   sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys "$apt_key"
 }
 export -f add_apt_key
+
+# Execute command as a login shell with default SHELL
+shl() {
+  bash -l -c "$*"
+}
+export -f shl
