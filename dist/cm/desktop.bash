@@ -10,12 +10,27 @@ if [[ "${INSTALL_WITH_VPN:-}" == true ]]; then
 fi
 
 apt-ug
+
+# brew
 dotf-i brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# cargo
 dotf-i rust && PATH="${PATH}:${HOME}/.cargo/bin"
+
+# flatpack
+apt-i flatpak
+apt-i gnome-software-plugin-flatpak
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install -y flathub com.github.tchx84.Flatseal
+
 # apt-i ruby-full
 # :BASE
 
 echoc '> APT packages'
+# Lightweight and flexible command-line JSON processor
+apt-i jq
+# System information script for console and IRC
+apt-i inxi
 # Queue, examine, or delete jobs for later execution
 apt-i at
 # Basic GL utilities built by Mesa, including glxinfo and glxgears
@@ -98,16 +113,12 @@ apt-i tcptrace
 apt-i tcpflow
 # Multipurpose relay for bidirectional data transfer
 apt-i socat
-# Utility for network exploration or security auditing
-apt-i nmap
 
 echoc '> BREW packages'
 # New way to see and navigate directory trees
 brew-i broot
 # Command-line benchmarking tool
 brew-i hyperfine
-# Lightweight and flexible command-line JSON processor
-brew-i jq
 # A small utility to create JSON objects
 brew-i jo
 # Command-line JSON processing tool
@@ -140,7 +151,9 @@ brew-i ack
 
 echoc '>> Development'
 # A framework for managing and maintaining multi-language pre-commit hooks
-# brew-i pre-commit
+brew-i pre-commit
+# Tool to generate documentation from Terraform modules
+brew-i terraform-docs
 # GIT quick statistics
 brew-i git-quick-stats
 # Program that allows you to count code, quickly
@@ -155,7 +168,6 @@ echoc '> CARGO packages'
 
 # A tool to analyze file system usage written in Rust
 cargo install dutree
-cargo install rustscan # depends on nmap
 
 echoc '> DOTFILES packages'
 
@@ -186,6 +198,8 @@ dotf-i nnn
 dotf-i lan-bot
 # Create or mount an encrypted filesystem
 dotf-i gocryptfs
+# Modern Day Portscanner
+cargo install rustscan # depends on nmap
 
 echoc '>> Video & Streaming'
 # Celluloid (formerly GNOME MPV)
@@ -232,6 +246,8 @@ dotf-i portainer
 dotf-i vagrant
 # Open source editor fully dedicated to OpenAPI-based APIs
 dotf-i swagger-editor
+# Predictably create, change, and improve infrastructure
+dotf-i terraform
 
 echoc '>> Internet'
 dotf-i google-chrome
@@ -261,12 +277,6 @@ echoc '>> Text editors'
 dotf-i typora
 
 echoc '> Flatpack'
-
-echoc '>> Setup Flatpack'
-apt-i flatpak
-apt-i gnome-software-plugin-flatpak
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak install -y flathub com.github.tchx84.Flatseal
 
 echoc '>> Flatpack apps'
 flatpak install -y flathub org.gnucash.GnuCash
