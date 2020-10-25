@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+shl type -P nix >/dev/null && {
+  echo 'nix currently installed'
+  exit 0
+}
+
+yes y | sh <(wget -qO - https://nixos.org/nix/install) --daemon
+
+# solve locale problem
+shl nix-env -i glibc-locales
+
+exit 0
+# NixGL solve the "OpenGL" problem with nix
+# cd "$(mktemp -d)"
+# git clone https://github.com/guibou/nixGL
+# cd nixGL
+
+# shl nix-env -f ./ -iA nixGLIntel
+# shl nix-env -f ./ -iA nixVulkanIntel
