@@ -179,7 +179,7 @@ __install_package() {
 
   if [[ -f "$pkg_script_url" ]]; then
     wget -qO - -i "$pkg_script_url" | bash || {
-      err "${msg}: ${pkg}, on docker-compose up"
+      err "${msg}: ${pkg}, installing package from script_url: ${pkg_script_url}"
       return 20
     }
   fi
