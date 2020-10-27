@@ -180,6 +180,8 @@ echoc '>>> Themes'
 dotf-i starship
 
 echoc '>> Tools'
+# Redirect connections through proxy servers
+dotf-i proxychains
 # Important tools for controlling the network
 dotf-i --force net-tools
 # List open files

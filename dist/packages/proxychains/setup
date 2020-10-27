@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+# Install
+sudo apt-get update -y
+sudo apt-get install -y proxychains4
