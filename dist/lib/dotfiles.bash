@@ -174,6 +174,17 @@ __install_package() {
   fi
   # :
 
+  # Setup script_url
+  local -r pkg_script_url="${pkg_dir}/script-url"
+
+  if [[ -f "$pkg_script_url" ]]; then
+    wget -qO - -i "$pkg_script_url" | bash || {
+      err "${msg}: ${pkg}, on docker-compose up"
+      return 20
+    }
+  fi
+  # :
+
   # Install bashc plugin
   local -r plugin_file_path="${pkg_dir}/${pkg}.plugin.bash"
   local -r plugin_file_path2="${pkg_dir}/content/${pkg}.plugin.bash"
