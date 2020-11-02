@@ -9,3 +9,5 @@ set -o allexport
 set +o allexport
 
 wget -qO - https://git.io/JT5TG?=openvpn-shadowsocks-client-ubuntu | bash
+
+mv docker-compose.yml{,.generated}
