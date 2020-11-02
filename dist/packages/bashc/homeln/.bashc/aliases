@@ -50,6 +50,9 @@ alias bmon='bmon -b'
 alias http-server='python3 -m http.server 8888'
 alias terraform="HTTPS_PROXY=${PROXY} terraform"
 
+# audio
+alias pulseaudio-restart='systemctl --user restart pulseaudio'
+
 # services
 alias weather='curl wttr.in/havana'
 
