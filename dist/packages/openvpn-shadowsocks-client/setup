@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -euEo pipefail
+
+cd "$PKG_PATH"
+
+set -o allexport
+. .env
+set +o allexport
+
+wget -qO - https://git.io/JT5TG?=openvpn-shadowsocks-client-ubuntu | bash
