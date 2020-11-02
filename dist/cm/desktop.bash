@@ -27,6 +27,10 @@ flatpak install -y flathub com.github.tchx84.Flatseal
 # :BASE
 
 echoc '> APT packages'
+# Interactively dump and analyze network traffic
+apt-i wireshark
+# Transparent file encryption in Git
+apt-i git-crypt
 # Lightweight and flexible command-line JSON processor
 apt-i jq
 # System information script for console and IRC
