@@ -23,8 +23,9 @@ nmcli connection modify "$NETWORK_CONFIG_CONN_WIFI5" \
 
 ## Dependencies
 sudo apt-get install -y network-manager-openvpn-gnome \
-                        openvpn-systemd-resolved
+  openvpn-systemd-resolved
 ## Import OpenVPN profiles
+shopt -s nullglob
 for vpn in "${PKG_PATH}/ovpn-profiles"/*.ovpn; do
   [[ -f "$vpn" ]] || continue
   # skip if already added
@@ -35,7 +36,7 @@ for vpn in "${PKG_PATH}/ovpn-profiles"/*.ovpn; do
     continue
   fi
 
-  nmcli connection import type openvpn file "$vpn" \
-  || sudo nmcli connection import type openvpn file "$vpn"
+  nmcli connection import type openvpn file "$vpn" ||
+    sudo nmcli connection import type openvpn file "$vpn"
 done
 # :OPEN-VPN
