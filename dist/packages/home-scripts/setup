@@ -10,17 +10,14 @@ sudo apt-get update -y
 if [[ ! -f ~/.usr/bin/netconn-toggle ]]; then
   ## add keybindings
   bl::gnome_add_custom_keybinding 'Toggle ethernet' \
-                                  "sh -c 'netconn-toggle ${NETCONN_TOGGLE_USB_ETHERNET_CONN}'" \
-                                  "$NETCONN_TOGGLE_USB_ETHERNET_KEYBIND"
-  bl::gnome_add_custom_keybinding 'Toggle vpn' \
-                                  "sh -c 'netconn-toggle ${NETCONN_TOGGLE_VPN_CONN}'" \
-                                  "$NETCONN_TOGGLE_VPN_KEYBIND"
+    "sh -c 'netconn-toggle ${NETCONN_TOGGLE_USB_ETHERNET_CONN}'" \
+    "$NETCONN_TOGGLE_USB_ETHERNET_KEYBIND"
   bl::gnome_add_custom_keybinding 'Toggle wifi 2.4' \
-                                  "sh -c 'netconn-toggle ${NETCONN_TOGGLE_WIFI2_CONN}'" \
-                                  "$NETCONN_TOGGLE_WIFI2_KEYBIND"
+    "sh -c 'netconn-toggle ${NETCONN_TOGGLE_WIFI2_CONN}'" \
+    "$NETCONN_TOGGLE_WIFI2_KEYBIND"
   bl::gnome_add_custom_keybinding 'Toggle wifi 5' \
-                                  "sh -c 'netconn-toggle ${NETCONN_TOGGLE_WIFI5_CONN}'" \
-                                  "$NETCONN_TOGGLE_WIFI5_KEYBIND"
+    "sh -c 'netconn-toggle ${NETCONN_TOGGLE_WIFI5_CONN}'" \
+    "$NETCONN_TOGGLE_WIFI5_KEYBIND"
 fi
 # :NETCONN-TOGGLE
 
@@ -41,7 +38,6 @@ sudo apt-get install -y rsync
 echo "${USER} ALL=NOPASSWD:$(type -P mount)" | sudo tee "/etc/sudoers.d/${USER}-nopasswd-mount"
 ### allows user to umount a device
 echo "${USER} ALL=NOPASSWD:$(type -P umount)" | sudo tee "/etc/sudoers.d/${USER}-nopasswd-umount"
-
 
 ### allows run rsync-backup daily
 cat <<EOF | sudo tee "/etc/cron.daily/${USER}-rsync-backup"
